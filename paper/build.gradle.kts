@@ -11,15 +11,19 @@ dependencies {
 }
 
 tasks {
-    shadowJar {
-        archiveClassifier.set("")
+    assemble {
+        dependsOn(reobfJar)
 
         doLast {
             copy {
-                from(shadowJar.get())
+                from(reobfJar.get())
                 into(rootProject.projectDir.resolve("jars"))
             }
         }
+    }
+
+    shadowJar {
+        archiveClassifier.set("")
     }
 
     runServer {
