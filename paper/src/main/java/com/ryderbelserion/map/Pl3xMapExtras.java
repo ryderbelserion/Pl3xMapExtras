@@ -19,12 +19,12 @@ public class Pl3xMapExtras extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Server server = getServer();
+        PluginManager pluginManager = getServer().getPluginManager();
 
-        if (!server.getPluginManager().isPluginEnabled("Pl3xMap")) {
+        if (!pluginManager.isPluginEnabled("Pl3xMap")) {
             getLogger().severe("Pl3xMap not found!");
 
-            server.getPluginManager().disablePlugin(this);
+            pluginManager.disablePlugin(this);
         }
 
         // Register provider
@@ -35,8 +35,9 @@ public class Pl3xMapExtras extends JavaPlugin {
 
         // Enable mob manager
         this.mobsManager = new MobsManager();
-        server.getPluginManager().registerEvents(new WorldListener(), this);
-        server.getPluginManager().registerEvents(new EntityListener(), this);
+
+        pluginManager.registerEvents(new MobWorldListener(), this);
+        pluginManager.registerEvents(new MobEntityListener(), this);
 
         // Enable banners
         pluginManager.registerEvents(new BannerWorldListener(), this);
