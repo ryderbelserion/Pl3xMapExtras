@@ -74,9 +74,9 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Assemble
+      - name: Build
         run:
-          ./gradlew assemble --stacktrace
+          ./gradlew build --stacktrace
 
       - name: Publish
         env:

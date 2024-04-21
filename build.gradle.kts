@@ -18,6 +18,18 @@ subprojects.forEach {
     it.project.version = rootProject.version
 }
 
+tasks {
+    shadowJar {
+        subprojects
+            .filter { it.name != "common" }
+            .forEach { dependsOn(":${it.name}:shadowJar") }
+    }
+
+    build {
+        dependsOn(shadowJar)
+    }
+}
+
 modrinth {
     token.set(System.getenv("MODRINTH_TOKEN"))
 
