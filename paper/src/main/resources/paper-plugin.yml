@@ -1,0 +1,14 @@
+name: '${name}'
+main: '${group}.Pl3xMapExtras'
+
+version: '${version}'
+api-version: '1.20'
+description: '${description}'
+website: '${website}'
+
+dependencies:
+  server:
+    Pl3xMap:
+      load: BEFORE
+      required: false
+      join-classpath: true

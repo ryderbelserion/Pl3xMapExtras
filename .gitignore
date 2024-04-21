@@ -1,0 +1,11 @@
+buildSrc/.gradle
+buildSrc/build
+
+common/build
+paper/build
+paper/run
+.gradle
+build
+
+.idea
+jars

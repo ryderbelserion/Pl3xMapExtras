@@ -1,0 +1,10 @@
+[plugins]
+run-paper = { id = "xyz.jpenilla.run-paper", version = "2.2.3" }
+
+[versions]
+minecraftVersion = "1.20.4"
+
+[libraries]
+annotations = { group = "org.jetbrains", name = "annotations", version = "24.1.0" }
+
+pl3xmap = { group = "maven.modrinth", name = "pl3xmap", version = "1.20.4-492" }
