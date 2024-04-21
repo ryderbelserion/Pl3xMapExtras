@@ -40,13 +40,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public class WorldListener implements EventListener, Listener {
+public class MobWorldListener implements EventListener, Listener {
 
     private @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
 
     private @NotNull final MobsManager mobsManager = this.plugin.getMobsManager();
 
-    public WorldListener() {
+    public MobWorldListener() {
         Pl3xMap.api().getEventRegistry().register(this);
     }
 
