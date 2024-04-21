@@ -30,6 +30,9 @@ public class Pl3xMapExtras extends JavaPlugin {
         // Register provider
         Provider.register(new Provider.MapExtras(getDataFolder(), getLogger()));
 
+        FileUtil.extracts(getClass(), "/mobs/icons/", getDataFolder().toPath().resolve("mobs").resolve("icons"), false);
+        FileUtil.extracts(getClass(), "/banners/icons/", getDataFolder().toPath().resolve("banners").resolve("icons"), false);
+
         // Enable mob manager
         this.mobsManager = new MobsManager();
         server.getPluginManager().registerEvents(new WorldListener(), this);

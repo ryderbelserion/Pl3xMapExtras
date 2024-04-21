@@ -292,8 +292,6 @@ public enum Icon {
 
         Path iconFolder = plugin.getDataFolder().toPath().resolve("mobs");
 
-        FileUtil.extracts(plugin.getClass(), "/mobs/icons/", iconFolder.resolve("icons"), false);
-
         for (Icon icon : values()) {
             String fileName = String.format("icons%s%s.png", File.separator, icon.name);
 
