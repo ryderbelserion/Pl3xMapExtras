@@ -42,4 +42,8 @@ modrinth {
 
     autoAddDependsOn.set(false)
     detectLoaders.set(false)
+
+    dependencies {
+        required.project("pl3xmap")
+    }
 }
