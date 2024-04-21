@@ -1,11 +1,15 @@
 package com.ryderbelserion.map;
 
-import com.ryderbelserion.map.listener.mobs.EntityListener;
-import com.ryderbelserion.map.listener.mobs.WorldListener;
+import com.ryderbelserion.map.listener.banners.BannerListener;
+import com.ryderbelserion.map.listener.banners.BannerWorldListener;
+import com.ryderbelserion.map.listener.mobs.MobEntityListener;
+import com.ryderbelserion.map.listener.mobs.MobWorldListener;
+import com.ryderbelserion.map.markers.banners.BannersLayer;
 import com.ryderbelserion.map.markers.mobs.MobsLayer;
 import com.ryderbelserion.map.markers.mobs.MobsManager;
+import com.ryderbelserion.map.util.FileUtil;
 import net.pl3x.map.core.Pl3xMap;
-import org.bukkit.Server;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,6 +34,10 @@ public class Pl3xMapExtras extends JavaPlugin {
         this.mobsManager = new MobsManager();
         server.getPluginManager().registerEvents(new WorldListener(), this);
         server.getPluginManager().registerEvents(new EntityListener(), this);
+
+        // Enable banners
+        pluginManager.registerEvents(new BannerWorldListener(), this);
+        pluginManager.registerEvents(new BannerListener(), this);
     }
 
     @Override
@@ -37,9 +45,12 @@ public class Pl3xMapExtras extends JavaPlugin {
         Pl3xMap api = Pl3xMap.api();
 
         api.getWorldRegistry().forEach(world -> {
-            // Unregister mob layer
             try {
                 world.getLayerRegistry().unregister(MobsLayer.KEY);
+            } catch (Throwable ignore) {}
+
+            try {
+                world.getLayerRegistry().unregister(BannersLayer.KEY);
             } catch (Throwable ignore) {}
         });
 
