@@ -44,6 +44,8 @@ import org.bukkit.craftbukkit.v1_20_R3.util.CraftChatMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,7 +61,8 @@ public class BannerListener implements Listener {
             return;
         }
 
-        BlockState state = block.getState();
+        BlockState state = block.getState(false);
+
         if (!(state instanceof org.bukkit.block.Banner banner)) {
             // clicked block is not a banner; ignore
             return;
@@ -87,8 +90,18 @@ public class BannerListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBannerPlace(@NotNull BlockPlaceEvent event) {
+        tryAddBanner(event.getBlock().getState(false));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBannerBreak(@NotNull BlockBreakEvent event) {
+        tryRemoveBanner(event.getBlock().getState(false));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBannerBreak(@NotNull BlockDestroyEvent event) {
-        tryRemoveBanner(event.getBlock().getState());
+        tryRemoveBanner(event.getBlock().getState(false));
     }
 
     protected void tryAddBanner(@NotNull BlockState state) {
