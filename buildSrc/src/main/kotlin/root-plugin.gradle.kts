@@ -4,11 +4,9 @@ plugins {
     `maven-publish`
 }
 
-base {
-    archivesName.set(rootProject.name)
-}
-
 repositories {
+    maven("https://repo.papermc.io/repository/maven-public/")
+
     exclusiveContent {
         forRepository {
             maven("https://api.modrinth.com/maven/")
@@ -23,13 +21,13 @@ repositories {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of("17"))
+    toolchain.languageVersion.set(JavaLanguageVersion.of("21"))
 }
 
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        options.release.set(21)
     }
 
     processResources {

@@ -1,26 +1,3 @@
-/*
- * MIT License
- *
- * Copyright (c) 2020-2023 William Blake Galbreath
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package com.ryderbelserion.map.markers.mobs;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
@@ -126,8 +103,8 @@ public enum Icon {
     LLAMA_WHITE(EntityType.LLAMA, Icon.<Llama>predicate(mob -> mob.getColor() == Llama.Color.WHITE)),
     MAGMA_CUBE(EntityType.MAGMA_CUBE),
     MULE(EntityType.MULE),
-    MUSHROOM_COW(EntityType.MUSHROOM_COW, Icon.<MushroomCow>predicate(mob -> mob.getVariant() == MushroomCow.Variant.RED)),
-    MUSHROOM_COW_BROWN(EntityType.MUSHROOM_COW, Icon.<MushroomCow>predicate(mob -> mob.getVariant() == MushroomCow.Variant.BROWN)),
+    MUSHROOM_COW(EntityType.COW, Icon.<MushroomCow>predicate(mob -> mob.getVariant() == MushroomCow.Variant.RED)),
+    MUSHROOM_COW_BROWN(EntityType.COW, Icon.<MushroomCow>predicate(mob -> mob.getVariant() == MushroomCow.Variant.BROWN)),
     OCELOT(EntityType.OCELOT),
     PANDA_AGGRESSIVE(EntityType.PANDA, Icon.<Panda>predicate(mob -> getTrait(mob) == Panda.Gene.AGGRESSIVE)),
     PANDA_BROWN(EntityType.PANDA, Icon.<Panda>predicate(mob -> getTrait(mob) == Panda.Gene.BROWN)),
@@ -197,8 +174,8 @@ public enum Icon {
     SKELETON_HORSE(EntityType.SKELETON_HORSE),
     SLIME(EntityType.SLIME),
     SNIFFER(EntityType.SNIFFER),
-    SNOW_GOLEM(EntityType.SNOWMAN, Icon.<Snowman>predicate(mob -> !mob.isDerp())),
-    SNOW_GOLEM_SHEARED(EntityType.SNOWMAN, Icon.predicate(Snowman::isDerp)),
+    SNOW_GOLEM(EntityType.SNOW_GOLEM, Icon.<Snowman>predicate(mob -> !mob.isDerp())),
+    SNOW_GOLEM_SHEARED(EntityType.SNOW_GOLEM, Icon.predicate(Snowman::isDerp)),
     SPIDER(EntityType.SPIDER),
     SQUID(EntityType.SQUID),
     STRAY(EntityType.STRAY),

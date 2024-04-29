@@ -1,11 +1,11 @@
-name: Publish
+name: Publish Snapshot
 env:
   NEXT_BUILD_NUMBER: ${{ vars.NEXT_BUILD_NUMBER }}
   BUILD_INITIAL_VALUE: 1
 on:
   push:
     branches:
-      - main
+      - dev
   workflow_dispatch:
     inputs:
       logLevel:
@@ -74,15 +74,41 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Build
+      - name: Assemble
         run:
-          ./gradlew build --stacktrace
+          ./gradlew assemble --stacktrace
 
       - name: Publish
         env:
           HANGAR_KEY: ${{ secrets.HANGAR_KEY }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-        run: ./gradlew modrinth --stacktrace
+        run: ./gradlew modrinth publishAllPublicationsToHangar --stacktrace
+
+        #- name: Build Succeeded
+        #uses: sarisia/actions-status-discord@v1
+        #if: success()
+        #with:
+        #  webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        #  noprefix: true
+        #  nodetail: true
+        #  title: A new version of CrazyCrates is ready.
+        #  color: 0xE91E63
+        #  description: |
+        #    * <:hangar:1139326635313733652> https://hangar.papermc.io/CrazyCrew/CrazyCrates/versions/2.1-${{env.NEXT_BUILD_NUMBER}}
+        #    * <:modrinth:1115307870473420800> https://modrinth.com/plugin/crazycrates/version/2.1-${{env.NEXT_BUILD_NUMBER}}
+
+        #- name: Build Failed
+        #uses: sarisia/actions-status-discord@v1
+        #if: ${{ failure() }}
+        #with:
+        #  webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        #  noprefix: true
+        #  nodetail: true
+        #  title: The build didn't survive.
+        #  color: 0xff0000
+        #  description: |
+        #    Version 2.1 build ${{env.NEXT_BUILD_NUMBER}} has died.
+        #    Click [here](${{github.server_url}}/${{github.repository}}/actions/runs/${{ github.run_id }}) to view the run.
 
       # https://github.com/granny/Pl3xMap/blob/1df593e5706444de28fc61855df5a7552afcd3c7/.github/workflows/build.yml#L95
       - uses: actions/github-script@v6

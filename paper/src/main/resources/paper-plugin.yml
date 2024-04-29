@@ -10,5 +10,5 @@ dependencies:
   server:
     Pl3xMap:
       load: BEFORE
-      required: false
+      required: true
       join-classpath: true

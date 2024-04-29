@@ -23,10 +23,8 @@
  */
 package com.ryderbelserion.map.config;
 
-import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
-
 import com.ryderbelserion.map.Provider;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.configuration.AbstractConfig;

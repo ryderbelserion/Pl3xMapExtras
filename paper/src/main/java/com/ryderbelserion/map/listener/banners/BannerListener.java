@@ -1,26 +1,3 @@
-/*
- * MIT License
- *
- * Copyright (c) 2020-2023 William Blake Galbreath
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
 package com.ryderbelserion.map.listener.banners;
 
 import java.lang.reflect.Method;
@@ -39,8 +16,8 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.v1_20_R3.block.CraftBlockEntityState;
-import org.bukkit.craftbukkit.v1_20_R3.util.CraftChatMessage;
+import org.bukkit.craftbukkit.block.CraftBlockEntityState;
+import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -61,7 +38,7 @@ public class BannerListener implements Listener {
             return;
         }
 
-        BlockState state = block.getState(false);
+        BlockState state = block.getState();
 
         if (!(state instanceof org.bukkit.block.Banner banner)) {
             // clicked block is not a banner; ignore
@@ -131,7 +108,7 @@ public class BannerListener implements Listener {
         layer.putBanner(new Banner(pos, icon, getCustomName(banner)));
 
         // play fancy particles as visualizer
-        particles(banner.getLocation(), Particle.VILLAGER_HAPPY, Sound.ENTITY_PLAYER_LEVELUP);
+        particles(banner.getLocation(), Particle.HAPPY_VILLAGER, Sound.ENTITY_PLAYER_LEVELUP);
     }
 
     protected void tryRemoveBanner(@NotNull BlockState state) {

@@ -3,31 +3,28 @@ import git.latestCommitHash
 import git.latestCommitMessage
 
 plugins {
+    id("io.papermc.hangar-publish-plugin") version "0.1.2"
     id("com.modrinth.minotaur") version "2.+"
 
-    id("com.github.johnrengelman.shadow")
+    id("io.github.goooler.shadow")
 
     `root-plugin`
 }
 
 val buildNumber: String = System.getenv("NEXT_BUILD_NUMBER") ?: "SNAPSHOT"
 
-rootProject.version = "1.20.4-$buildNumber"
+val isSnapshot = false
 
-subprojects.forEach {
-    it.project.version = rootProject.version
+rootProject.version = if (isSnapshot) "1.0-$buildNumber" else "1.0"
+
+val content: String = if (isSnapshot) {
+    formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name)
+} else {
+    rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
 }
 
-tasks {
-    shadowJar {
-        subprojects
-            .filter { it.name != "common" }
-            .forEach { dependsOn(":${it.name}:shadowJar") }
-    }
-
-    build {
-        dependsOn(shadowJar)
-    }
+subprojects.filter { it.name != "api" }.forEach {
+    it.project.version = rootProject.version
 }
 
 modrinth {
@@ -35,27 +32,23 @@ modrinth {
 
     projectId.set(rootProject.name.lowercase())
 
-    versionType.set("release")
+    versionType.set(if (isSnapshot) "beta" else "release")
 
     versionName.set("${rootProject.name} ${rootProject.version}")
     versionNumber.set(rootProject.version as String)
 
-    changelog.set(formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name))
+    changelog.set(content)
 
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
     gameVersions.set(listOf(
-        "1.20.4"
-        //"1.20.5"
+        "1.20.6"
     ))
 
     loaders.add("paper")
     loaders.add("purpur")
+    loaders.add("folia")
 
     autoAddDependsOn.set(false)
     detectLoaders.set(false)
-
-    dependencies {
-        required.project("pl3xmap")
-    }
 }
