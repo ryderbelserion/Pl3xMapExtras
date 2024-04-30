@@ -13,6 +13,8 @@ repositories {
 
     maven("https://repo.papermc.io/repository/maven-public/")
 
+    maven("https://repo.triumphteam.dev/snapshots/")
+
     maven("https://repo.essentialsx.net/releases/")
 
     maven("https://repo.crazycrew.us/snapshots/")
@@ -25,7 +27,7 @@ repositories {
 dependencies {
     implementation(project(":common"))
 
-    implementation("com.ryderbelserion.vital", "paper", "1.0-snapshot")
+    implementation("dev.triumphteam", "triumph-cmd-bukkit", "2.0.0-ALPHA-10")
 
     // Warps
     compileOnly("com.olziedev", "playerwarps-api", "6.30.0") {}
@@ -71,11 +73,7 @@ tasks {
         archiveBaseName.set(rootProject.name)
         archiveClassifier.set("")
 
-        listOf(
-            "com.ryderbelserion.vital"
-        ).forEach {
-            relocate(it, "libs.$it")
-        }
+        relocate("dev.triumphteam", "com.ryderbelserion.triumphteam")
     }
 
     processResources {
