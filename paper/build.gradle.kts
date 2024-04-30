@@ -73,7 +73,11 @@ tasks {
         archiveBaseName.set(rootProject.name)
         archiveClassifier.set("")
 
-        relocate("dev.triumphteam", "com.ryderbelserion.triumphteam")
+        listOf(
+            "dev.triumphteam"
+        ).forEach {
+            relocate(it, "libs.$it")
+        }
     }
 
     processResources {
