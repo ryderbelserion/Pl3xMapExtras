@@ -1,4 +1,4 @@
-markers:
+marker:
   # Should we display banner markers on pl3xmap?
   banners: true
   # Should we display sign markers on pl3xmap?
