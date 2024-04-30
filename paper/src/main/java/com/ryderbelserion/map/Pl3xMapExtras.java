@@ -1,28 +1,19 @@
 package com.ryderbelserion.map;
 
+import com.ryderbelserion.map.config.PluginConfig;
 import com.ryderbelserion.map.hook.Hook;
-import com.ryderbelserion.map.listener.banners.BannerListener;
-import com.ryderbelserion.map.listener.banners.BannerWorldListener;
-import com.ryderbelserion.map.listener.claims.ClaimListener;
-import com.ryderbelserion.map.listener.mobs.MobEntityListener;
-import com.ryderbelserion.map.listener.mobs.MobWorldListener;
-import com.ryderbelserion.map.listener.signs.SignListener;
-import com.ryderbelserion.map.listener.signs.SignWorldListener;
-import com.ryderbelserion.map.listener.warps.WarpListener;
-import com.ryderbelserion.map.markers.banners.BannersLayer;
-import com.ryderbelserion.map.markers.mobs.MobsLayer;
 import com.ryderbelserion.map.markers.mobs.MobsManager;
-import com.ryderbelserion.map.markers.signs.SignsLayer;
-import com.ryderbelserion.map.util.FileUtil;
-import com.ryderbelserion.vital.VitalPaper;
-import net.pl3x.map.core.Pl3xMap;
-import net.pl3x.map.core.world.World;
+import com.ryderbelserion.map.util.ModuleUtil;
+import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
+import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.util.Arrays;
 
 public class Pl3xMapExtras extends JavaPlugin {
+
+    private final @NotNull BukkitCommandManager<CommandSender> commandManager = BukkitCommandManager.create(this);
 
     private MobsManager mobsManager;
 
@@ -36,96 +27,52 @@ public class Pl3xMapExtras extends JavaPlugin {
             pluginManager.disablePlugin(this);
         }
 
-        new VitalPaper(this);
-
-        // Register provider
+        // Register the provider.
         Provider.register(new Provider.MapExtras(getDataFolder(), getLogger()));
 
-        // Extract files
-        FileUtil.extracts(getClass(), "/banners/icons/", getDataFolder().toPath().resolve("banners").resolve("icons"), false);
-        FileUtil.extracts(getClass(), "/warps/icons/", getDataFolder().toPath().resolve("warps").resolve("icons"), false);
-        FileUtil.extracts(getClass(), "/signs/icons/", getDataFolder().toPath().resolve("signs").resolve("icons"), false);
-        FileUtil.extracts(getClass(), "/mobs/icons/", getDataFolder().toPath().resolve("mobs").resolve("icons"), false);
+        // Extract the files needed for the plugin.
+        ModuleUtil.extract();
 
-        findHooks();
+        // Find all plugin hooks and load them.
+        ModuleUtil.findHooks();
 
-        // Enable mob manager
+        // Create mob manager class.
         this.mobsManager = new MobsManager();
 
-        pluginManager.registerEvents(new MobWorldListener(), this);
-        pluginManager.registerEvents(new MobEntityListener(), this);
+        // Toggle all our shit on startup.
+        ModuleUtil.toggleAll(false);
 
-        // Enable banners
-        pluginManager.registerEvents(new BannerWorldListener(), this);
-        pluginManager.registerEvents(new BannerListener(), this);
-
-        // Enable signs
-        pluginManager.registerEvents(new SignWorldListener(), this);
-        pluginManager.registerEvents(new SignListener(), this);
-
-        // Enable warps
-        pluginManager.registerEvents(new WarpListener(), this);
-
-        // Enable claims
-        pluginManager.registerEvents(new ClaimListener(), this);
-
-        Pl3xMap.api().getWorldRegistry().forEach(Pl3xMapExtras::registerWorld);
+        // Register the commands.
+        this.commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> sender.sendRichMessage(PluginConfig.no_permission.replace("{prefix}", PluginConfig.msg_prefix)));
+        this.commandManager.registerCommand(new BaseCommand());
     }
 
     @Override
     public void onDisable() {
-        Pl3xMap api = Pl3xMap.api();
+        // Cancel the tasks regardless
+        getServer().getGlobalRegionScheduler().cancelTasks(this);
+        getServer().getAsyncScheduler().cancelTasks(this);
 
-        // Unregistry data
-        api.getWorldRegistry().forEach(world -> {
-            try {
-                world.getLayerRegistry().unregister(MobsLayer.KEY);
-            } catch (Throwable ignore) {}
+        // Unregister data.
+        ModuleUtil.unload();
 
-            try {
-                world.getLayerRegistry().unregister(BannersLayer.KEY);
-            } catch (Throwable ignore) {}
+        // Clean up all our shit on shutdown.
+        ModuleUtil.toggleAll(true);
 
-            try {
-                world.getLayerRegistry().unregister(SignsLayer.KEY);
-            } catch (Throwable ignore) {}
-
-            Pl3xMapExtras.unloadWorld(world);
-        });
-
-        // Clear hooks
+        // Clear plugin hooks.
         Hook.clear();
-
-        // Cancel tasks
-        getServer().getScheduler().cancelTasks(this);
 
         // Unregister provider.
         Provider.unregister();
     }
 
-    public @NotNull MobsManager getMobsManager() {
+    public MobsManager getMobsManager() {
+        if (!ModuleUtil.isMobsEnabled()) {
+            getLogger().warning("The toggle for displaying a mob layer is turned off.");
+
+            return null;
+        }
+
         return this.mobsManager;
-    }
-
-    public void reload() {
-        Hook.clear();
-        findHooks();
-    }
-
-    public void findHooks() {
-        Arrays.stream(Hook.Impl.values()).forEach(impl -> {
-            if (getServer().getPluginManager().isPluginEnabled(impl.getPluginName())) {
-                getLogger().info("Hooking into " + impl.getPluginName());
-                Hook.add(impl);
-            }
-        });
-    }
-
-    public static void registerWorld(@NotNull World world) {
-        Hook.hooks().forEach(hook -> hook.registerWorld(world));
-    }
-
-    public static void unloadWorld(@NotNull World world) {
-        Hook.hooks().forEach(hook -> hook.unloadWorld(world));
     }
 }

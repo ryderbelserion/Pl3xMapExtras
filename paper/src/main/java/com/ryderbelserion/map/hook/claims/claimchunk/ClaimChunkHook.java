@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.ryderbelserion.map.hook.Hook;
+import com.ryderbelserion.map.util.ChunkMergeUtil;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Rectangle;
@@ -88,9 +89,8 @@ public class ClaimChunkHook implements Listener, Hook {
 
         for (ClaimChunkGroup group : groups) {
             String key = String.format("cc_%s_chunk_%s", world.getName(), group.id());
-            //todo() update this
-            //markers.add(ChunkMerge.getPoly(key, group.claims())
-            //       .setOptions(options(world, group.owner())));
+            markers.add(ChunkMergeUtil.getPoly(key, group.claims())
+                   .setOptions(options(world, group.owner())));
         }
 
         return markers;

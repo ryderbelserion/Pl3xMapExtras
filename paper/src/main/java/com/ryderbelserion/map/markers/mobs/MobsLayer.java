@@ -4,7 +4,6 @@ import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.config.MobConfig;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Marker;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Mob;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,22 +40,21 @@ public class MobsLayer extends WorldLayer {
     }
 
     private void retrieveMarkers() {
-        World bukkitWorld = Bukkit.getWorld(this.config.getWorld().getName());
+        World bukkitWorld = this.plugin.getServer().getWorld(this.config.getWorld().getName());
 
         // If world is null, do fuck all.
         if (bukkitWorld == null) {
             return;
         }
 
-        this.plugin.getServer().getScheduler().runTask(plugin, () -> bukkitWorld.getEntitiesByClass(Mob.class).forEach(mob -> {
-                    if (config.ONLY_SHOW_MOBS_EXPOSED_TO_SKY && bukkitWorld.getHighestBlockYAt(mob.getLocation()) > mob.getLocation().getY()) {
-                        return;
-                    }
+        this.plugin.getServer().getGlobalRegionScheduler().execute(this.plugin, () -> bukkitWorld.getEntitiesByClass(Mob.class).forEach(mob -> {
+            if (config.ONLY_SHOW_MOBS_EXPOSED_TO_SKY && bukkitWorld.getHighestBlockYAt(mob.getLocation()) > mob.getLocation().getY()) {
+                return;
+            }
 
-                    String key = String.format("%s_%s_%s", KEY, getWorld().getName(), mob.getUniqueId());
+            String key = String.format("%s_%s_%s", KEY, getWorld().getName(), mob.getUniqueId());
 
-                    this.mobsManager.addMarker(key, mob, this.config);
-                }
-        ));
+            this.mobsManager.addMarker(key, mob, this.config);
+        }));
     }
 }

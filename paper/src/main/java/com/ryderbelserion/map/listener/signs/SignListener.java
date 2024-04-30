@@ -3,7 +3,8 @@ package com.ryderbelserion.map.listener.signs;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
-import com.ryderbelserion.vital.util.ItemUtil;
+import com.ryderbelserion.map.util.ItemUtil;
+import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
 import com.ryderbelserion.map.markers.signs.Icon;
@@ -39,7 +40,10 @@ public class SignListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignEdit(@NotNull SignChangeEvent event) {
-        if (!event.getPlayer().hasPermission("pl3xmap.signs.admin")) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
+        //todo() register this with the server
+        if (!event.getPlayer().hasPermission("pl3xmapextras.signs.admin")) {
             // player doesn't have permission to track signs; ignore
             return;
         }
@@ -67,11 +71,15 @@ public class SignListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockDestroyEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         tryRemoveSign(event.getBlock().getState());
     }
 
     @EventHandler
     public void onClickSign(@NotNull PlayerInteractEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         Block block = event.getClickedBlock();
 
         if (block == null) {
@@ -90,7 +98,8 @@ public class SignListener implements Listener {
             return;
         }
 
-        if (!event.getPlayer().hasPermission("pl3xmap.signs.admin")) {
+        //todo() register this with the server
+        if (!event.getPlayer().hasPermission("pl3xmapextras.signs.admin")) {
             // player does not have permission; ignore
             return;
         }
@@ -119,36 +128,50 @@ public class SignListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockDropItemEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         tryRemoveSign(event.getBlockState());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockBurnEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         tryRemoveSign(event.getBlock().getState());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockExplodeEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         event.blockList().forEach(block -> tryRemoveSign(block.getState()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull EntityExplodeEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         event.blockList().forEach(block -> tryRemoveSign(block.getState()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockPistonExtendEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         event.getBlocks().forEach(block -> tryRemoveSign(block.getState()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockPistonRetractEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         event.getBlocks().forEach(block -> tryRemoveSign(block.getState()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockFromToEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         tryRemoveSign(event.getToBlock().getState());
     }
 
@@ -237,6 +260,7 @@ public class SignListener implements Listener {
                 double x = loc.getX() + rand.nextGaussian();
                 double y = loc.getY() + rand.nextGaussian();
                 double z = loc.getZ() + rand.nextGaussian();
+
                 loc.getWorld().spawnParticle(particle, x, y, z, 1, 0, 0, 0, 0, null, true);
             }
         }

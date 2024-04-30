@@ -5,6 +5,7 @@ import com.ryderbelserion.map.config.MobConfig;
 import com.ryderbelserion.map.markers.mobs.Icon;
 import com.ryderbelserion.map.markers.mobs.MobsLayer;
 import com.ryderbelserion.map.markers.mobs.MobsManager;
+import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
 import net.pl3x.map.core.event.EventListener;
@@ -24,16 +25,22 @@ public class MobWorldListener implements EventListener, Listener {
     private @NotNull final MobsManager mobsManager = this.plugin.getMobsManager();
 
     public MobWorldListener() {
+        if (!ModuleUtil.isMobsEnabled()) return;
+        
         Pl3xMap.api().getEventRegistry().register(this);
     }
 
     @EventHandler
     public void onPl3xMapEnabled(@NotNull Pl3xMapEnabledEvent event) {
+        if (!ModuleUtil.isMobsEnabled()) return;
+        
         Icon.register();
     }
 
     @EventHandler
     public void onServerLoaded(@NotNull ServerLoadedEvent event) {
+        if (!ModuleUtil.isMobsEnabled()) return;
+        
         Icon.register();
 
         Pl3xMap.api().getWorldRegistry().forEach(this::registerWorld);
@@ -41,11 +48,15 @@ public class MobWorldListener implements EventListener, Listener {
 
     @EventHandler
     public void onWorldLoaded(@NotNull WorldLoadedEvent event) {
+        if (!ModuleUtil.isMobsEnabled()) return;
+        
         registerWorld(event.getWorld());
     }
 
     @EventHandler
     public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
+        if (!ModuleUtil.isMobsEnabled()) return;
+        
         try {
             // Clear when world is unloaded.
             this.mobsManager.clearMarkers(event.getWorld().getName());

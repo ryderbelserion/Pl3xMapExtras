@@ -7,6 +7,7 @@ import com.ryderbelserion.map.markers.banners.Banner;
 import com.ryderbelserion.map.markers.banners.BannersLayer;
 import com.ryderbelserion.map.markers.banners.Icon;
 import com.ryderbelserion.map.markers.banners.Position;
+import com.ryderbelserion.map.util.ModuleUtil;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
@@ -31,6 +32,8 @@ public class BannerListener implements Listener {
 
     @EventHandler
     public void onClickBanner(@NotNull PlayerInteractEvent event) {
+        if (!ModuleUtil.isBannersEnabled()) return;
+
         Block block = event.getClickedBlock();
 
         if (block == null) {
@@ -68,16 +71,22 @@ public class BannerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBannerPlace(@NotNull BlockPlaceEvent event) {
+        if (!ModuleUtil.isBannersEnabled()) return;
+
         tryAddBanner(event.getBlock().getState(false));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBannerBreak(@NotNull BlockBreakEvent event) {
+        if (!ModuleUtil.isBannersEnabled()) return;
+
         tryRemoveBanner(event.getBlock().getState(false));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBannerBreak(@NotNull BlockDestroyEvent event) {
+        if (!ModuleUtil.isBannersEnabled()) return;
+
         tryRemoveBanner(event.getBlock().getState(false));
     }
 

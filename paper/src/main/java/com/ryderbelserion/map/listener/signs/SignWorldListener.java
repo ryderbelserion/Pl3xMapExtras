@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.listener.signs;
 
 import com.ryderbelserion.map.config.SignsConfig;
+import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
 import net.pl3x.map.core.event.EventListener;
@@ -21,11 +22,15 @@ import org.jetbrains.annotations.NotNull;
 public class SignWorldListener implements EventListener, Listener {
 
     public SignWorldListener() {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         Pl3xMap.api().getEventRegistry().register(this);
     }
 
     @org.bukkit.event.EventHandler(priority = EventPriority.MONITOR)
     public void onChunkLoad(@NotNull ChunkLoadEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         if (event.isNewChunk()) {
             // chunk is new; ignore
             return;
@@ -36,27 +41,37 @@ public class SignWorldListener implements EventListener, Listener {
 
     @org.bukkit.event.EventHandler(priority = EventPriority.MONITOR)
     public void onChunkUnload(@NotNull ChunkUnloadEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         checkChunk(event.getChunk());
     }
 
     @EventHandler
     public void onPl3xMapEnabled(@NotNull Pl3xMapEnabledEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         Icon.register();
     }
 
     @EventHandler
     public void onServerLoaded(@NotNull ServerLoadedEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         Icon.register();
         Pl3xMap.api().getWorldRegistry().forEach(this::registerWorld);
     }
 
     @EventHandler
     public void onWorldLoaded(@NotNull WorldLoadedEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         registerWorld(event.getWorld());
     }
 
     @EventHandler
     public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
+        if (!ModuleUtil.isSignsEnabled()) return;
+
         try {
             event.getWorld().getLayerRegistry().unregister(SignsLayer.KEY);
         } catch (Throwable ignore) {}

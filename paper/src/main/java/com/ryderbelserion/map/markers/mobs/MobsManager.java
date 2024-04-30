@@ -34,6 +34,10 @@ public class MobsManager {
         this.activeMarkers.remove(worldName);
     }
 
+    public void clearAll() {
+        this.activeMarkers.clear();
+    }
+
     public void addWorld(@NotNull String worldName) {
         if (this.activeMarkers.containsKey(worldName)) return;
 

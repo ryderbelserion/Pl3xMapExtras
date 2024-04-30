@@ -1,7 +1,7 @@
 package com.ryderbelserion.map.listener.warps;
 
-import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.hook.Hook;
+import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
 import net.pl3x.map.core.event.EventListener;
@@ -13,46 +13,57 @@ import net.pl3x.map.core.world.World;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 public class WarpListener implements EventListener, Listener {
 
-    private final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
-
     public WarpListener() {
+        if (!ModuleUtil.isWarpsEnabled()) return;
+
         Pl3xMap.api().getEventRegistry().register(this);
     }
 
     @org.bukkit.event.EventHandler
     public void onPluginEnabled(@NotNull PluginEnableEvent event) {
+        if (!ModuleUtil.isWarpsEnabled()) return;
+
         Hook.add(event.getPlugin().getName());
     }
 
     @org.bukkit.event.EventHandler
     public void onPluginDisabled(@NotNull PluginDisableEvent event) {
+        if (!ModuleUtil.isWarpsEnabled()) return;
+
         Hook.remove(event.getPlugin().getName());
     }
 
     @EventHandler
     public void onPl3xMapEnabled(@NotNull Pl3xMapEnabledEvent event) {
-        this.plugin.reload();
+        if (!ModuleUtil.isWarpsEnabled()) return;
+
+        ModuleUtil.reload();
     }
 
     @EventHandler
     public void onServerLoaded(@NotNull ServerLoadedEvent event) {
-        this.plugin.reload();
+        if (!ModuleUtil.isWarpsEnabled()) return;
+
+        ModuleUtil.reload();
 
         Pl3xMap.api().getWorldRegistry().forEach(this::registerWorld);
     }
 
     @EventHandler
     public void onWorldLoaded(@NotNull WorldLoadedEvent event) {
+        if (!ModuleUtil.isWarpsEnabled()) return;
+
         registerWorld(event.getWorld());
     }
 
     @EventHandler
     public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
+        if (!ModuleUtil.isWarpsEnabled()) return;
+
         try {
             Hook.hooks().forEach(hook -> hook.unloadWorld(event.getWorld()));
         } catch (Throwable ignore) {}
