@@ -12,7 +12,7 @@ Mob icons are provided by [ADHCMC](https://github.com/ADHDMC) ([CC0-1.0](https:/
 [https://github.com/ADHDMC/Entity-Icons](https://github.com/ADHDMC/Entity-Icons)
 
 ## Downloads
-https://jenkins.crazycrew.us/view/other/job/Pl3xMap-Mobs/
+https://github.com/ryderbelserion/Pl3xMap-Signs/releases/tag/v1.2
 
 ## Contact
   [![Join us on Discord](https://discord.com/api/guilds/182615261403283459/widget.png?style=banner2)](https://discord.gg/badbones-s-live-chat-182615261403283459)
