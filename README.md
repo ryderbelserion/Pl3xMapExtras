@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> This addon has been merged into one plugin! You can now find it here: https://github.com/ryderbelserion/Pl3xMapExtras
+----
+
 <div align="center">
 
 # Pl3xMap-Mobs
