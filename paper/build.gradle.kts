@@ -1,7 +1,7 @@
 plugins {
-    id("io.github.goooler.shadow")
-
-    alias(libs.plugins.run.paper)
+    alias(libs.plugins.paperweight)
+    alias(libs.plugins.shadowJar)
+    alias(libs.plugins.runPaper)
 
     `paper-plugin`
 }
@@ -25,7 +25,9 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":common"))
+    paperweight.paperDevBundle(libs.versions.paper)
+
+    implementation(project(":pl3xmapextras-core"))
 
     implementation("dev.triumphteam", "triumph-cmd-bukkit", "2.0.0-ALPHA-10")
 
@@ -84,6 +86,7 @@ tasks {
         inputs.properties("name" to rootProject.name)
         inputs.properties("version" to project.version)
         inputs.properties("group" to project.properties["group"])
+        inputs.properties("apiVersion" to libs.versions.minecraft.get())
         inputs.properties("description" to project.properties["description"])
         inputs.properties("website" to project.properties["website"])
 

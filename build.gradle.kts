@@ -1,27 +1,17 @@
-import git.formatLog
-import git.latestCommitHash
-import git.latestCommitMessage
-
 plugins {
-    id("io.papermc.hangar-publish-plugin") version "0.1.2"
-    id("com.modrinth.minotaur") version "2.+"
+    alias(libs.plugins.minotaur)
+    alias(libs.plugins.hangar)
 
-    id("io.github.goooler.shadow")
-
-    `root-plugin`
+    `java-plugin`
 }
 
-val buildNumber: String = System.getenv("NEXT_BUILD_NUMBER") ?: "SNAPSHOT"
+val buildNumber: String? = System.getenv("BUILD_NUMBER")
+
+rootProject.version = if (buildNumber != null) "1.0-$buildNumber" else "1.0"
 
 val isSnapshot = false
 
-rootProject.version = if (isSnapshot) "1.0-$buildNumber" else "1.0"
-
-val content: String = if (isSnapshot) {
-    formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name)
-} else {
-    rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
-}
+val content: String = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
 
 subprojects.filter { it.name != "api" }.forEach {
     it.project.version = rootProject.version
@@ -41,14 +31,38 @@ modrinth {
 
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
-    gameVersions.set(listOf(
-        "1.20.6"
-    ))
+    gameVersions.set(listOf(libs.versions.minecraft.get()))
 
-    loaders.add("paper")
-    loaders.add("purpur")
-    loaders.add("folia")
+    loaders.addAll("paper", "purpur")
 
     autoAddDependsOn.set(false)
     detectLoaders.set(false)
+}
+
+hangarPublish {
+    publications.register("plugin") {
+        apiKey.set(System.getenv("HANGAR_KEY"))
+
+        id.set(rootProject.name.lowercase())
+
+        version.set(rootProject.version as String)
+
+        channel.set(if (isSnapshot) "Snapshot" else "Release")
+
+        changelog.set(content)
+
+        platforms {
+            paper {
+                jar.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
+
+                platformVersions.set(listOf(libs.versions.minecraft.get()))
+
+                dependencies {
+                    hangar("PlaceholderAPI") {
+                        required = false
+                    }
+                }
+            }
+        }
+    }
 }
