@@ -11,11 +11,11 @@ plugins {
     `root-plugin`
 }
 
-val buildNumber: String = System.getenv("NEXT_BUILD_NUMBER") ?: "SNAPSHOT"
+val buildNumber: String? = System.getenv("BUILD_NUMBER")
+
+rootProject.version = if (buildNumber != null) "1.0-$buildNumber" else "1.0"
 
 val isSnapshot = false
-
-rootProject.version = if (isSnapshot) "1.0-$buildNumber" else "1.0"
 
 val content: String = if (isSnapshot) {
     formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name)
