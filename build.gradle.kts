@@ -11,9 +11,9 @@ plugins {
     `root-plugin`
 }
 
-val buildNumber: String? = System.getenv("BUILD_NUMBER")
+val buildNumber: String = if (System.getenv("BUILD_NUMBER") != null) System.getenv("BUILD_NUMBER") else "SNAPSHOT"
 
-rootProject.version = if (buildNumber != null) "1.0-$buildNumber" else "1.0"
+rootProject.version = "${libs.versions.minecraft.get()}-$buildNumber"
 
 val isSnapshot = false
 
@@ -41,13 +41,9 @@ modrinth {
 
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
-    gameVersions.set(listOf(
-        "1.20.6"
-    ))
+    gameVersions.set(listOf(libs.versions.minecraft.get()))
 
-    loaders.add("paper")
-    loaders.add("purpur")
-    loaders.add("folia")
+    loaders.addAll(listOf("purpur", "paper", "folia"))
 
     autoAddDependsOn.set(false)
     detectLoaders.set(false)
