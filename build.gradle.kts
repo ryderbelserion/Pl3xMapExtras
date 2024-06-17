@@ -11,17 +11,11 @@ plugins {
     `root-plugin`
 }
 
-val buildNumber: String = if (System.getenv("BUILD_NUMBER") != null) System.getenv("BUILD_NUMBER") else "SNAPSHOT"
+val buildNumber: String = if (System.getenv("NEXT_BUILD_NUMBER") != null) System.getenv("NEXT_BUILD_NUMBER") else "SNAPSHOT"
 
 rootProject.version = "${libs.versions.minecraft.get()}-$buildNumber"
 
-val isSnapshot = false
-
-val content: String = if (isSnapshot) {
-    formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name)
-} else {
-    rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
-}
+val content: String = formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name)
 
 subprojects.filter { it.name != "api" }.forEach {
     it.project.version = rootProject.version
@@ -32,7 +26,7 @@ modrinth {
 
     projectId.set(rootProject.name.lowercase())
 
-    versionType.set(if (isSnapshot) "beta" else "release")
+    versionType.set("release")
 
     versionName.set("${rootProject.name} ${rootProject.version}")
     versionNumber.set(rootProject.version as String)
