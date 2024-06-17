@@ -31,6 +31,9 @@ public class Pl3xMapExtras extends JavaPlugin {
         // Register the provider.
         Provider.register(new Provider.MapExtras(getDataFolder(), getLogger()));
 
+        // Load the config.
+        PluginConfig.reload();
+
         // Extract the files needed for the plugin.
         ModuleUtil.extract();
 
