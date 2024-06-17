@@ -1,5 +1,6 @@
 package com.ryderbelserion.map;
 
+import com.ryderbelserion.map.api.MetricsWrapper;
 import com.ryderbelserion.map.config.PluginConfig;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.markers.mobs.MobsManager;
@@ -45,6 +46,7 @@ public class Pl3xMapExtras extends JavaPlugin {
         // Register the commands.
         this.commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> sender.sendRichMessage(PluginConfig.no_permission.replace("{prefix}", PluginConfig.msg_prefix)));
         this.commandManager.registerCommand(new BaseCommand());
+        new MetricsWrapper(this, 22296).start();
     }
 
     @Override
