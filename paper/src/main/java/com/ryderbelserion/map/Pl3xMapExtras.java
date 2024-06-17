@@ -43,6 +43,17 @@ public class Pl3xMapExtras extends JavaPlugin {
         // Toggle all our shit on startup.
         ModuleUtil.toggleAll(false);
 
+        // Register the permissions.
+        Arrays.stream(Permissions.values()).toList().forEach(permission -> {
+            Permission newPermission = new Permission(
+                    permission.getPermission(),
+                    permission.getDescription(),
+                    permission.isDefault()
+            );
+
+            getServer().getPluginManager().addPermission(newPermission);
+        });
+
         // Register the commands.
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             final @NotNull Commands registry = event.registrar();
