@@ -5,9 +5,14 @@ import com.ryderbelserion.map.config.PluginConfig;
 import com.ryderbelserion.map.util.ModuleUtil;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class BaseCommand implements BasicCommand {
 
@@ -42,6 +47,18 @@ public class BaseCommand implements BasicCommand {
         }
     }
 
+    @Override
+    public @NotNull Collection<String> suggest(@NotNull CommandSourceStack stack, @NotNull String[] args) {
+        Collection<String> suggestions = new ArrayList<>();
+
+        if (args.length == 0) {
+            if (Permissions.reload.hasPermission(stack.getSender())) suggestions.add("reload");
+            if (Permissions.help.hasPermission(stack.getSender())) suggestions.add("help");
+        }
+
+        return suggestions;
+    }
+
     private void help(final CommandSender sender) {
         if (!Permissions.help.hasPermission(sender)) {
             sender.sendRichMessage(PluginConfig.no_permission.replace("{prefix}", PluginConfig.msg_prefix));
@@ -49,6 +66,18 @@ public class BaseCommand implements BasicCommand {
             return;
         }
 
-        sender.sendRichMessage(PluginConfig.help_message.replace("{prefix}", PluginConfig.msg_prefix));
+        sender.sendRichMessage(convertList(PluginConfig.help_message).replace("{prefix}", PluginConfig.msg_prefix));
+    }
+
+    private String convertList(@NotNull final List<String> list) {
+        if (list.isEmpty()) return "";
+
+        StringBuilder message = new StringBuilder();
+
+        for (String line : list) {
+            message.append(line).append("\n");
+        }
+
+        return StringUtils.chomp(message.toString());
     }
 }

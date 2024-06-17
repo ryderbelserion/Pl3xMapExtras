@@ -3,6 +3,7 @@ package com.ryderbelserion.map.marker.mobs;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.image.IconImage;
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Bee;
@@ -23,6 +24,7 @@ import org.bukkit.entity.Shulker;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Strider;
 import org.bukkit.entity.TraderLlama;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +40,7 @@ import java.util.logging.Level;
 public enum Icon {
 
     ALLAY(EntityType.ALLAY),
+    ARMADILLO(EntityType.ARMADILLO),
     AXOLOTL_BLUE(EntityType.AXOLOTL, Icon.<Axolotl>predicate(mob -> mob.getVariant() == Axolotl.Variant.BLUE)),
     AXOLOTL_BROWN(EntityType.AXOLOTL, Icon.<Axolotl>predicate(mob -> mob.getVariant() == Axolotl.Variant.WILD)),
     AXOLOTL_CYAN(EntityType.AXOLOTL, Icon.<Axolotl>predicate(mob -> mob.getVariant() == Axolotl.Variant.CYAN)),
@@ -47,6 +50,7 @@ public enum Icon {
     BEE(EntityType.BEE, Icon.<Bee>predicate(mob -> mob.getAnger() <= 0)),
     BEE_ANGRY(EntityType.BEE, Icon.<Bee>predicate(mob -> mob.getAnger() > 0)),
     BLAZE(EntityType.BLAZE),
+    BOGGED(EntityType.BOGGED),
     CAMEL(EntityType.CAMEL),
     CAT_BLACK(EntityType.CAT, Icon.<Cat>predicate(mob -> mob.getCatType() == Cat.Type.BLACK)),
     CAT_BRITISH_SHORTHAIR(EntityType.CAT, Icon.<Cat>predicate(mob -> mob.getCatType() == Cat.Type.BRITISH_SHORTHAIR)),
@@ -85,14 +89,36 @@ public enum Icon {
     GOAT(EntityType.GOAT),
     GUARDIAN(EntityType.GUARDIAN),
     HOGLIN(EntityType.HOGLIN),
-    HORSE(EntityType.HORSE), //todo() (7 colors, 5 variants, 35 total, yikes)
-    //HORSE_BROWN(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.BROWN)),
-    //HORSE_CREAMY(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.CREAMY)),
-    //HORSE_GRAY(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.GRAY)),
-    //HORSE_WHITE(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.WHITE)),
-    //HORSE_BLACK(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.BLACK)),
-    //HORSE_CHESTNUT(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.CHESTNUT)),
-    //HORSE_DARK_BROWN(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.DARK_BROWN)),
+    //HORSE(EntityType.HORSE),
+
+    HORSE_BROWN(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.BROWN)),
+    HORSE_BROWN_WHITE_FIELD(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.BROWN && mob.getStyle() == Horse.Style.WHITEFIELD)),
+    HORSE_BROWN_WHITE_SPOTTED(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.BROWN && mob.getStyle() == Horse.Style.WHITE_DOTS)),
+
+    HORSE_CREAMY(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.CREAMY)),
+    HORSE_CREAMY_WHITE_FIELD(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.CREAMY && mob.getStyle() == Horse.Style.WHITEFIELD)),
+    HORSE_CREAMY_WHITE_SPOTTED(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.CREAMY && mob.getStyle() == Horse.Style.WHITE_DOTS)),
+
+    HORSE_GRAY(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.GRAY)),
+    HORSE_GRAY_WHITE_FIELD(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.GRAY && mob.getStyle() == Horse.Style.WHITEFIELD)),
+    HORSE_GRAY_WHITE_SPOTTED(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.GRAY && mob.getStyle() == Horse.Style.WHITE_DOTS)),
+
+    HORSE_WHITE(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.WHITE)),
+    HORSE_WHITE_WHITE_FIELD(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.WHITE && mob.getStyle() == Horse.Style.WHITEFIELD)),
+    HORSE_WHITE_WHITE_SPOTTED(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.WHITE && mob.getStyle() == Horse.Style.WHITE_DOTS)),
+
+    HORSE_BLACK(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.BLACK)),
+    HORSE_BLACK_WHITE_FIELD(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.BLACK && mob.getStyle() == Horse.Style.WHITEFIELD)),
+    HORSE_BLACK_WHITE_SPOTTED(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.BLACK && mob.getStyle() == Horse.Style.WHITE_DOTS)),
+
+    HORSE_CHESTNUT(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.CHESTNUT)),
+    HORSE_CHESTNUT_WHITE_FIELD(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.CHESTNUT && mob.getStyle() == Horse.Style.WHITEFIELD)),
+    HORSE_CHESTNUT_WHITE_SPOTTED(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.CHESTNUT && mob.getStyle() == Horse.Style.WHITE_DOTS)),
+
+    HORSE_DARK_BROWN(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.DARK_BROWN)),
+    HORSE_DARK_BROWN_WHITE_FIELD(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.DARK_BROWN && mob.getStyle() == Horse.Style.WHITEFIELD)),
+    HORSE_DARK_BROWN_WHITE_SPOTTED(EntityType.HORSE, Icon.<Horse>predicate(mob -> mob.getColor() == Horse.Color.DARK_BROWN && mob.getStyle() == Horse.Style.WHITE_DOTS)),
+
     HUSK(EntityType.HUSK),
     ILLUSIONER(EntityType.ILLUSIONER),
     IRON_GOLEM(EntityType.IRON_GOLEM),
@@ -188,16 +214,66 @@ public enum Icon {
     TROPICAL_FISH(EntityType.TROPICAL_FISH),
     TURTLE(EntityType.TURTLE),
     VEX(EntityType.VEX),
-    VILLAGER(EntityType.VILLAGER),
+
+    VILLAGER(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.NONE)),
+
+    VILLAGER_TUNDRA(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getVillagerType() == Villager.Type.SNOW)),
+    VILLAGER_SAVANNA(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getVillagerType() == Villager.Type.SAVANNA)),
+    VILLAGER_DESERT(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getVillagerType() == Villager.Type.DESERT)),
+
+    VILLAGER_ARMORER(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.ARMORER)),
+    VILLAGER_BUTCHER(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.BUTCHER)),
+    VILLAGER_CLERIC(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.CLERIC)),
+    //VILLAGER_CARTOGRAPHER(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.CARTOGRAPHER)),
+    VILLAGER_FARMER(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.FARMER)),
+    VILLAGER_FISHERMAN(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.FISHERMAN)),
+    VILLAGER_FLETCHER(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.FLETCHER)),
+    //VILLAGER_LEATHERWORKER(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.LEATHERWORKER)),
+    VILLAGER_LIBRARIAN(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.LIBRARIAN)),
+    //VILLAGER_MASON(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.MASON)),
+    //VILLAGER_NITWIT(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.NITWIT)),
+    VILLAGER_SHEPHERD(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.SHEPHERD)),
+    //VILLAGER_TOOLSMITH(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.TOOLSMITH)),
+    VILLAGER_WEAPONSMITH(EntityType.VILLAGER, Icon.<Villager>predicate(mob -> mob.getProfession() == Villager.Profession.WEAPONSMITH)),
     VINDICATOR(EntityType.VINDICATOR),
     WANDERING_TRADER(EntityType.WANDERING_TRADER),
     WARDEN(EntityType.WARDEN),
     WITCH(EntityType.WITCH),
     WITHER(EntityType.WITHER),
     WITHER_SKELETON(EntityType.WITHER_SKELETON),
-    WOLF(EntityType.WOLF, Icon.<Wolf>predicate(mob -> !mob.isTamed())),
-    WOLF_ANGRY(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.isTamed() && mob.isAngry())),
+
+    WOLF_ASHEN(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.ASHEN && !mob.isTamed())),
+    WOLF_BLACK(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.BLACK && !mob.isTamed())),
+    WOLF_CHESTNUT(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.CHESTNUT && !mob.isTamed())),
+    WOLF_PALE(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.PALE && !mob.isTamed())),
+    WOLF_RUSTY(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.RUSTY && !mob.isTamed())),
+    WOLF_SNOWY(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.SNOWY && !mob.isTamed())),
+    WOLF_SPOTTED(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.SPOTTED && !mob.isTamed())),
+    WOLF_STRIPED(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.STRIPED && !mob.isTamed())),
+    WOLF_WOODS(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.WOODS && !mob.isTamed())),
+
+    WOLF_ANGRY_ASHEN(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.ASHEN && mob.isAngry())),
+    WOLF_ANGRY_BLACK(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.BLACK && mob.isAngry())),
+    WOLF_ANGRY_CHESTNUT(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.CHESTNUT && mob.isAngry())),
+    WOLF_ANGRY_PALE(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.PALE && mob.isAngry())),
+    WOLF_ANGRY_RUSTY(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.RUSTY && mob.isAngry())),
+    WOLF_ANGRY_SNOWY(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.SNOWY && mob.isAngry())),
+    WOLF_ANGRY_SPOTTED(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.SPOTTED && mob.isAngry())),
+    WOLF_ANGRY_STRIPED(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.STRIPED && mob.isAngry())),
+    WOLF_ANGRY_WOODS(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.WOODS && mob.isAngry())),
+
     WOLF_TAMED(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.isTamed() && !mob.isAngry())),
+
+    WOLF_TAME_ASHEN(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.ASHEN && mob.isTamed())),
+    WOLF_TAME_BLACK(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.BLACK && mob.isTamed())),
+    WOLF_TAME_CHESTNUT(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.CHESTNUT && mob.isTamed())),
+    WOLF_TAME_PALE(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.PALE && mob.isTamed())),
+    WOLF_TAME_RUSTY(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.RUSTY && mob.isTamed())),
+    WOLF_TAME_SNOWY(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.SNOWY && mob.isTamed())),
+    WOLF_TAME_SPOTTED(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.SPOTTED && mob.isTamed())),
+    WOLF_TAME_STRIPED(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.STRIPED && mob.isTamed())),
+    WOLF_TAME_WOODS(EntityType.WOLF, Icon.<Wolf>predicate(mob -> mob.getVariant() == Wolf.Variant.WOODS && mob.isTamed())),
+
     ZOGLIN(EntityType.ZOGLIN),
     ZOMBIE(EntityType.ZOMBIE),
     ZOMBIE_HORSE(EntityType.ZOMBIE_HORSE),
@@ -236,6 +312,10 @@ public enum Icon {
                     return icon;
                 }
             }
+        }
+
+        if (mob instanceof Wolf wolf) {
+            Bukkit.getLogger().warning("Variant: " + wolf.getVariant().getKey().getKey());
         }
 
         throw new IllegalStateException();
