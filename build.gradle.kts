@@ -41,4 +41,10 @@ modrinth {
 
     autoAddDependsOn.set(false)
     detectLoaders.set(false)
+
+    dependencies {
+        optional.version("GriefPrevention")
+
+        required.version("Pl3xMap")
+    }
 }
