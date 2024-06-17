@@ -9,6 +9,9 @@ import org.jetbrains.annotations.NotNull;
 
 public enum Permissions {
 
+    banners_admin("banners.admin", "allows the user to have banners show up on the map", PermissionDefault.OP),
+    signs_admin("signs.admin", "allows the user to have signs show up on the map", PermissionDefault.OP),
+
     reload("reload", "the reload command", PermissionDefault.OP),
     help("help", "help command", PermissionDefault.OP);
 

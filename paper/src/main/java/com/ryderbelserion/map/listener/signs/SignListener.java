@@ -3,6 +3,7 @@ package com.ryderbelserion.map.listener.signs;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
+import com.ryderbelserion.map.api.enums.Permissions;
 import com.ryderbelserion.map.util.ItemUtil;
 import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
@@ -42,8 +43,7 @@ public class SignListener implements Listener {
     public void onSignEdit(@NotNull SignChangeEvent event) {
         if (!ModuleUtil.isSignsEnabled()) return;
 
-        //todo() register this with the server
-        if (!event.getPlayer().hasPermission("pl3xmapextras.signs.admin")) {
+        if (!Permissions.signs_admin.hasPermission(event.getPlayer())) {
             // player doesn't have permission to track signs; ignore
             return;
         }
@@ -98,9 +98,8 @@ public class SignListener implements Listener {
             return;
         }
 
-        //todo() register this with the server
-        if (!event.getPlayer().hasPermission("pl3xmapextras.signs.admin")) {
-            // player does not have permission; ignore
+        if (!Permissions.signs_admin.hasPermission(event.getPlayer())) {
+            // player doesn't have permission to track signs; ignore
             return;
         }
 
