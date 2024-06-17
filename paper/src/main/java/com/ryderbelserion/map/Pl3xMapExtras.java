@@ -1,20 +1,20 @@
 package com.ryderbelserion.map;
 
 import com.ryderbelserion.map.api.MetricsWrapper;
+import com.ryderbelserion.map.api.enums.Permissions;
 import com.ryderbelserion.map.config.PluginConfig;
 import com.ryderbelserion.map.hook.Hook;
-import com.ryderbelserion.map.markers.mobs.MobsManager;
+import com.ryderbelserion.map.marker.mobs.MobsManager;
 import com.ryderbelserion.map.util.ModuleUtil;
-import dev.triumphteam.cmd.bukkit.BukkitCommandManager;
-import dev.triumphteam.cmd.bukkit.message.BukkitMessageKey;
-import org.bukkit.command.CommandSender;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.util.Arrays;
 
 public class Pl3xMapExtras extends JavaPlugin {
-
-    private final @NotNull BukkitCommandManager<CommandSender> commandManager = BukkitCommandManager.create(this);
 
     private MobsManager mobsManager;
 
@@ -44,8 +44,12 @@ public class Pl3xMapExtras extends JavaPlugin {
         ModuleUtil.toggleAll(false);
 
         // Register the commands.
-        this.commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> sender.sendRichMessage(PluginConfig.no_permission.replace("{prefix}", PluginConfig.msg_prefix)));
-        this.commandManager.registerCommand(new BaseCommand());
+        getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
+            final @NotNull Commands registry = event.registrar();
+
+            registry.register("pl3xmapextras", "the command to handle the plugin", new BaseCommand());
+        });
+
         new MetricsWrapper(this, 22296).start();
     }
 
