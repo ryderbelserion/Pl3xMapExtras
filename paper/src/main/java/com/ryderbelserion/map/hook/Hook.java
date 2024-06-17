@@ -5,6 +5,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
+
+import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkHook;
+import com.ryderbelserion.map.hook.claims.griefdefender.GriefDefenderHook;
+import com.ryderbelserion.map.hook.claims.griefprevention.GriefPreventionHook;
+import com.ryderbelserion.map.hook.claims.plotsquared.P2Hook;
+import com.ryderbelserion.map.hook.claims.worldguard.WorldGuardHook;
 import com.ryderbelserion.map.hook.warps.essentials.EssentialsHook;
 import com.ryderbelserion.map.hook.warps.playerwarps.PlayerWarpsHook;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -47,12 +53,12 @@ public interface Hook {
 
     enum Impl {
         ESSENTIALS("Essentials", EssentialsHook::new),
-        PLAYERWARPS("PlayerWarps", PlayerWarpsHook::new);
-        //CLAIMCHUNK("ClaimChunk", com.ryderbelserion.map.claims.hook.claimchunk.ClaimChunkHook::new),
-        //GRIEFDEFENDER("GriefDefender", com.ryderbelserion.map.claims.hook.griefdefender.GriefDefenderHook::new),
-        //GRIEFPREVENTION("GriefPrevention", com.ryderbelserion.map.claims.hook.griefprevention.GriefPreventionHook::new),
-        //PLOTSQUARED("PlotSquared", com.ryderbelserion.map.claims.hook.plotsquared.P2Hook::new),
-        //WORLDGUARD("WorldGuard", com.ryderbelserion.map.claims.hook.worldguard.WorldGuardHook::new);
+        PLAYERWARPS("PlayerWarps", PlayerWarpsHook::new),
+        CLAIMCHUNK("ClaimChunk", ClaimChunkHook::new),
+        GRIEFDEFENDER("GriefDefender", GriefDefenderHook::new),
+        GRIEFPREVENTION("GriefPrevention", GriefPreventionHook::new),
+        PLOTSQUARED("PlotSquared", P2Hook::new),
+        WORLDGUARD("WorldGuard", WorldGuardHook::new);
 
         private final String name;
         private final Supplier<Hook> hook;
