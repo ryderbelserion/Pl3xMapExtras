@@ -1,7 +1,6 @@
-package com.ryderbelserion.map.markers.mobs;
+package com.ryderbelserion.map.marker.mobs;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
-import com.ryderbelserion.map.util.FileUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.image.IconImage;
 import org.bukkit.DyeColor;

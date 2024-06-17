@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.markers.banners;
+package com.ryderbelserion.map.marker.banners;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.markers.mobs;
+package com.ryderbelserion.map.marker.mobs;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.config.MobConfig;

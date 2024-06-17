@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.markers.signs;
+package com.ryderbelserion.map.marker.signs;
 
 import java.io.File;
 import java.io.IOException;

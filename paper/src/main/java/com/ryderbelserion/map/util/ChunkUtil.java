@@ -15,7 +15,7 @@ import net.pl3x.map.core.markers.marker.Polyline;
 import org.jetbrains.annotations.NotNull;
 
 // https://stackoverflow.com/a/56326866
-public class ChunkMergeUtil {
+public class ChunkUtil {
 
     public static @NotNull Polygon getPoly(@NotNull String key, @NotNull Collection<? extends Region> regions) {
         Area area = new Area();
