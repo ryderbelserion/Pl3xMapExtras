@@ -4,7 +4,7 @@ import org.gradle.api.Project
 import java.io.ByteArrayOutputStream
 
 fun formatLog(hash: String, message: String, project: String): String {
-    return "[$hash](https://github.com/Crazy-Crew/$project/commit/$hash) $message<br>"
+    return "[$hash](https://github.com/ryderbelserion/$project/commit/$hash) $message<br>"
 }
 
 fun Project.latestCommitHash(): String {
