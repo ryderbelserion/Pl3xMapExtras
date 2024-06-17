@@ -14,10 +14,13 @@ https://ci.crazycrew.us/job/Pl3xMapExtras/
 4) Restart server again
 
 ## Building from source
-To build this project just run the following command:
-
+Run the following command:
 ```
 ./gradlew assemble
 ```
-
 The compiled jar will be in the `jars` folder
+
+## Credit
+Original Author: BillyGalbreath
+
+Mob Icons: https://github.com/ADHDMC/Entity-Icons
