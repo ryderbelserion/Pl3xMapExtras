@@ -9,7 +9,7 @@ https://modrinth.com/project/pl3xmapextras
 
 ## Installation
 1) Place [Pl3xMap](https://modrinth.com/plugin/pl3xmap) in your `plugins` folder
-2) Place the jar inside your server's `plugins` folder
+2) Place Pl3xMapExtras inside your server's `plugins` folder
 3) Restart your server
 4) Edit the config(s) to your liking
 5) Restart server again
