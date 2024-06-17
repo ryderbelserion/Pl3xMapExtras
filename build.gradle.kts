@@ -43,8 +43,8 @@ modrinth {
     detectLoaders.set(false)
 
     dependencies {
-        optional.version("GriefPrevention")
+        optional.version("griefprevention", "16.18.3")
 
-        required.version("Pl3xMap")
+        required.version("pl3xmap", "1.20.6-498")
     }
 }
