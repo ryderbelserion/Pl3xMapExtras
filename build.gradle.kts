@@ -35,6 +35,8 @@ modrinth {
 
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
+    syncBodyFrom.set(rootProject.file("README.md").readText(Charsets.UTF_8))
+
     gameVersions.set(listOf(libs.versions.minecraft.get()))
 
     loaders.addAll(listOf("purpur", "paper", "folia"))
