@@ -5,7 +5,7 @@ An addon to [Pl3xMap](https://modrinth.com/plugin/pl3xmap)
 https://modrinth.com/project/pl3xmapextras
 
 ## Contact
-[![Join us on Discord](https://discord.com/api/guilds/182615261403283459/widget.png?style=banner2)](https://discord.gg/badbones-s-live-chat-182615261403283459)
+[![Join us on Discord](https://discord.com/api/guilds/931330926653358090/widget.png?style=banner2)](https://discord.gg/w7yCw4M9za)
 
 ## Installation
 1) Place [Pl3xMap](https://modrinth.com/plugin/pl3xmap) in your `plugins` folder
