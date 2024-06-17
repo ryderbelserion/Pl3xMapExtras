@@ -12,9 +12,10 @@ import com.ryderbelserion.map.listener.mobs.MobWorldListener;
 import com.ryderbelserion.map.listener.signs.SignListener;
 import com.ryderbelserion.map.listener.signs.SignWorldListener;
 import com.ryderbelserion.map.listener.warps.WarpListener;
-import com.ryderbelserion.map.markers.banners.BannersLayer;
-import com.ryderbelserion.map.markers.mobs.MobsLayer;
-import com.ryderbelserion.map.markers.signs.SignsLayer;
+import com.ryderbelserion.map.marker.banners.BannersLayer;
+import com.ryderbelserion.map.marker.mobs.MobsLayer;
+import com.ryderbelserion.map.marker.mobs.MobsManager;
+import com.ryderbelserion.map.marker.signs.SignsLayer;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
 import org.bukkit.Server;
@@ -52,16 +53,16 @@ public class ModuleUtil {
     }
 
     public static void toggleAll(boolean isShutdown) {
-        toggleSigns();
-        toggleWarps();
-        toggleBanners();
+        toggleSigns(isShutdown);
+        toggleWarps(isShutdown);
+        toggleBanners(isShutdown);
 
         toggleMobs(isShutdown);
         toggleClaims(isShutdown);
     }
 
-    public static void toggleClaims(boolean isShutDown) {
-        if (isClaimsEnabled()) {
+    public static void toggleClaims(final boolean isShutdown) {
+        if (isClaimsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new ClaimListener(), plugin);
 
             Pl3xMap.api().getWorldRegistry().forEach(ModuleUtil::registerWorld);
@@ -71,13 +72,13 @@ public class ModuleUtil {
 
         Pl3xMap.api().getWorldRegistry().forEach(ModuleUtil::unloadWorld);
 
-        if (!isShutDown) {
+        if (!isShutdown) {
             server.getGlobalRegionScheduler().cancelTasks(plugin);
         }
     }
 
-    public static void toggleWarps() {
-        if (isWarpsEnabled()) {
+    public static void toggleWarps(final boolean isShutdown) {
+        if (isWarpsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new WarpListener(), plugin);
 
             return;
@@ -90,8 +91,8 @@ public class ModuleUtil {
         });
     }
 
-    public static void toggleSigns() {
-        if (isSignsEnabled()) {
+    public static void toggleSigns(final boolean isShutdown) {
+        if (isSignsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new SignWorldListener(), plugin);
             pluginManager.registerEvents(new SignListener(), plugin);
 
@@ -105,8 +106,8 @@ public class ModuleUtil {
         });
     }
 
-    public static void toggleBanners() {
-        if (isBannersEnabled()) {
+    public static void toggleBanners(final boolean isShutdown) {
+        if (isBannersEnabled() && !isShutdown) {
             pluginManager.registerEvents(new BannerWorldListener(), plugin);
             pluginManager.registerEvents(new BannerListener(), plugin);
 
@@ -120,8 +121,8 @@ public class ModuleUtil {
         });
     }
 
-    public static void toggleMobs(boolean isShutDown) {
-        if (isMobsEnabled() && !isShutDown) {
+    public static void toggleMobs(final boolean isShutdown) {
+        if (isMobsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new MobWorldListener(), plugin);
             pluginManager.registerEvents(new MobEntityListener(), plugin);
 
@@ -134,10 +135,13 @@ public class ModuleUtil {
             } catch (Throwable ignore) {}
         });
 
-        // Clear all the shit.
-        plugin.getMobsManager().clearAll();
+        MobsManager manager = plugin.getMobsManager();
 
-        if (!isShutDown) {
+        if (manager != null) {
+            manager.clearAll();
+        }
+
+        if (!isShutdown) {
             server.getGlobalRegionScheduler().cancelTasks(plugin);
         }
     }
