@@ -11,7 +11,7 @@ plugins {
     `root-plugin`
 }
 
-val buildNumber: String = if (System.getenv("NEXT_BUILD_NUMBER") != null) System.getenv("NEXT_BUILD_NUMBER") else "SNAPSHOT"
+val buildNumber: String = if (System.getenv("BUILD_NUMBER") != null) System.getenv("BUILD_NUMBER") else "SNAPSHOT"
 
 rootProject.version = "${libs.versions.minecraft.get()}-$buildNumber"
 
