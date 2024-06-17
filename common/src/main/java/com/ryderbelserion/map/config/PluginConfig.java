@@ -36,6 +36,8 @@ public class PluginConfig extends AbstractConfig {
     @Comment("The message sent when the player does not have the correct permission.")
     public static String no_permission = "{prefix} <red>You do not have permission to perform this command.";
 
+    public static String help_message = "{prefix} /pl3xmapextras reload - reloads the plugin.";
+
     public PluginConfig() {}
 
     private static final PluginConfig CONFIG = new PluginConfig();
