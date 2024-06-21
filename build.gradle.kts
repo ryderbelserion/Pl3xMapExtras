@@ -1,7 +1,3 @@
-import com.ryderbelserion.feather.tools.formatLog
-import com.ryderbelserion.feather.tools.latestCommitHash
-import com.ryderbelserion.feather.tools.latestCommitMessage
-
 plugins {
     alias(libs.plugins.minotaur)
     alias(libs.plugins.hangar)
@@ -12,8 +8,6 @@ plugins {
 val buildNumber: String? = if (System.getenv("NEXT_BUILD_NUMBER") != null) System.getenv("NEXT_BUILD_NUMBER") else "SNAPSHOT"
 
 rootProject.version = "${libs.versions.minecraft.get()}-$buildNumber"
-
-val content: String = formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name, "ryderbelserion")
 
 subprojects.filter { it.name != "api" }.forEach {
     it.project.version = rootProject.version
@@ -29,7 +23,7 @@ modrinth {
     versionName.set("${rootProject.name} ${rootProject.version}")
     versionNumber.set(rootProject.version as String)
 
-    changelog.set(content)
+    changelog.set(System.getenv("COMMIT_MESSAGE"))
 
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 

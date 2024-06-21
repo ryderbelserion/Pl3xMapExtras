@@ -68,6 +68,9 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build
+        run: ./gradlew assemble --stacktrace
+
+      - name: Modrinth
         run: ./gradlew modrinth --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
