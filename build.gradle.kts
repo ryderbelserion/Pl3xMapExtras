@@ -9,10 +9,6 @@ val buildNumber: String? = if (System.getenv("NEXT_BUILD_NUMBER") != null) Syste
 
 rootProject.version = "${libs.versions.minecraft.get()}-$buildNumber"
 
-subprojects.filter { it.name != "api" }.forEach {
-    it.project.version = rootProject.version
-}
-
 modrinth {
     token.set(System.getenv("MODRINTH_TOKEN"))
 

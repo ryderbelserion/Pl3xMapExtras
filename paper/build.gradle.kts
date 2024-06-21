@@ -47,6 +47,10 @@ dependencies {
     compileOnly("com.plotsquared:PlotSquared-Bukkit")
 }
 
+paperweight {
+    reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
+}
+
 tasks {
     runServer {
         jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
@@ -54,7 +58,7 @@ tasks {
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
         downloadPlugins {
-            modrinth("pl3xmap", "1.20.6-498")
+            modrinth("pl3xmap", "1.21-500")
         }
 
         minecraftVersion(libs.versions.minecraft.get())
@@ -70,7 +74,7 @@ tasks {
     }
 
     shadowJar {
-        archiveBaseName.set(rootProject.name)
+        archiveBaseName.set("${rootProject.name}-${rootProject.version}")
         archiveClassifier.set("")
     }
 
