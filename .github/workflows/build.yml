@@ -7,17 +7,24 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log Level'
+        required: false
+        default: 'warning'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     if: "!contains(github.event.commits[0].message, '[ci-skip]')"
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
+
       - uses: actions/github-script@v6
         name: Prepare build number if it doesn't exist
         with:
@@ -51,11 +58,21 @@ jobs:
             }
 
             return core.exportVariable("NEXT_BUILD_NUMBER", process.env.NEXT_BUILD_NUMBER);
+
+      - name: Gradle Properties Import.
+        id: properties
+        shell: bash
+        run: cat gradle.properties >> $GITHUB_ENV
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Build
         run: ./gradlew modrinth --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           COMMIT_MESSAGE: ${{ join(github.event.commits.*.message, '<br>') }}
+
       - uses: actions/github-script@v6
         name: Increment Build Number
         if: success()
