@@ -1,9 +1,5 @@
-# Pl3xMapExtras
+## Pl3xMapExtras
 An addon to [Pl3xMap](https://modrinth.com/plugin/pl3xmap)
-
-### Quick Links
-[Request Features](https://github.com/ryderbelserion/Pl3xMapExtras/issues)<br>
-[Report Bugs](https://github.com/ryderbelserion/Pl3xMapExtras/issues)<br>
 
 ### Downloads
 https://modrinth.com/project/pl3xmapextras
@@ -24,7 +20,7 @@ https://modrinth.com/project/pl3xmapextras
 4) Edit the config(s) to your liking
 5) Restart server again
 
-### Permissions
+## Permissions
 | Node                          | Description                                          | Default |
 |-------------------------------|------------------------------------------------------|---------|
 | `pl3xmapextras.banners.admin` | `allows the user to have banners show up on the map` | op      |
@@ -32,14 +28,7 @@ https://modrinth.com/project/pl3xmapextras
 | `pl3xmapextras.reload`        | `the reload command`                                 | op      |
 | `pl3xmapextras.help`          | `help command`                                       | op      |
 
-### Building from source
-Run the following command:
-```
-./gradlew assemble
-```
-The compiled jar will be in the `jars` folder
-
-### Credit
+## Credit
 Original Author: BillyGalbreath
 
 Mob Icons: https://github.com/ADHDMC/Entity-Icons
