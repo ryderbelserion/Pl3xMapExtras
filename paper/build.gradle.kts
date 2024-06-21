@@ -7,29 +7,27 @@ plugins {
 }
 
 repositories {
-    maven("https://oss.sonatype.org/content/repositories/snapshots/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
 
     maven("https://repo.glaremasters.me/repository/bloodshot")
 
-    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.papermc.io/repository/maven-public")
 
-    maven("https://repo.triumphteam.dev/snapshots/")
+    maven("https://repo.triumphteam.dev/snapshots")
 
-    maven("https://repo.essentialsx.net/releases/")
+    maven("https://repo.essentialsx.net/releases")
 
-    maven("https://repo.crazycrew.us/snapshots/")
+    maven("https://repo.crazycrew.us/snapshots")
 
-    maven("https://maven.enginehub.org/repo/")
+    maven("https://maven.enginehub.org/repo")
 
-    maven("https://repo.olziedev.com/")
+    maven("https://repo.olziedev.com")
 }
 
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
 
     implementation(project(":pl3xmapextras-core"))
-
-    implementation("dev.triumphteam", "triumph-cmd-bukkit", "2.0.0-ALPHA-10")
 
     // Warps
     compileOnly("com.olziedev", "playerwarps-api", "6.30.0") {}
@@ -56,10 +54,10 @@ tasks {
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
         downloadPlugins {
-            modrinth("pl3xmap", "1.20.4-492")
+            modrinth("pl3xmap", "1.20.6-498")
         }
 
-        minecraftVersion("1.20.6")
+        minecraftVersion(libs.versions.minecraft.get())
     }
 
     assemble {
@@ -74,12 +72,6 @@ tasks {
     shadowJar {
         archiveBaseName.set(rootProject.name)
         archiveClassifier.set("")
-
-        listOf(
-            "dev.triumphteam"
-        ).forEach {
-            relocate(it, "libs.$it")
-        }
     }
 
     processResources {
@@ -88,6 +80,7 @@ tasks {
         inputs.properties("group" to project.properties["group"])
         inputs.properties("apiVersion" to libs.versions.minecraft.get())
         inputs.properties("description" to project.properties["description"])
+        inputs.properties("apiVersion" to libs.versions.minecraft.get())
         inputs.properties("website" to project.properties["website"])
 
         filesMatching("paper-plugin.yml") {

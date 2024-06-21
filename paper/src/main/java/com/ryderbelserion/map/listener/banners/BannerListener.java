@@ -3,10 +3,11 @@ package com.ryderbelserion.map.listener.banners;
 import java.lang.reflect.Method;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
-import com.ryderbelserion.map.markers.banners.Banner;
-import com.ryderbelserion.map.markers.banners.BannersLayer;
-import com.ryderbelserion.map.markers.banners.Icon;
-import com.ryderbelserion.map.markers.banners.Position;
+import com.ryderbelserion.map.api.enums.Permissions;
+import com.ryderbelserion.map.marker.banners.Banner;
+import com.ryderbelserion.map.marker.banners.BannersLayer;
+import com.ryderbelserion.map.marker.banners.Icon;
+import com.ryderbelserion.map.marker.banners.Position;
 import com.ryderbelserion.map.util.ModuleUtil;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.pl3x.map.core.Pl3xMap;
@@ -53,7 +54,7 @@ public class BannerListener implements Listener {
             return;
         }
 
-        if (!event.getPlayer().hasPermission("pl3xmap.banners.admin")) {
+        if (!Permissions.banners_admin.hasPermission(event.getPlayer())) {
             // player does not have permission; ignore
             return;
         }

@@ -1,3 +1,7 @@
+import com.ryderbelserion.feather.tools.formatLog
+import com.ryderbelserion.feather.tools.latestCommitHash
+import com.ryderbelserion.feather.tools.latestCommitMessage
+
 plugins {
     alias(libs.plugins.minotaur)
     alias(libs.plugins.hangar)
@@ -5,13 +9,11 @@ plugins {
     `java-plugin`
 }
 
-val buildNumber: String? = System.getenv("BUILD_NUMBER")
+val buildNumber: String? = if (System.getenv("NEXT_BUILD_NUMBER") != null) System.getenv("NEXT_BUILD_NUMBER") else "SNAPSHOT"
 
-rootProject.version = if (buildNumber != null) "1.0-$buildNumber" else "1.0"
+rootProject.version = "${libs.versions.minecraft.get()}-$buildNumber"
 
-val isSnapshot = false
-
-val content: String = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+val content: String = formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name, "ryderbelserion")
 
 subprojects.filter { it.name != "api" }.forEach {
     it.project.version = rootProject.version
@@ -22,7 +24,7 @@ modrinth {
 
     projectId.set(rootProject.name.lowercase())
 
-    versionType.set(if (isSnapshot) "beta" else "release")
+    versionType.set("release")
 
     versionName.set("${rootProject.name} ${rootProject.version}")
     versionNumber.set(rootProject.version as String)
@@ -31,38 +33,18 @@ modrinth {
 
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
+    syncBodyFrom.set(rootProject.file("README.md").readText(Charsets.UTF_8))
+
     gameVersions.set(listOf(libs.versions.minecraft.get()))
 
-    loaders.addAll("paper", "purpur")
+    loaders.addAll(listOf("purpur", "paper", "folia"))
 
     autoAddDependsOn.set(false)
     detectLoaders.set(false)
-}
 
-hangarPublish {
-    publications.register("plugin") {
-        apiKey.set(System.getenv("HANGAR_KEY"))
+    dependencies {
+        optional.version("griefprevention", "16.18.3")
 
-        id.set(rootProject.name.lowercase())
-
-        version.set(rootProject.version as String)
-
-        channel.set(if (isSnapshot) "Snapshot" else "Release")
-
-        changelog.set(content)
-
-        platforms {
-            paper {
-                jar.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
-
-                platformVersions.set(listOf(libs.versions.minecraft.get()))
-
-                dependencies {
-                    hangar("PlaceholderAPI") {
-                        required = false
-                    }
-                }
-            }
-        }
+        required.version("pl3xmap", "1.20.6-498")
     }
 }

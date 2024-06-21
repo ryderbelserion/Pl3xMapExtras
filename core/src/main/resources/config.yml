@@ -17,3 +17,7 @@ messages:
   reloaded-plugin: '{prefix} <green>You have reloaded the plugin.'
   # The message sent when the player does not have the correct permission.
   no-permission: '{prefix} <red>You do not have permission to perform this command.'
+  # The message sent when doing /pl3xmapextras help
+  help-message:
+    - '{prefix} <red>/pl3xmapextras reload <gray>- <white>reloads the plugin.'
+    - '{prefix} <red>/pl3xmapextras help <gray>- <white>shows this menu.'

@@ -25,6 +25,6 @@ shadowJar = "8.1.7"
 minotaur = "2.+"
 
 [libraries]
-pl3xmap = { group = "maven.modrinth", name = "pl3xmap", version = "1.21-499" }
+pl3xmap = { group = "maven.modrinth", name = "pl3xmap", version = "1.21-500" }
 
 jetbrains = { module = "org.jetbrains:annotations", version.ref = "jetbrains" }

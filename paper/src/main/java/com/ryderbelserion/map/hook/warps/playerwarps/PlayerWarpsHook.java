@@ -62,7 +62,7 @@ public class PlayerWarpsHook implements Hook {
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
         return PlayerWarpsAPI.getInstance().getPlayerWarps(PlayerWarpsConfig.SHOW_LOCKED).stream()
-                .filter(warp -> warp.getWarpLocation().getWorld().equals(world.getName()))
+                .filter(warp -> warp.getWarpLocation().getWorld().equals(world.getName()) || warp.isWarpLocked())
                 .map(this::createIcon).collect(Collectors.toList());
     }
 

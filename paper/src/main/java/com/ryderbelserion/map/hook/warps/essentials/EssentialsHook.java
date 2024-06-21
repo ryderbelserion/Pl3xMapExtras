@@ -2,12 +2,10 @@ package com.ryderbelserion.map.hook.warps.essentials;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.Warps;
-import com.earth2me.essentials.commands.WarpNotFoundException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-import net.ess3.api.InvalidWorldException;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -66,12 +64,13 @@ public class EssentialsHook implements Listener, Hook {
     public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
         Map<String, Location> map = new HashMap<>();
         Warps warps = Essentials.getPlugin(Essentials.class).getWarps();
+
         for (String warp : warps.getList()) {
             try {
                 map.put(warp, warps.getWarp(warp));
-            } catch (WarpNotFoundException | InvalidWorldException ignore) {
-            }
+            } catch (Exception ignore) {}
         }
+
         return map.entrySet().stream()
                 .filter(warp -> warp.getValue().getWorld().getName().equals(world.getName()))
                 .map(this::createIcon).collect(Collectors.toList());
@@ -82,6 +81,7 @@ public class EssentialsHook implements Listener, Hook {
         Location loc = warp.getValue();
         Point point = Point.of(loc.getX(), loc.getZ());
         String key = String.format("essentialswarps_%s_%s", loc.getWorld(), name);
+
         Icon icon = Marker.icon(key, point, this.imageKey, EssentialsConfig.ICON_SIZE)
                 .setAnchor(EssentialsConfig.ICON_ANCHOR)
                 .setRotationAngle(EssentialsConfig.ICON_ROTATION_ANGLE)
@@ -90,12 +90,15 @@ public class EssentialsHook implements Listener, Hook {
                 .setShadowSize(EssentialsConfig.ICON_SHADOW_SIZE)
                 .setShadowAnchor(EssentialsConfig.ICON_SHADOW_ANCHOR);
         Options.Builder builder = this.options.asBuilder();
+
         if (EssentialsConfig.ICON_POPUP_CONTENT != null) {
             builder.popupContent(EssentialsConfig.ICON_POPUP_CONTENT.replace("<warp>", name));
         }
+
         if (EssentialsConfig.ICON_TOOLTIP_CONTENT != null) {
             builder.tooltipContent(EssentialsConfig.ICON_TOOLTIP_CONTENT.replace("<warp>", name));
         }
+
         return icon.setOptions(builder.build());
     }
 }

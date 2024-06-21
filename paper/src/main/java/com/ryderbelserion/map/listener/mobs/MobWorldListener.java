@@ -2,9 +2,9 @@ package com.ryderbelserion.map.listener.mobs;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.config.MobConfig;
-import com.ryderbelserion.map.markers.mobs.Icon;
-import com.ryderbelserion.map.markers.mobs.MobsLayer;
-import com.ryderbelserion.map.markers.mobs.MobsManager;
+import com.ryderbelserion.map.marker.mobs.Icon;
+import com.ryderbelserion.map.marker.mobs.MobsLayer;
+import com.ryderbelserion.map.marker.mobs.MobsManager;
 import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;

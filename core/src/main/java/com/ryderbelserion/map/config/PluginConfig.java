@@ -4,6 +4,7 @@ import com.ryderbelserion.map.Provider;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.util.FileUtil;
 import java.nio.file.Path;
+import java.util.List;
 
 public class PluginConfig extends AbstractConfig {
 
@@ -35,6 +36,12 @@ public class PluginConfig extends AbstractConfig {
 
     @Comment("The message sent when the player does not have the correct permission.")
     public static String no_permission = "{prefix} <red>You do not have permission to perform this command.";
+
+    @Comment("The message sent when doing /pl3xmapextras help")
+    public static List<String> help_message = List.of(
+            "{prefix} <red>/pl3xmapextras reload <gray>- <white>reloads the plugin.",
+            "{prefix} <red>/pl3xmapextras help <gray>- <white>shows this menu."
+    );
 
     public PluginConfig() {}
 

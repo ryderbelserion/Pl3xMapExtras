@@ -230,8 +230,8 @@ public class BannerConfig extends AbstractConfig {
         if (getConfig().get("world-settings.default." + path) == null) {
             set("world-settings.default." + path, def);
         }
-        return get("world-settings." + this.world.getName() + "." + path,
-                get("world-settings.default." + path, def));
+
+        return get("world-settings." + this.world.getName() + "." + path, get("world-settings.default." + path, def));
     }
 
     @Override
@@ -242,9 +242,11 @@ public class BannerConfig extends AbstractConfig {
     @Override
     protected @Nullable Object get(@NotNull String path) {
         Object value = getConfig().get(path);
+
         if (value == null) {
             return null;
         }
+
         //noinspection EnhancedSwitchMigration
         switch (path.substring(path.indexOf(".", path.indexOf(".") + 1) + 1)) {
             case "marker.icon.size":
@@ -275,6 +277,7 @@ public class BannerConfig extends AbstractConfig {
             case "marker.tooltip.direction":
                 return Tooltip.Direction.valueOf(String.valueOf(value).toUpperCase(Locale.ROOT));
         }
+
         return super.get(path);
     }
 
@@ -287,6 +290,7 @@ public class BannerConfig extends AbstractConfig {
         } else if (value instanceof Tooltip.Direction direction) {
             value = direction.name();
         }
+
         getConfig().set(path, value);
     }
 }

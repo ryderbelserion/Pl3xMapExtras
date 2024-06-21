@@ -1,6 +1,6 @@
 package com.ryderbelserion.map.hook.claims.plotsquared;
 
-import com.ryderbelserion.map.util.ChunkMergeUtil;
+import com.ryderbelserion.map.util.ChunkUtil;
 import com.plotsquared.core.PlotSquared;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
@@ -67,7 +67,7 @@ public class P2Hook implements Listener, Hook {
                     continue; // no p2plots added
                 }
 
-                Polygon poly = ChunkMergeUtil.getPoly(key, p2plots);
+                Polygon poly = ChunkUtil.getPoly(key, p2plots);
                 markers.add(poly.setOptions(options(world, plot.getOwner())));
             }
         }
