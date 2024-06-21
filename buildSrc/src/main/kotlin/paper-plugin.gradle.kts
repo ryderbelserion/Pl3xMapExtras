@@ -1,13 +1,13 @@
+import com.ryderbelserion.feather.enums.Repository
+
 plugins {
-    id("io.papermc.paperweight.userdev")
-
-    id("root-plugin")
+    id("java-plugin")
 }
 
-dependencies {
-    paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
-}
+repositories {
+    maven("https://repo.triumphteam.dev/snapshots")
 
-paperweight {
-    reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
+    maven("https://maven.enginehub.org/repo")
+
+    maven(Repository.Paper.url)
 }

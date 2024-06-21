@@ -1,21 +1,19 @@
-import git.formatLog
-import git.latestCommitHash
-import git.latestCommitMessage
+import com.ryderbelserion.feather.tools.formatLog
+import com.ryderbelserion.feather.tools.latestCommitHash
+import com.ryderbelserion.feather.tools.latestCommitMessage
 
 plugins {
-    id("io.papermc.hangar-publish-plugin") version "0.1.2"
-    id("com.modrinth.minotaur") version "2.+"
+    alias(libs.plugins.minotaur)
+    alias(libs.plugins.hangar)
 
-    id("io.github.goooler.shadow")
-
-    `root-plugin`
+    `java-plugin`
 }
 
-val buildNumber: String = if (System.getenv("BUILD_NUMBER") != null) System.getenv("BUILD_NUMBER") else "SNAPSHOT"
+val buildNumber: String? = if (System.getenv("NEXT_BUILD_NUMBER") != null) System.getenv("NEXT_BUILD_NUMBER") else "SNAPSHOT"
 
 rootProject.version = "${libs.versions.minecraft.get()}-$buildNumber"
 
-val content: String = formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name)
+val content: String = formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name, "ryderbelserion")
 
 subprojects.filter { it.name != "api" }.forEach {
     it.project.version = rootProject.version

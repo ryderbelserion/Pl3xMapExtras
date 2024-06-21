@@ -1,9 +1,9 @@
 plugins {
-    `root-plugin`
+    `java-plugin`
 }
 
 dependencies {
     compileOnlyApi(libs.pl3xmap)
 
-    compileOnly(libs.annotations)
+    compileOnly(libs.jetbrains)
 }

@@ -1,7 +1,7 @@
 buildSrc/.gradle
 buildSrc/build
 
-common/build
+core/build
 paper/build
 paper/run
 .gradle
