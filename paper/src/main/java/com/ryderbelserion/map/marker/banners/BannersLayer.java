@@ -129,8 +129,6 @@ public class BannersLayer extends WorldLayer {
         try (DataInputStream in = new DataInputStream(new GZIPInputStream(new FileInputStream(this.dataFile.toFile())))) {
             int size = in.readInt();
 
-            Bukkit.getLogger().warning("Size: " + size);
-
             for (int i = 0; i < size; i++) {
                 putBanner(Banner.load(in), false);
             }
