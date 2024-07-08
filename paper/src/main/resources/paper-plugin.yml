@@ -12,3 +12,27 @@ dependencies:
       load: BEFORE
       required: true
       join-classpath: true
+    Essentials:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    PlayerWarps:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    ClaimChunk:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    GriefDefender:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    PlotSquared:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    WorldGuard:
+      load: BEFORE
+      required: false
+      join-classpath: true
