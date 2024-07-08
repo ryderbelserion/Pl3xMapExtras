@@ -21,8 +21,7 @@ modrinth {
     versionName.set("${rootProject.name} ${rootProject.version}")
     versionNumber.set(rootProject.version as String)
 
-    changelog.set(latestCommitHistory("f638e1", rootProject.name, "ryderbelserion").replace("\n", ""))
-
+    changelog.set(latestCommitHistory("5fd83e", rootProject.name, "ryderbelserion").replace("\n", ""))
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
     syncBodyFrom.set(rootProject.file("README.md").readText(Charsets.UTF_8))
