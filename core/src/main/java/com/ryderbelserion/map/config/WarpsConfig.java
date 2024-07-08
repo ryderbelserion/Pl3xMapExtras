@@ -20,7 +20,7 @@ public abstract class WarpsConfig extends AbstractConfig {
 
     public static void registerIcon(String image) {
         String fileName = String.format("icons%s%s.png", File.separator, image);
-        File icon = Provider.getInstance().getDataFolder().resolve("warps").resolve("icons").resolve(fileName).toFile();
+        File icon = Provider.getInstance().getDataFolder().resolve("warps").resolve(fileName).toFile();
 
         try {
             String key = String.format("pl3xmap_warps_%s", image);
