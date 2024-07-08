@@ -15,6 +15,8 @@ repositories {
 
     maven("https://repo.triumphteam.dev/snapshots")
 
+    maven("https://repo.essentialsx.net/snapshots")
+
     maven("https://repo.essentialsx.net/releases")
 
     maven("https://repo.crazycrew.us/snapshots")
@@ -31,7 +33,7 @@ dependencies {
 
     // Warps
     compileOnly("com.olziedev", "playerwarps-api", "6.30.0") {}
-    compileOnly("net.essentialsx", "EssentialsX", "2.20.1") {
+    compileOnly("net.essentialsx", "EssentialsX", "2.21.0-SNAPSHOT") {
         exclude("org.bstats", "*")
         exclude("org.spigotmc", "*")
     }
