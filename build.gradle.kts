@@ -1,6 +1,4 @@
-import com.ryderbelserion.feather.tools.formatLog
-import com.ryderbelserion.feather.tools.latestCommitHash
-import com.ryderbelserion.feather.tools.latestCommitMessage
+import com.ryderbelserion.feather.tools.latestCommitHistory
 
 plugins {
     alias(libs.plugins.minotaur)
@@ -23,7 +21,7 @@ modrinth {
     versionName.set("${rootProject.name} ${rootProject.version}")
     versionNumber.set(rootProject.version as String)
 
-    changelog.set(formatLog(latestCommitHash(), latestCommitMessage(), rootProject.name, "ryderbelserion"))
+    changelog.set(latestCommitHistory("f638e1", rootProject.name, "ryderbelserion").replace("\n", ""))
 
     uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
 
