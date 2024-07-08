@@ -80,7 +80,7 @@ tasks {
 
     processResources {
         inputs.properties("name" to rootProject.name)
-        inputs.properties("version" to project.version)
+        inputs.properties("version" to rootProject.version)
         inputs.properties("group" to project.properties["group"])
         inputs.properties("apiVersion" to libs.versions.minecraft.get())
         inputs.properties("description" to project.properties["description"])
