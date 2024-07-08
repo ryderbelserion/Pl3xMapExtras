@@ -1,11 +1,11 @@
 package com.ryderbelserion.map.hook.warps.essentials;
 
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.Warps;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.Warps;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
