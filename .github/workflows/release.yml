@@ -20,10 +20,15 @@ jobs:
     if: "!contains(github.event.commits[0].message, '[ci-skip]')"
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          fetch-depth: '0'
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
           java-version: 21
+          check-latest: true
 
       - uses: actions/github-script@v6
         name: Prepare build number if it doesn't exist
