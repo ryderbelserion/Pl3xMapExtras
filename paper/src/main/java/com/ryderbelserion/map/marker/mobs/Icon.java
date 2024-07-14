@@ -3,7 +3,6 @@ package com.ryderbelserion.map.marker.mobs;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.image.IconImage;
-import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Bee;
@@ -312,10 +311,6 @@ public enum Icon {
                     return icon;
                 }
             }
-        }
-
-        if (mob instanceof Wolf wolf) {
-            Bukkit.getLogger().warning("Variant: " + wolf.getVariant().getKey().getKey());
         }
 
         throw new IllegalStateException();
