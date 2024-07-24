@@ -60,7 +60,7 @@ tasks {
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
         downloadPlugins {
-            modrinth("pl3xmap", "1.21-500")
+            modrinth("pl3xmap", "1.21-505")
         }
 
         minecraftVersion(libs.versions.minecraft.get())
