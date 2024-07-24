@@ -39,3 +39,55 @@ modrinth {
         required.version("pl3xmap", "1.21-500")
     }
 }
+
+hangarPublish {
+    publications.register("plugin") {
+        apiKey.set(System.getenv("HANGAR_KEY"))
+
+        id.set(rootProject.name.lowercase())
+
+        version.set(rootProject.version as String)
+
+        channel.set("Release")
+
+        changelog.set(latestCommitHistory("5fd83e", rootProject.name, "ryderbelserion").replace("\n", ""))
+
+        platforms {
+            paper {
+                jar.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
+
+                platformVersions.set(listOf(libs.versions.minecraft.get()))
+
+                dependencies {
+                    url("Pl3xMap", "https://modrinth.com/plugin/pl3xmap") {
+                        required = true
+                    }
+
+                    url("GriefPrevention", "https://modrinth.com/plugin/griefprevention") {
+                        required = false
+                    }
+
+                    url("WorldGuard", "https://enginehub.org/worldguard#downloads") {
+                        required = false
+                    }
+
+                    url("EssentialsX", "https://essentialsx.net/downloads.html") {
+                        required = false
+                    }
+
+                    url("GriefDefender", "https://www.spigotmc.org/resources/1-12-2-1-21-griefdefender-claim-plugin-grief-prevention-protection.68900/") {
+                        required = false
+                    }
+
+                    url("ClaimChunk", "https://www.spigotmc.org/resources/claimchunk.44458/") {
+                        required = false
+                    }
+
+                    url("PlotSquared", "https://www.spigotmc.org/resources/plotsquared-v7.77506/") {
+                        required = false
+                    }
+                }
+            }
+        }
+    }
+}
