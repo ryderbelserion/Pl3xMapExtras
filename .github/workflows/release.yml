@@ -75,10 +75,12 @@ jobs:
       - name: Build
         run: ./gradlew assemble --stacktrace
 
-      - name: Modrinth
-        run: ./gradlew modrinth --stacktrace
+      - name: Publish
         env:
+          HANGAR_KEY: ${{ secrets.HANGAR_KEY }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          COMMIT_MESSAGE: ${{ join(github.event.commits.*.message, '<br>* ') }}
+        run: ./gradlew modrinth publishAllPublicationsToHangar --stacktrace
 
       - uses: actions/github-script@v6
         name: Increment Build Number
