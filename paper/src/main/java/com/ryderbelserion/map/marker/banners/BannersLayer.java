@@ -121,6 +121,10 @@ public class BannersLayer extends WorldLayer {
         saveData();
     }
 
+    public boolean containsBanner(@NotNull Position pos) {
+        return this.markers.containsKey(pos) && this.banners.containsKey(pos);
+    }
+
     private void loadData() {
         if (!Files.exists(this.dataFile)) {
             return;

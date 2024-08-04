@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.api.enums.Permissions;
+import com.ryderbelserion.map.config.BannerConfig;
+import com.ryderbelserion.map.config.PluginConfig;
 import com.ryderbelserion.map.marker.banners.Banner;
 import com.ryderbelserion.map.marker.banners.BannersLayer;
 import com.ryderbelserion.map.marker.banners.Icon;
@@ -136,7 +138,13 @@ public class BannerListener implements Listener {
         }
 
         Location loc = banner.getLocation();
+
         Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+
+        // if it does not contain position, return.
+        if (!layer.containsBanner(pos)) {
+            return;
+        }
 
         layer.removeBanner(pos);
 
