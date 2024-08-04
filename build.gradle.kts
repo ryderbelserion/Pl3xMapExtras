@@ -36,7 +36,7 @@ modrinth {
     dependencies {
         optional.version("griefprevention", "16.18.3")
 
-        required.version("pl3xmap", "1.21-500")
+        required.version("pl3xmap", "1.21-507")
     }
 }
 
