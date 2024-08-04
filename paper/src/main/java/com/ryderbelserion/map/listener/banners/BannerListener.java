@@ -72,7 +72,7 @@ public class BannerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBannerPlace(@NotNull BlockPlaceEvent event) {
-        if (!ModuleUtil.isBannersEnabled()) return;
+        if (!ModuleUtil.isBannersEnabled() || !BannerConfig.banners_block_place) return;
 
         tryAddBanner(event.getBlock().getState(false));
     }

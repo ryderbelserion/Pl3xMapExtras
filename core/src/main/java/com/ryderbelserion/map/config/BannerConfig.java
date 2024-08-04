@@ -205,6 +205,10 @@ public class BannerConfig extends AbstractConfig {
             popup closing when user clicks on the map. Defaults to true.""")
     public Boolean ICON_POPUP_SHOULD_CLOSE_ON_CLICK = null;
 
+    @Key("root.banners.block-place")
+    @Comment("Should banners be displayed on block place?")
+    public static boolean banners_block_place = true;
+
     private final World world;
 
     public BannerConfig(@NotNull World world) {
