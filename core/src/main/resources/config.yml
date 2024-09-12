@@ -1,0 +1,23 @@
+marker:
+  # Should we display banner markers on pl3xmap?
+  banners: true
+  # Should we display sign markers on pl3xmap?
+  signs: true
+  # Should we display mob markers on pl3xmap?
+  mobs: true
+  # Should we display warp markers on pl3xmap?
+  warps: false
+  # Should we display claim markers on pl3xmap?
+  claims: false
+
+messages:
+  # The prefix in front of messages.
+  prefix: '<gray>[<red>Pl3xMapExtras<gray>]'
+  # The message sent when reloading the plugin.
+  reloaded-plugin: '{prefix} <green>You have reloaded the plugin.'
+  # The message sent when the player does not have the correct permission.
+  no-permission: '{prefix} <red>You do not have permission to perform this command.'
+  # The message sent when doing /pl3xmapextras help
+  help-message:
+    - '{prefix} <red>/pl3xmapextras reload <gray>- <white>reloads the plugin.'
+    - '{prefix} <red>/pl3xmapextras help <gray>- <white>shows this menu.'

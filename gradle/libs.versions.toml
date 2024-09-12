@@ -1,0 +1,56 @@
+[plugins]
+paperweight = { id = "io.papermc.paperweight.userdev", version.ref = "paperweight" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+
+hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
+minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
+
+runPaper = { id = "xyz.jpenilla.run-paper", version.ref = "runPaper" }
+
+[versions]
+# Paper API
+paper = "1.21.1-R0.1-SNAPSHOT"
+velocity = "3.3.0-SNAPSHOT"
+minecraft = "1.21.1"
+
+# Gradle Plugins
+paperweight = "1.7.1"
+runPaper = "2.3.0"
+shadow = "8.3.0"
+hangar = "0.1.2"
+
+# Libraries
+configurate = "4.2.0-SNAPSHOT"
+jetbrains = "24.1.0"
+adventure = "4.17.0"
+jalu = "1.4.1"
+
+# Bukkit Plugins
+headdatabaseapi = "1.3.1"
+placeholderapi = "2.11.5"
+itemsadder = "3.6.3-beta-14"
+oraxen = "1.171.0"
+luckperms = "5.4"
+
+# Modrinth
+minotaur = "2.+"
+
+[libraries]
+velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
+paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+
+# Kyori
+kyori-logger = { module = "net.kyori:adventure-text-logger-slf4j", version.ref = "adventure" }
+kyori-text = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
+kyori-api = { module = "net.kyori:adventure-api", version.ref = "adventure" }
+
+# Plugins
+pl3xmap = { group = "maven.modrinth", name = "pl3xmap", version = "1.21-507" }
+
+# Common
+configurate = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
+jetbrains = { module = "org.jetbrains:annotations", version.ref = "jetbrains" }
+jalu = { module = "ch.jalu:configme", version.ref = "jalu" }
+
+[bundles]
+adventure = [ "kyori-api", "kyori-text", "kyori-logger" ]
