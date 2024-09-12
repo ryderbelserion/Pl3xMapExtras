@@ -40,9 +40,9 @@ modrinth {
     detectLoaders.set(false)
 
     dependencies {
-        optional.version("griefprevention", "16.18.3")
+        optional.project("griefprevention", "essentialsx", "worldguard", "claimchunk")
 
-        required.version("pl3xmap", "1.21-507")
+        required.project("pl3xmap")
     }
 }
 
@@ -65,19 +65,15 @@ hangarPublish {
                 platformVersions.set(listOf(libs.versions.minecraft.get()))
 
                 dependencies {
-                    url("Pl3xMap", "https://modrinth.com/plugin/pl3xmap") {
+                    hangar("Pl3xMap") {
                         required = true
                     }
 
-                    url("GriefPrevention", "https://modrinth.com/plugin/griefprevention") {
+                    hangar("Essentials") {
                         required = false
                     }
 
-                    url("WorldGuard", "https://enginehub.org/worldguard#downloads") {
-                        required = false
-                    }
-
-                    url("EssentialsX", "https://essentialsx.net/downloads.html") {
+                    hangar("GriefPrevention") {
                         required = false
                     }
 
@@ -85,11 +81,15 @@ hangarPublish {
                         required = false
                     }
 
+                    url("PlotSquared", "https://www.spigotmc.org/resources/plotsquared-v7.77506/") {
+                        required = false
+                    }
+
                     url("ClaimChunk", "https://www.spigotmc.org/resources/claimchunk.44458/") {
                         required = false
                     }
 
-                    url("PlotSquared", "https://www.spigotmc.org/resources/plotsquared-v7.77506/") {
+                    url("WorldGuard", "https://enginehub.org/worldguard#downloads") {
                         required = false
                     }
                 }
