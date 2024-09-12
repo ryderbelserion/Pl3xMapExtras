@@ -65,7 +65,7 @@ hangarPublish {
                 platformVersions.set(listOf(libs.versions.minecraft.get()))
 
                 dependencies {
-                    hangar("Pl3xMap") {
+                    url("Pl3xMap", "https://modrinth.com/plugin/pl3xmap") {
                         required = true
                     }
 
