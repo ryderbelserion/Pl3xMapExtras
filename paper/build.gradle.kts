@@ -15,15 +15,13 @@ repositories {
 
     maven("https://repo.essentialsx.net/releases")
 
-    maven("https://repo.crazycrew.us/snapshots")
-
     maven("https://repo.olziedev.com")
 }
 
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
 
-    implementation(project(":core"))
+    implementation(project(":common"))
 
     // Warps
     compileOnly("com.olziedev", "playerwarps-api", "6.30.0") {}
@@ -66,13 +64,13 @@ tasks {
     }
 
     shadowJar {
-        archiveBaseName.set("${rootProject.name}-${rootProject.version}")
+        archiveBaseName.set("${rootProject.name}-${project.version}")
         archiveClassifier.set("")
     }
 
     processResources {
         inputs.properties("name" to rootProject.name)
-        inputs.properties("version" to rootProject.version)
+        inputs.properties("version" to project.version)
         inputs.properties("group" to project.properties["group"])
         inputs.properties("apiVersion" to libs.versions.minecraft.get())
         inputs.properties("description" to project.properties["description"])

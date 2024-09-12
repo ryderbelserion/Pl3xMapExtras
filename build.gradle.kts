@@ -5,9 +5,17 @@ plugins {
     `java-plugin`
 }
 
-rootProject.version = if (System.getenv("BUILD_NUMBER") == null) "1.0.0" else System.getenv("BUILD_NUMBER")
+val buildNumber: String? = System.getenv("BUILD_NUMBER")
+
+rootProject.version = if (buildNumber != null) "${libs.versions.minecraft.get()}-$buildNumber" else "1.0.0"
+
+val isSnapshot = false
 
 val content: String = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+
+subprojects.filter { it.name != "api" }.forEach {
+    it.project.version = rootProject.version
+}
 
 modrinth {
     token.set(System.getenv("MODRINTH_TOKEN"))
