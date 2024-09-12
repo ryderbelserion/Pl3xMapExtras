@@ -64,7 +64,7 @@ tasks {
     }
 
     shadowJar {
-        archiveBaseName.set("${rootProject.name}-${project.version}")
+        archiveBaseName.set(rootProject.name)
         archiveClassifier.set("")
     }
 
