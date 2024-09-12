@@ -1,5 +1,6 @@
-### Changes:
-- Versioning is different, because the previous versioning I didn't care for anymore.
+### Added:
+- Ability to blacklist worldguard regions from showing up on the map.
+  - The config option can be found in the `worldguard` folder!
 
 ### Fixed:
-- GriefPrevention now loads properly.
+- Properly reload configuration files for claim plugins.
