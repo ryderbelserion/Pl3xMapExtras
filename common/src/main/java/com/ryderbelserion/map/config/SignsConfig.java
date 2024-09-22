@@ -210,22 +210,22 @@ public class SignsConfig extends AbstractConfig {
     @Key("sign.add.particles")
     @Comment("""
             The particles to play when a sign is added to Pl3xMap.
-            https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html""")
+            https://minecraft.wiki/w/Particles_(Java_Edition)""")
     public String SIGN_ADD_PARTICLES = "happy_villager";
     @Key("sign.add.sound")
     @Comment("""
             The sound to play when a sign is added to Pl3xMap.
-            https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html""")
+            https://minecraft.wiki/w/Sounds.json#Java_Edition_values""")
     public String SIGN_ADD_SOUND = "entity.player.levelup";
     @Key("sign.remove.particles")
     @Comment("""
             The particles to play when a sign is removed from Pl3xMap.
-            https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html""")
+            https://minecraft.wiki/w/Particles_(Java_Edition)""")
     public String SIGN_REMOVE_PARTICLES = "wax_on";
     @Key("sign.remove.sound")
     @Comment("""
             The sound to play when a sign is removed from Pl3xMap.
-            https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html""")
+            https://minecraft.wiki/w/Sounds.json#Java_Edition_values""")
     public String SIGN_REMOVE_SOUND = "entity.ghast.hurt";
 
     private final World world;
