@@ -12,6 +12,7 @@ import com.ryderbelserion.map.marker.signs.Icon;
 import com.ryderbelserion.map.marker.signs.Position;
 import com.ryderbelserion.map.marker.signs.Sign;
 import com.ryderbelserion.map.marker.signs.SignsLayer;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -31,6 +32,7 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -76,7 +78,7 @@ public class SignListener implements Listener {
         tryRemoveSign(event.getBlock().getState());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onClickSign(@NotNull PlayerInteractEvent event) {
         if (!ModuleUtil.isSignsEnabled()) return;
 
@@ -107,6 +109,7 @@ public class SignListener implements Listener {
             case LEFT_CLICK_BLOCK -> {
                 // cancel event to stop sign from breaking
                 event.setCancelled(true);
+
                 tryRemoveSign(sign);
             }
 
@@ -190,6 +193,7 @@ public class SignListener implements Listener {
 
     private void tryAddSign(org.bukkit.block.Sign sign, Position pos, SignSide side) {
         SignsLayer layer = getLayer(sign);
+
         if (layer == null) {
             // world has no signs layer; ignore
             return;
