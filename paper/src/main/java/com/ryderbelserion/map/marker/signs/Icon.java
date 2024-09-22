@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.image.IconImage;
 import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.block.CraftBlock;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -44,7 +43,11 @@ public enum Icon {
     }
 
     public static @Nullable Icon get(@NotNull Sign sign) {
-        return BY_WOOD.get(((SignBlock) ((CraftBlock) sign.getBlock()).getNMS().getBlock()).type());
+        if (sign instanceof SignBlock block) {
+            return BY_WOOD.get(block.type());
+        }
+
+        return BY_WOOD.get(WoodType.OAK);
     }
 
     public static void register() {
