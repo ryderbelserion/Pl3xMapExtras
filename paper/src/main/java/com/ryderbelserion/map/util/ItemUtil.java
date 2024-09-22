@@ -32,6 +32,6 @@ public class ItemUtil {
     }
 
     private static NamespacedKey getKey(String value) {
-        return NamespacedKey.minecraft(value);
+        return NamespacedKey.minecraft(value.toLowerCase());
     }
 }
