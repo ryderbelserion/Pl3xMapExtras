@@ -1,8 +1,5 @@
 package com.ryderbelserion.map.hook.claims.claimchunk;
 
-import com.cjburkey.claimchunk.ClaimChunk;
-import com.cjburkey.claimchunk.chunk.DataChunk;
-import com.cjburkey.claimchunk.data.newdata.IClaimChunkDataHandler;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +10,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.cjburkey.claimchunk.ClaimChunk;
+import com.cjburkey.claimchunk.chunk.DataChunk;
+import com.cjburkey.claimchunk.data.newdata.IClaimChunkDataHandler;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.util.ChunkUtil;
 import net.pl3x.map.core.markers.Point;
@@ -45,7 +45,6 @@ public class ClaimChunkHook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
-        @SuppressWarnings("deprecation")
         ClaimChunk cc = ClaimChunk.getInstance();
 
         IClaimChunkDataHandler dataHandler;
@@ -66,15 +65,15 @@ public class ClaimChunkHook implements Listener, Hook {
         }
 
         List<DataChunk> chunks = Arrays.stream(chunkArr)
-                .filter(claim -> claim.chunk.getWorld().equals(world.getName()))
+                .filter(claim -> claim.chunk.world().equals(world.getName()))
                 .toList();
 
         if (ClaimChunkConfig.SHOW_CHUNKS) {
             return chunks.stream().map(claim -> {
-                int minX = claim.chunk.getX() << 4;
-                int maxX = (claim.chunk.getX() + 1) << 4;
-                int minZ = claim.chunk.getZ() << 4;
-                int maxZ = (claim.chunk.getZ() + 1) << 4;
+                int minX = claim.chunk.x() << 4;
+                int maxX = (claim.chunk.x() + 1) << 4;
+                int minZ = claim.chunk.z() << 4;
+                int maxZ = (claim.chunk.z() + 1) << 4;
                 String key = String.format("cc_%s_chunk_%d_%d", world.getName(), minX, minZ);
                 Rectangle rect = Marker.rectangle(key, Point.of(minX, minZ), Point.of(maxX, maxZ));
                 return rect.setOptions(options(world, claim.player));
@@ -82,7 +81,7 @@ public class ClaimChunkHook implements Listener, Hook {
         }
 
         List<ClaimChunkClaim> claims = chunks.stream().map(chunk ->
-                new ClaimChunkClaim(chunk.chunk.getX(), chunk.chunk.getZ(), chunk.player)
+                new ClaimChunkClaim(chunk.chunk.x(), chunk.chunk.x(), chunk.player)
         ).collect(Collectors.toList());
         List<ClaimChunkGroup> groups = groupClaims(claims);
         Collection<Marker<?>> markers = new ArrayList<>();

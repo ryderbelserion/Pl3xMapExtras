@@ -33,7 +33,7 @@ dependencies {
     // Claims
     compileOnly("com.sk89q.worldguard", "worldguard-bukkit", "7.0.8-SNAPSHOT")
     compileOnly("com.github.TechFortress", "GriefPrevention", "16.18.2")
-    compileOnly("com.github.cjburkey01", "ClaimChunk", "0.0.22")
+    compileOnly("com.cjburkey.claimchunk", "claimchunk", "0.0.25-FIX3")
     compileOnly("com.griefdefender", "api", "2.1.0-SNAPSHOT")
 
     implementation(platform("com.intellectualsites.bom:bom-1.18.x:1.28"))

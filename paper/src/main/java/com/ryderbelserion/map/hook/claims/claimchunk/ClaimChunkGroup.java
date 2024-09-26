@@ -51,7 +51,7 @@ public class ClaimChunkGroup {
 
     public @NotNull String id() {
         if (!claims.isEmpty()) {
-            ClaimChunkClaim claim = claims.get(0);
+            ClaimChunkClaim claim = claims.getFirst();
             return claim.minX() + "_" + claim.minZ();
         } else {
             return "NaN_NaN";
