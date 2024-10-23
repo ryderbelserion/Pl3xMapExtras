@@ -3,6 +3,7 @@ package com.ryderbelserion.map.listener.mobs;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.marker.mobs.MobsManager;
+import com.ryderbelserion.map.util.ConfigUtil;
 import com.ryderbelserion.map.util.ModuleUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Mob;
@@ -19,7 +20,7 @@ public class MobEntityListener implements Listener {
 
     @EventHandler
     public void onEntityRemove(EntityRemoveFromWorldEvent event) {
-        if (!ModuleUtil.isMobsEnabled()) return;
+        if (!ConfigUtil.isMobsEnabled()) return;
 
         Entity entity = event.getEntity();
 

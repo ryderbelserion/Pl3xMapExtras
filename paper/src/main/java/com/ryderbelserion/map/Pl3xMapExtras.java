@@ -5,6 +5,7 @@ import com.ryderbelserion.map.api.enums.Permissions;
 import com.ryderbelserion.map.config.PluginConfig;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.marker.mobs.MobsManager;
+import com.ryderbelserion.map.util.ConfigUtil;
 import com.ryderbelserion.map.util.ModuleUtil;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
@@ -87,7 +88,7 @@ public class Pl3xMapExtras extends JavaPlugin {
     }
 
     public MobsManager getMobsManager() {
-        if (!ModuleUtil.isMobsEnabled()) {
+        if (!ConfigUtil.isMobsEnabled()) {
             getLogger().warning("The toggle for displaying a mob layer is turned off.");
 
             return null;

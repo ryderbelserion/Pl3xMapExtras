@@ -3,6 +3,7 @@ package com.ryderbelserion.map.listener.banners;
 import com.ryderbelserion.map.config.BannerConfig;
 import com.ryderbelserion.map.marker.banners.BannersLayer;
 import com.ryderbelserion.map.marker.banners.Icon;
+import com.ryderbelserion.map.util.ConfigUtil;
 import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
@@ -22,14 +23,14 @@ import org.jetbrains.annotations.NotNull;
 public class BannerWorldListener implements EventListener, Listener {
 
     public BannerWorldListener() {
-        if (!ModuleUtil.isBannersEnabled()) return;
+        if (!ConfigUtil.isBannersEnabled()) return;
 
         Pl3xMap.api().getEventRegistry().register(this);
     }
 
     @org.bukkit.event.EventHandler(priority = EventPriority.MONITOR)
     public void onChunkLoad(@NotNull ChunkLoadEvent event) {
-        if (!ModuleUtil.isBannersEnabled()) return;
+        if (!ConfigUtil.isBannersEnabled()) return;
 
         if (event.isNewChunk()) {
             // chunk is new; ignore
@@ -41,21 +42,21 @@ public class BannerWorldListener implements EventListener, Listener {
 
     @org.bukkit.event.EventHandler(priority = EventPriority.MONITOR)
     public void onChunkUnload(@NotNull ChunkUnloadEvent event) {
-        if (!ModuleUtil.isBannersEnabled()) return;
+        if (!ConfigUtil.isBannersEnabled()) return;
 
         checkChunk(event.getChunk());
     }
 
     @EventHandler
     public void onPl3xMapEnabled(@NotNull Pl3xMapEnabledEvent event) {
-        if (!ModuleUtil.isBannersEnabled()) return;
+        if (!ConfigUtil.isBannersEnabled()) return;
 
         Icon.register();
     }
 
     @EventHandler
     public void onServerLoaded(@NotNull ServerLoadedEvent event) {
-        if (!ModuleUtil.isBannersEnabled()) return;
+        if (!ConfigUtil.isBannersEnabled()) return;
 
         Icon.register();
         Pl3xMap.api().getWorldRegistry().forEach(this::registerWorld);
@@ -63,29 +64,28 @@ public class BannerWorldListener implements EventListener, Listener {
 
     @EventHandler
     public void onWorldLoaded(@NotNull WorldLoadedEvent event) {
-        if (!ModuleUtil.isBannersEnabled()) return;
+        if (!ConfigUtil.isBannersEnabled()) return;
 
         registerWorld(event.getWorld());
     }
 
     @EventHandler
     public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
-        if (!ModuleUtil.isBannersEnabled()) return;
+        if (!ConfigUtil.isBannersEnabled()) return;
 
         try {
             event.getWorld().getLayerRegistry().unregister(BannersLayer.KEY);
-        } catch (Throwable ignore) {
-        }
+        } catch (Throwable ignore) {}
     }
 
     private void registerWorld(@NotNull World world) {
-        if (!ModuleUtil.isBannersEnabled()) return;
+        if (!ConfigUtil.isBannersEnabled()) return;
 
         world.getLayerRegistry().register(new BannersLayer(new BannerConfig(world)));
     }
 
     private void checkChunk(@NotNull Chunk chunk) {
-        if (!ModuleUtil.isBannersEnabled()) return;
+        if (!ConfigUtil.isBannersEnabled()) return;
 
         org.bukkit.World bukkitWorld = chunk.getWorld();
 

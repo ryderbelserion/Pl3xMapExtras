@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.listener.warps;
 
 import com.ryderbelserion.map.hook.Hook;
+import com.ryderbelserion.map.util.ConfigUtil;
 import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
@@ -18,35 +19,35 @@ import org.jetbrains.annotations.NotNull;
 public class WarpListener implements EventListener, Listener {
 
     public WarpListener() {
-        if (!ModuleUtil.isWarpsEnabled()) return;
+        if (!ConfigUtil.isWarpsEnabled()) return;
 
         Pl3xMap.api().getEventRegistry().register(this);
     }
 
     @org.bukkit.event.EventHandler
     public void onPluginEnabled(@NotNull PluginEnableEvent event) {
-        if (!ModuleUtil.isWarpsEnabled()) return;
+        if (!ConfigUtil.isWarpsEnabled()) return;
 
         Hook.add(event.getPlugin().getName());
     }
 
     @org.bukkit.event.EventHandler
     public void onPluginDisabled(@NotNull PluginDisableEvent event) {
-        if (!ModuleUtil.isWarpsEnabled()) return;
+        if (!ConfigUtil.isWarpsEnabled()) return;
 
         Hook.remove(event.getPlugin().getName());
     }
 
     @EventHandler
     public void onPl3xMapEnabled(@NotNull Pl3xMapEnabledEvent event) {
-        if (!ModuleUtil.isWarpsEnabled()) return;
+        if (!ConfigUtil.isWarpsEnabled()) return;
 
         ModuleUtil.reload();
     }
 
     @EventHandler
     public void onServerLoaded(@NotNull ServerLoadedEvent event) {
-        if (!ModuleUtil.isWarpsEnabled()) return;
+        if (!ConfigUtil.isWarpsEnabled()) return;
 
         ModuleUtil.reload();
 
@@ -55,14 +56,14 @@ public class WarpListener implements EventListener, Listener {
 
     @EventHandler
     public void onWorldLoaded(@NotNull WorldLoadedEvent event) {
-        if (!ModuleUtil.isWarpsEnabled()) return;
+        if (!ConfigUtil.isWarpsEnabled()) return;
 
         registerWorld(event.getWorld());
     }
 
     @EventHandler
     public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
-        if (!ModuleUtil.isWarpsEnabled()) return;
+        if (!ConfigUtil.isWarpsEnabled()) return;
 
         try {
             Hook.hooks().forEach(hook -> hook.unloadWorld(event.getWorld()));

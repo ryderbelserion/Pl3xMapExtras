@@ -37,26 +37,6 @@ public class ModuleUtil {
 
     private static final PluginManager pluginManager = server.getPluginManager();
 
-    public static boolean isBannersEnabled() {
-        return PluginConfig.toggle_banners;
-    }
-
-    public static boolean isClaimsEnabled() {
-        return PluginConfig.toggle_claims;
-    }
-
-    public static boolean isSignsEnabled() {
-        return PluginConfig.toggle_signs;
-    }
-
-    public static boolean isWarpsEnabled() {
-        return PluginConfig.toggle_warps;
-    }
-
-    public static boolean isMobsEnabled() {
-        return PluginConfig.toggle_mobs;
-    }
-
     public static void toggleAll(boolean isShutdown) {
         toggleSigns(isShutdown);
         toggleWarps(isShutdown);
@@ -67,7 +47,7 @@ public class ModuleUtil {
     }
 
     public static void toggleClaims(final boolean isShutdown) {
-        if (isClaimsEnabled() && !isShutdown) {
+        if (ConfigUtil.isClaimsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new ClaimListener(), plugin);
 
             Pl3xMap.api().getWorldRegistry().forEach(ModuleUtil::registerWorld);
@@ -103,7 +83,7 @@ public class ModuleUtil {
     }
 
     public static void toggleWarps(final boolean isShutdown) {
-        if (isWarpsEnabled() && !isShutdown) {
+        if (ConfigUtil.isWarpsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new WarpListener(), plugin);
 
             return;
@@ -117,7 +97,7 @@ public class ModuleUtil {
     }
 
     public static void toggleSigns(final boolean isShutdown) {
-        if (isSignsEnabled() && !isShutdown) {
+        if (ConfigUtil.isSignsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new SignWorldListener(), plugin);
             pluginManager.registerEvents(new SignListener(), plugin);
 
@@ -132,7 +112,7 @@ public class ModuleUtil {
     }
 
     public static void toggleBanners(final boolean isShutdown) {
-        if (isBannersEnabled() && !isShutdown) {
+        if (ConfigUtil.isBannersEnabled() && !isShutdown) {
             pluginManager.registerEvents(new BannerWorldListener(), plugin);
             pluginManager.registerEvents(new BannerListener(), plugin);
 
@@ -147,7 +127,7 @@ public class ModuleUtil {
     }
 
     public static void toggleMobs(final boolean isShutdown) {
-        if (isMobsEnabled() && !isShutdown) {
+        if (ConfigUtil.isMobsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new MobWorldListener(), plugin);
             pluginManager.registerEvents(new MobEntityListener(), plugin);
 
@@ -213,12 +193,12 @@ public class ModuleUtil {
     }
 
     public static void extract() {
-        if (isBannersEnabled()) FileUtil.extracts(plugin.getClass(), "/banners/icons/", plugin.getDataFolder().toPath().resolve("banners").resolve("icons"), false);
+        if (ConfigUtil.isBannersEnabled()) FileUtil.extracts(plugin.getClass(), "/banners/icons/", plugin.getDataFolder().toPath().resolve("banners").resolve("icons"), false);
 
-        if (isWarpsEnabled()) FileUtil.extracts(plugin.getClass(), "/warps/icons/", plugin.getDataFolder().toPath().resolve("warps").resolve("icons"), false);
+        if (ConfigUtil.isWarpsEnabled()) FileUtil.extracts(plugin.getClass(), "/warps/icons/", plugin.getDataFolder().toPath().resolve("warps").resolve("icons"), false);
 
-        if (isSignsEnabled()) FileUtil.extracts(plugin.getClass(), "/signs/icons/", plugin.getDataFolder().toPath().resolve("signs").resolve("icons"), false);
+        if (ConfigUtil.isSignsEnabled()) FileUtil.extracts(plugin.getClass(), "/signs/icons/", plugin.getDataFolder().toPath().resolve("signs").resolve("icons"), false);
 
-        if (isMobsEnabled()) FileUtil.extracts(plugin.getClass(), "/mobs/icons/", plugin.getDataFolder().toPath().resolve("mobs").resolve("icons"), false);
+        if (ConfigUtil.isMobsEnabled()) FileUtil.extracts(plugin.getClass(), "/mobs/icons/", plugin.getDataFolder().toPath().resolve("mobs").resolve("icons"), false);
     }
 }
