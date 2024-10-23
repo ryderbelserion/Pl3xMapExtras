@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import com.ryderbelserion.map.Provider;
+import com.ryderbelserion.map.util.ConfigUtil;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.configuration.AbstractConfig;
@@ -19,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 public abstract class WarpsConfig extends AbstractConfig {
 
     public static void registerIcon(String image) {
+        if (!ConfigUtil.isWarpsEnabled()) return;
+
         String fileName = String.format("icons%s%s.png", File.separator, image);
         File icon = Provider.getInstance().getDataFolder().resolve("warps").resolve(fileName).toFile();
 
