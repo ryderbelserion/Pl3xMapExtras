@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,6 +16,7 @@ import com.cjburkey.claimchunk.chunk.DataChunk;
 import com.cjburkey.claimchunk.data.newdata.IClaimChunkDataHandler;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.util.ChunkUtil;
+import com.ryderbelserion.map.util.ConfigUtil;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Rectangle;
@@ -45,6 +47,8 @@ public class ClaimChunkHook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
+
         ClaimChunk cc = ClaimChunk.getInstance();
 
         IClaimChunkDataHandler dataHandler;

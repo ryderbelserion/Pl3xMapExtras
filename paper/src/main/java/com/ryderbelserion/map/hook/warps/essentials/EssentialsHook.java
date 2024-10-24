@@ -2,10 +2,12 @@ package com.ryderbelserion.map.hook.warps.essentials;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.stream.Collectors;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.Warps;
+import com.ryderbelserion.map.util.ConfigUtil;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -62,6 +64,8 @@ public class EssentialsHook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+        if (!ConfigUtil.isWarpsEnabled()) return EMPTY_LIST;
+
         Map<String, Location> map = new HashMap<>();
         Warps warps = Essentials.getPlugin(Essentials.class).getWarps();
 

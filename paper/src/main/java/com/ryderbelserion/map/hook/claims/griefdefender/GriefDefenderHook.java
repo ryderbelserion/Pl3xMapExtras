@@ -2,8 +2,10 @@ package com.ryderbelserion.map.hook.claims.griefdefender;
 
 import com.griefdefender.api.GriefDefender;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 import com.ryderbelserion.map.hook.Hook;
+import com.ryderbelserion.map.util.ConfigUtil;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.util.Colors;
@@ -29,6 +31,8 @@ public class GriefDefenderHook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
+
         return GriefDefender.getCore().getAllClaims().stream()
                 .filter(claim -> claim.getWorldName().equals(world.getName()))
                 .map(claim -> new GriefDefenderClaim(world, claim))

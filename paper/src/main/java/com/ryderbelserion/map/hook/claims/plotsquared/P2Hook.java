@@ -5,6 +5,7 @@ import com.plotsquared.core.PlotSquared;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
 import com.ryderbelserion.map.hook.Hook;
+import com.ryderbelserion.map.util.ConfigUtil;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class P2Hook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
+
         Collection<Marker<?>> markers = new ArrayList<>();
 
         for (PlotArea plotArea : PlotSquared.get().getPlotAreaManager().getPlotAreasSet(world.getName())) {

@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.hook.claims.worldguard;
 
 import com.ryderbelserion.map.hook.Hook;
+import com.ryderbelserion.map.util.ConfigUtil;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flag;
@@ -47,6 +48,8 @@ public class WorldGuardHook implements Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
+
         RegionManager manager = getRegionManager(world);
 
         if (manager == null) {

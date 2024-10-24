@@ -2,6 +2,7 @@ package com.ryderbelserion.map.marker.mobs;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.config.MobConfig;
+import com.ryderbelserion.map.util.ConfigUtil;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Marker;
 import org.bukkit.World;
