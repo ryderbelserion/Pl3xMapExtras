@@ -2,11 +2,13 @@ plugins {
     alias(libs.plugins.paperweight)
     alias(libs.plugins.runPaper)
     alias(libs.plugins.shadow)
-
-    `paper-plugin`
 }
 
 repositories {
+    maven("https://repo.papermc.io/repository/maven-public")
+
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
+
     maven("https://oss.sonatype.org/content/repositories/snapshots")
 
     maven("https://repo.glaremasters.me/repository/bloodshot")
@@ -14,6 +16,10 @@ repositories {
     maven("https://repo.essentialsx.net/snapshots")
 
     maven("https://repo.essentialsx.net/releases")
+
+    maven("https://maven.enginehub.org/repo")
+
+    maven("https://repo.oraxen.com/releases")
 
     maven("https://repo.olziedev.com")
 }

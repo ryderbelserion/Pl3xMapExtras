@@ -21,12 +21,14 @@ public class Pl3xMapExtras extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        PluginManager pluginManager = getServer().getPluginManager();
+        final PluginManager pluginManager = getServer().getPluginManager();
 
         if (!pluginManager.isPluginEnabled("Pl3xMap")) {
             getLogger().severe("Pl3xMap not found!");
 
             pluginManager.disablePlugin(this);
+
+            return;
         }
 
         // Register the provider.

@@ -1,99 +1,60 @@
 plugins {
-    alias(libs.plugins.minotaur)
-    alias(libs.plugins.hangar)
-
-    `java-plugin`
+    `maven-publish`
+    `java-library`
 }
 
 val buildNumber: String? = System.getenv("BUILD_NUMBER")
 
-rootProject.version = if (buildNumber != null) "${libs.versions.minecraft.get()}-$buildNumber" else "1.1.3"
-
-val isSnapshot = false
-
-val content: String = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
+rootProject.version = if (buildNumber != null) "${libs.versions.minecraft.get()}-$buildNumber" else "4.0.2"
 
 subprojects.filter { it.name != "api" }.forEach {
     it.project.version = rootProject.version
 }
 
-modrinth {
-    token.set(System.getenv("MODRINTH_TOKEN"))
+subprojects {
+    apply(plugin = "maven-publish")
+    apply(plugin = "java-library")
 
-    projectId.set(rootProject.name.lowercase())
+    group = "com.ryderbelserion.map"
+    description = "An addon adding extra additions to Pl3xMap."
 
-    versionType.set("release")
+    repositories {
+        maven("https://repo.codemc.io/repository/maven-public")
 
-    versionName.set("${rootProject.name} ${rootProject.version}")
-    versionNumber.set(rootProject.version as String)
+        maven("https://repo.crazycrew.us/libraries")
+        maven("https://repo.crazycrew.us/releases")
 
-    uploadFile.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
-    changelog.set(content)
+        maven("https://jitpack.io")
 
-    syncBodyFrom.set(rootProject.file("README.md").readText(Charsets.UTF_8))
-
-    gameVersions.set(listOf(libs.versions.minecraft.get()))
-
-    loaders.addAll(listOf("purpur", "paper", "folia"))
-
-    autoAddDependsOn.set(false)
-    detectLoaders.set(false)
-
-    dependencies {
-        optional.project("griefprevention", "essentialsx", "worldguard", "claimchunk")
-
-        required.project("pl3xmap")
-    }
-}
-
-hangarPublish {
-    publications.register("plugin") {
-        apiKey.set(System.getenv("HANGAR_KEY"))
-
-        id.set(rootProject.name.lowercase())
-
-        version.set(rootProject.version as String)
-
-        channel.set("Release")
-
-        changelog.set(content)
-
-        platforms {
-            paper {
-                jar.set(rootProject.projectDir.resolve("jars/${rootProject.name}-${rootProject.version}.jar"))
-
-                platformVersions.set(listOf(libs.versions.minecraft.get()))
-
-                dependencies {
-                    url("Pl3xMap", "https://modrinth.com/plugin/pl3xmap") {
-                        required = true
-                    }
-
-                    hangar("Essentials") {
-                        required = false
-                    }
-
-                    hangar("GriefPrevention") {
-                        required = false
-                    }
-
-                    url("GriefDefender", "https://www.spigotmc.org/resources/1-12-2-1-21-griefdefender-claim-plugin-grief-prevention-protection.68900/") {
-                        required = false
-                    }
-
-                    url("PlotSquared", "https://www.spigotmc.org/resources/plotsquared-v7.77506/") {
-                        required = false
-                    }
-
-                    url("ClaimChunk", "https://www.spigotmc.org/resources/claimchunk.44458/") {
-                        required = false
-                    }
-
-                    url("WorldGuard", "https://enginehub.org/worldguard#downloads") {
-                        required = false
-                    }
-                }
+        exclusiveContent {
+            forRepository {
+                maven("https://api.modrinth.com/maven")
             }
+
+            filter { includeGroup("maven.modrinth") }
+        }
+
+        mavenCentral()
+    }
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
+
+    tasks {
+        compileJava {
+            options.encoding = Charsets.UTF_8.name()
+            options.release.set(21)
+        }
+
+        javadoc {
+            options.encoding = Charsets.UTF_8.name()
+        }
+
+        processResources {
+            filteringCharset = Charsets.UTF_8.name()
         }
     }
 }
