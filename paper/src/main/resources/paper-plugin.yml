@@ -1,0 +1,42 @@
+name: '${name}'
+main: '${group}.Pl3xMapExtras'
+
+version: '${version}'
+api-version: '${apiVersion}'
+description: '${description}'
+website: '${website}'
+
+dependencies:
+  server:
+    Pl3xMap:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    Essentials:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    PlayerWarps:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    ClaimChunk:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    GriefDefender:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    GriefPrevention:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    PlotSquared:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    WorldGuard:
+      load: BEFORE
+      required: false
+      join-classpath: true
