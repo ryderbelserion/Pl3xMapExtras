@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.api.enums.Permissions;
-import com.ryderbelserion.map.config.BannerConfig;
 import com.ryderbelserion.map.marker.banners.Banner;
 import com.ryderbelserion.map.marker.banners.BannersLayer;
 import com.ryderbelserion.map.marker.banners.Icon;
@@ -26,7 +25,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,13 +68,6 @@ public class BannerListener implements Listener {
 
             case RIGHT_CLICK_BLOCK -> tryAddBanner(banner);
         }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onBannerPlace(@NotNull BlockPlaceEvent event) {
-        if (!ConfigUtil.isBannersEnabled() || !BannerConfig.banners_block_place) return;
-
-        tryAddBanner(event.getBlock().getState(false));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
