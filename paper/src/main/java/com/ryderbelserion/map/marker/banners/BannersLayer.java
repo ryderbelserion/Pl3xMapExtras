@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import com.ryderbelserion.map.config.BannerConfig;
+import com.ryderbelserion.map.config.SignsConfig;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -44,6 +45,10 @@ public class BannersLayer extends WorldLayer {
         setCss(config.LAYER_CSS);
 
         loadData();
+    }
+
+    public @NotNull BannerConfig getConfig() {
+        return this.config;
     }
 
     @Override
