@@ -4,14 +4,12 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.api.enums.Permissions;
-import com.ryderbelserion.map.config.BannerConfig;
-import com.ryderbelserion.map.config.PluginConfig;
 import com.ryderbelserion.map.marker.banners.Banner;
 import com.ryderbelserion.map.marker.banners.BannersLayer;
 import com.ryderbelserion.map.marker.banners.Icon;
 import com.ryderbelserion.map.marker.banners.Position;
 import com.ryderbelserion.map.util.ConfigUtil;
-import com.ryderbelserion.map.util.ModuleUtil;
+import com.ryderbelserion.map.util.ItemUtil;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
@@ -27,7 +25,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -74,13 +71,6 @@ public class BannerListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onBannerPlace(@NotNull BlockPlaceEvent event) {
-        if (!ConfigUtil.isBannersEnabled() || !BannerConfig.banners_block_place) return;
-
-        tryAddBanner(event.getBlock().getState(false));
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBannerBreak(@NotNull BlockBreakEvent event) {
         if (!ConfigUtil.isBannersEnabled()) return;
 
@@ -113,15 +103,10 @@ public class BannerListener implements Listener {
 
         Icon icon = Icon.get(banner.getType());
 
-        if (icon == null) {
-            // material is not a registered banner; ignore
-            return;
-        }
-
         layer.putBanner(new Banner(pos, icon, getCustomName(banner)));
 
         // play fancy particles as visualizer
-        particles(banner.getLocation(), Particle.HAPPY_VILLAGER, Sound.ENTITY_PLAYER_LEVELUP);
+        particles(banner.getLocation(), ItemUtil.getParticleType(layer.getConfig().BANNER_ADD_PARTICLES), ItemUtil.getSound(layer.getConfig().BANNER_ADD_SOUND));
     }
 
     protected void tryRemoveBanner(@NotNull BlockState state) {
@@ -150,7 +135,7 @@ public class BannerListener implements Listener {
         layer.removeBanner(pos);
 
         // play fancy particles as visualizer
-        particles(banner.getLocation(), Particle.WAX_ON, Sound.ENTITY_GHAST_HURT);
+        particles(banner.getLocation(), ItemUtil.getParticleType(layer.getConfig().BANNER_REMOVE_PARTICLES), ItemUtil.getSound(layer.getConfig().BANNER_REMOVE_SOUND));
     }
 
     protected String getCustomName(org.bukkit.block.Banner banner) {
@@ -177,16 +162,21 @@ public class BannerListener implements Listener {
         return (BannersLayer) world.getLayerRegistry().get(BannersLayer.KEY);
     }
 
-    protected void particles(@NotNull Location loc, @NotNull Particle particle, @NotNull Sound sound) {
-        loc.getWorld().playSound(loc, sound, 1.0F, 1.0F);
-        ThreadLocalRandom rand = ThreadLocalRandom.current();
+    protected void particles(@NotNull Location loc, @Nullable Particle particle, @Nullable Sound sound) {
+        if (sound != null) {
+            loc.getWorld().playSound(loc, sound, 1.0F, 1.0F);
+        }
 
-        for (int i = 0; i < 20; ++i) {
-            double x = loc.getX() + rand.nextGaussian();
-            double y = loc.getY() + rand.nextGaussian();
-            double z = loc.getZ() + rand.nextGaussian();
+        if (particle != null) {
+            ThreadLocalRandom rand = ThreadLocalRandom.current();
 
-            loc.getWorld().spawnParticle(particle, x, y, z, 1, 0, 0, 0, 0, null, true);
+            for (int i = 0; i < 20; ++i) {
+                double x = loc.getX() + rand.nextGaussian();
+                double y = loc.getY() + rand.nextGaussian();
+                double z = loc.getZ() + rand.nextGaussian();
+
+                loc.getWorld().spawnParticle(particle, x, y, z, 1, 0, 0, 0, 0, null, true);
+            }
         }
     }
 }

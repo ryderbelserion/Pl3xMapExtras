@@ -209,6 +209,28 @@ public class BannerConfig extends AbstractConfig {
     @Comment("Should banners be displayed on block place?")
     public static boolean banners_block_place = true;
 
+    @Key("banner.add.particles")
+    @Comment("""
+            The particles to play when a banner is added to Pl3xMap.
+            https://minecraft.wiki/w/Particles_(Java_Edition)""")
+    public String BANNER_ADD_PARTICLES = "happy_villager";
+    @Key("banner.add.sound")
+    @Comment("""
+            The sound to play when a banner is added to Pl3xMap.
+            https://minecraft.wiki/w/Sounds.json#Java_Edition_values""")
+    public String BANNER_ADD_SOUND = "entity.player.levelup";
+    @Key("banner.remove.particles")
+    @Comment("""
+            The particles to play when a banner is removed from Pl3xMap.
+            https://minecraft.wiki/w/Particles_(Java_Edition)""")
+    public String BANNER_REMOVE_PARTICLES = "wax_on";
+    @Key("banner.remove.sound")
+    @Comment("""
+            The sound to play when a banner is removed from Pl3xMap.
+            https://minecraft.wiki/w/Sounds.json#Java_Edition_values""")
+    public String BANNER_REMOVE_SOUND = "entity.ghast.hurt";
+
+
     private final World world;
 
     public BannerConfig(@NotNull World world) {
@@ -287,10 +309,10 @@ public class BannerConfig extends AbstractConfig {
 
     @Override
     protected void set(@NotNull String path, @Nullable Object value) {
-        if (value instanceof Point point) {
-            value = Map.of("x", point.x(), "z", point.z());
-        } else if (value instanceof Vector vector) {
-            value = Map.of("x", vector.x(), "z", vector.z());
+        if (value instanceof Point(int x, int z)) {
+            value = Map.of("x", x, "z", z);
+        } else if (value instanceof Vector(double x, double z)) {
+            value = Map.of("x", x, "z", z);
         } else if (value instanceof Tooltip.Direction direction) {
             value = direction.name();
         }
