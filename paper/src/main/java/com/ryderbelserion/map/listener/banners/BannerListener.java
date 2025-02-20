@@ -103,11 +103,6 @@ public class BannerListener implements Listener {
 
         Icon icon = Icon.get(banner.getType());
 
-        if (icon == null) {
-            // material is not a registered banner; ignore
-            return;
-        }
-
         layer.putBanner(new Banner(pos, icon, getCustomName(banner)));
 
         // play fancy particles as visualizer
