@@ -80,10 +80,10 @@ public abstract class WarpsConfig extends AbstractConfig {
 
     @Override
     protected void set(@NotNull String path, @Nullable Object value) {
-        if (value instanceof Point point) {
-            value = Map.of("x", point.x(), "z", point.z());
-        } else if (value instanceof Vector vector) {
-            value = Map.of("x", vector.x(), "z", vector.z());
+        if (value instanceof Point(int x, int z)) {
+            value = Map.of("x", x, "z", z);
+        } else if (value instanceof Vector(double x, double z)) {
+            value = Map.of("x", x, "z", z);
         } else if (value instanceof Tooltip.Direction direction) {
             value = direction.name();
         }
