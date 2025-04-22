@@ -11,11 +11,9 @@ import com.ryderbelserion.map.util.ModuleUtil;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.Arrays;
 
 public class Pl3xMapExtras extends JavaPlugin {
@@ -26,16 +24,6 @@ public class Pl3xMapExtras extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        final PluginManager pluginManager = getServer().getPluginManager();
-
-        if (!pluginManager.isPluginEnabled("Pl3xMap")) {
-            getLogger().severe("Pl3xMap not found!");
-
-            pluginManager.disablePlugin(this);
-
-            return;
-        }
-
         this.api = new FusionPaper(getComponentLogger(), getDataPath());
         this.api.enable(this);
 
