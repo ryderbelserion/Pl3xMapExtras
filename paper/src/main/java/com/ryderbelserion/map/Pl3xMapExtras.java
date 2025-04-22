@@ -75,7 +75,7 @@ public class Pl3xMapExtras extends JavaPlugin {
             registry.register("pl3xmapextras", "the command to handle the plugin", new BaseCommand());
         });
 
-        new MetricsWrapper(this, 22296).start();
+        new MetricsWrapper(this, 22296);
     }
 
     @Override

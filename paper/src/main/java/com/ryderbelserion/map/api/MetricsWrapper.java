@@ -1,20 +1,14 @@
 package com.ryderbelserion.map.api;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
+import org.bstats.bukkit.Metrics;
+import org.jetbrains.annotations.NotNull;
 
-public class MetricsWrapper extends CustomMetrics {
+public class MetricsWrapper {
 
-    /**
-     * Creates a new Metrics instance.
-     *
-     * @param serviceId The id of the service. It can be found at <a href="https://bstats.org/what-is-my-plugin-id">What is my plugin id?</a>
-     */
-    public MetricsWrapper(Pl3xMapExtras plugin, int serviceId) {
-        super(plugin, serviceId);
-    }
+    private final Metrics metrics;
 
-    public void start() {
-        // If it's not enabled, we do nothing!
-        if (!isEnabled()) return;
+    public MetricsWrapper(@NotNull final Pl3xMapExtras plugin, final int serviceId) {
+        this.metrics = new Metrics(plugin, serviceId);
     }
 }

@@ -5,10 +5,6 @@ plugins {
 
 val content: String = rootProject.file("CHANGELOG.md").readText(Charsets.UTF_8)
 
-val isBeta = false
-val pluginName = rootProject.name
-val mcVersion = libs.versions.minecraft.get()
-
 tasks {
     modrinth {
         token.set(System.getenv("MODRINTH_TOKEN"))

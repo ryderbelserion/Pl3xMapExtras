@@ -29,6 +29,8 @@ dependencies {
 
     implementation(libs.fusion.paper)
 
+    implementation(libs.metrics)
+
     implementation(project(":core"))
 
     // Warps
@@ -49,17 +51,17 @@ dependencies {
     compileOnly("com.plotsquared:PlotSquared-Bukkit")
 }
 
-paperweight {
-    reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
-}
-
 tasks {
-    runServer {
-        jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
+    shadowJar {
+        archiveBaseName.set(rootProject.name)
+        archiveClassifier.set("")
 
-        defaultCharacterEncoding = Charsets.UTF_8.name()
-
-        minecraftVersion(libs.versions.minecraft.get())
+        listOf(
+            "com.ryderbelserion.fusion",
+            "org.bstats"
+        ).forEach {
+            relocate(it, "libs.$it")
+        }
     }
 
     assemble {
@@ -71,11 +73,6 @@ tasks {
                 into(rootProject.projectDir.resolve("jars"))
             }
         }
-    }
-
-    shadowJar {
-        archiveBaseName.set(rootProject.name)
-        archiveClassifier.set("")
     }
 
     processResources {
@@ -90,5 +87,15 @@ tasks {
         filesMatching("paper-plugin.yml") {
             expand(inputs.properties)
         }
+    }
+
+    runPaper.folia.registerTask()
+
+    runServer {
+        jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
+
+        defaultCharacterEncoding = Charsets.UTF_8.name()
+
+        minecraftVersion(libs.versions.minecraft.get())
     }
 }
