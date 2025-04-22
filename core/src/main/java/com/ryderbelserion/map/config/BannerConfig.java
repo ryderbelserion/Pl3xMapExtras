@@ -23,9 +23,10 @@
  */
 package com.ryderbelserion.map.config;
 
+import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
-import com.ryderbelserion.map.Provider;
+import com.ryderbelserion.fusion.core.FusionCore;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.markers.Point;
@@ -36,6 +37,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BannerConfig extends AbstractConfig {
+
+    private static final FusionCore provider = FusionCore.Provider.get();
+
+    private static final Path path = provider.getDataPath();
 
     @Key("layer.label")
     @Comment("""
@@ -221,7 +226,7 @@ public class BannerConfig extends AbstractConfig {
     }
 
     public void reload() {
-        reload(Provider.getInstance().getDataFolder().resolve("banners").resolve("config.yml"), BannerConfig.class);
+        reload(path.resolve("banners").resolve("config.yml"), BannerConfig.class);
     }
 
     @Override
@@ -287,10 +292,10 @@ public class BannerConfig extends AbstractConfig {
 
     @Override
     protected void set(@NotNull String path, @Nullable Object value) {
-        if (value instanceof Point point) {
-            value = Map.of("x", point.x(), "z", point.z());
-        } else if (value instanceof Vector vector) {
-            value = Map.of("x", vector.x(), "z", vector.z());
+        if (value instanceof Point(int x, int z)) {
+            value = Map.of("x", x, "z", z);
+        } else if (value instanceof Vector(double x, double z)) {
+            value = Map.of("x", x, "z", z);
         } else if (value instanceof Tooltip.Direction direction) {
             value = direction.name();
         }

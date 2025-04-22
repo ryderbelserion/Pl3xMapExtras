@@ -2,12 +2,14 @@ package com.ryderbelserion.map.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import com.ryderbelserion.map.Provider;
+import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.map.util.ConfigUtil;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.image.IconImage;
@@ -19,24 +21,28 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class WarpsConfig extends AbstractConfig {
 
-    public static void registerIcon(String image) {
+    private static final FusionCore provider = FusionCore.Provider.get();
+
+    private static final Path path = provider.getDataPath();
+
+    private static final ComponentLogger logger = provider.getLogger();
+
+    public static void registerIcon(@NotNull final String image) {
         if (!ConfigUtil.isWarpsEnabled()) return;
 
         String fileName = String.format("icons%s%s.png", File.separator, image);
-        File icon = Provider.getInstance().getDataFolder().resolve("warps").resolve(fileName).toFile();
+        File icon = path.resolve("warps").resolve(fileName).toFile();
 
         try {
             String key = String.format("pl3xmap_warps_%s", image);
             Pl3xMap.api().getIconRegistry().register(new IconImage(key, ImageIO.read(icon), "png"));
-        } catch (IOException e) {
-            Provider.getInstance().getLogger().warning("Failed to register icon (" + image + ") " + fileName);
-
-            e.printStackTrace();
+        } catch (final IOException exception) {
+            logger.warn("Failed to register icon ({}) {}", image, fileName, exception);
         }
     }
 
     @Override
-    protected @Nullable Object get(@NotNull String path) {
+    protected @Nullable Object get(@NotNull final String path) {
         Object value = getConfig().get(path);
 
         if (value == null) {

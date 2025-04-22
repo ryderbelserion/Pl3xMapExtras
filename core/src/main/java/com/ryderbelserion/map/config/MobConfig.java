@@ -1,15 +1,20 @@
 package com.ryderbelserion.map.config;
 
-import com.ryderbelserion.map.Provider;
+import com.ryderbelserion.fusion.core.FusionCore;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.markers.Vector;
 import net.pl3x.map.core.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.nio.file.Path;
 import java.util.Map;
 
 public class MobConfig extends AbstractConfig {
+
+    private static final FusionCore provider = FusionCore.Provider.get();
+
+    private static final Path path = provider.getDataPath();
 
     @Key("layer.label")
     @Comment("""
@@ -64,7 +69,7 @@ public class MobConfig extends AbstractConfig {
     }
 
     public void reload() {
-        reload(Provider.getInstance().getDataFolder().resolve("mobs").resolve("config.yml"), MobConfig.class);
+        reload(path.resolve("mobs").resolve("config.yml"), MobConfig.class);
     }
 
     @Override
@@ -109,8 +114,8 @@ public class MobConfig extends AbstractConfig {
 
     @Override
     protected void set(@NotNull String path, @Nullable Object value) {
-        if (value instanceof Vector vector) {
-            value = Map.of("x", vector.x(), "z", vector.z());
+        if (value instanceof Vector(double x, double z)) {
+            value = Map.of("x", x, "z", z);
         }
 
         getConfig().set(path, value);

@@ -1,8 +1,9 @@
 package com.ryderbelserion.map.config;
 
+import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
-import com.ryderbelserion.map.Provider;
+import com.ryderbelserion.fusion.core.FusionCore;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.markers.Vector;
@@ -11,6 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SignsConfig extends AbstractConfig {
+
+    private static final FusionCore provider = FusionCore.Provider.get();
+
+    private static final Path path = provider.getDataPath();
+
     @Key("layer.label")
     @Comment("""
             Label for map layer""")
@@ -240,7 +246,7 @@ public class SignsConfig extends AbstractConfig {
     }
 
     public void reload() {
-        reload(Provider.getInstance().getDataFolder().resolve("signs").resolve("config.yml"), SignsConfig.class);
+        reload(path.resolve("signs").resolve("config.yml"), SignsConfig.class);
     }
 
     @Override
@@ -299,8 +305,8 @@ public class SignsConfig extends AbstractConfig {
 
     @Override
     protected void set(@NotNull String path, @Nullable Object value) {
-        if (value instanceof Vector vector) {
-            value = Map.of("x", vector.x(), "z", vector.z());
+        if (value instanceof Vector(double x, double z)) {
+            value = Map.of("x", x, "z", z);
         } else if (value instanceof Enum<?> enumeration) {
             value = enumeration.name();
         }

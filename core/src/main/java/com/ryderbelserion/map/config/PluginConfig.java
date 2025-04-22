@@ -1,12 +1,16 @@
 package com.ryderbelserion.map.config;
 
-import com.ryderbelserion.map.Provider;
+import com.ryderbelserion.fusion.core.FusionCore;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.util.FileUtil;
 import java.nio.file.Path;
 import java.util.List;
 
 public class PluginConfig extends AbstractConfig {
+
+    private static final FusionCore provider = FusionCore.Provider.get();
+
+    private static final Path path = provider.getDataPath();
 
     @Key("marker.banners")
     @Comment("Should we display banner markers on pl3xmap?")
@@ -48,9 +52,8 @@ public class PluginConfig extends AbstractConfig {
     private static final PluginConfig CONFIG = new PluginConfig();
 
     public static void reload() {
-        Path mainDir = Provider.getInstance().getDataFolder();
-        FileUtil.extractFile(PluginConfig.class, "config.yml", mainDir, false);
+        FileUtil.extractFile(PluginConfig.class, "config.yml", path, false);
 
-        CONFIG.reload(mainDir.resolve("config.yml"), PluginConfig.class);
+        CONFIG.reload(path.resolve("config.yml"), PluginConfig.class);
     }
 }
