@@ -42,69 +42,6 @@ public class BannerConfig extends AbstractConfig {
 
     private static final Path path = provider.getDataPath();
 
-    @Key("layer.label")
-    @Comment("""
-            Label for map layer""")
-    public String LAYER_LABEL = "Banners";
-    @Key("layer.show-controls")
-    @Comment("""
-            Show controls for map layer""")
-    public boolean LAYER_SHOW_CONTROLS = true;
-    @Key("layer.default-hidden")
-    @Comment("""
-            Whether map layer is hidden by default""")
-    public boolean LAYER_DEFAULT_HIDDEN = false;
-    @Key("layer.update-interval")
-    @Comment("""
-            Update interval for map layer""")
-    public int LAYER_UPDATE_INTERVAL = 5;
-    @Key("layer.priority")
-    @Comment("""
-            Priority for map layer""")
-    public int LAYER_PRIORITY = 99;
-    @Key("layer.z-index")
-    @Comment("""
-            zIndex for map layer""")
-    public int LAYER_ZINDEX = 99;
-    @Key("layer.css")
-    @Comment("""
-            Custom CSS for the sign's layer.""")
-    public String LAYER_CSS = null;
-
-    @Key("marker.icon.size")
-    @Comment("""
-            The size (in pixels) the icon should be.""")
-    public Vector ICON_SIZE = new Vector(32, 32);
-    @Key("marker.icon.anchor")
-    @Comment("""
-            The coordinates of the "tip" of the icon (relative to its top
-            left corner). The icon will be aligned so that this point is at
-            the marker's geographical location. Centered by default if size
-            is specified, also can be set in CSS with negative margins.""")
-    public Vector ICON_ANCHOR = null;
-    @Key("marker.icon.rotation.angle")
-    @Comment("""
-            The angle (in degrees) the icon should be rotated at. Rotation
-            is in a clockwise direction with 0 being at the top.""")
-    public Double ICON_ROTATION_ANGLE = null;
-    @Key("marker.icon.rotation.origin")
-    @Comment("""
-            The origin point on the icon for the center of rotation""")
-    public String ICON_ROTATION_ORIGIN = null;
-    @Key("marker.icon.shadow")
-    @Comment("""
-            The registered icon to use for a shadow image.""")
-    public String ICON_SHADOW = null;
-    @Key("marker.icon.shadow-size")
-    @Comment("""
-            The size (in pixels) the icon's shadow image should be.""")
-    public Vector ICON_SHADOW_SIZE = new Vector(20, 20);
-    @Key("marker.icon.shadow-anchor")
-    @Comment("""
-            The coordinates of the "tip" of the shadow (relative to its
-            top left corner) (the same as icon anchor if not specified).""")
-    public Vector ICON_SHADOW_ANCHOR = null;
-
     @Key("marker.tooltip.content")
     @Comment("""
             Contents of the icon's popup.""")
@@ -209,10 +146,6 @@ public class BannerConfig extends AbstractConfig {
             Set it if you want to override the default behavior of the
             popup closing when user clicks on the map. Defaults to true.""")
     public Boolean ICON_POPUP_SHOULD_CLOSE_ON_CLICK = null;
-
-    @Key("root.banners.block-place")
-    @Comment("Should banners be displayed on block place?")
-    public static boolean banners_block_place = true;
 
     private final World world;
 

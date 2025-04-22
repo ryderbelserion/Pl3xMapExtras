@@ -2,20 +2,9 @@ package com.ryderbelserion.map.util;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.hook.Hook;
-import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkConfig;
-import com.ryderbelserion.map.hook.claims.griefdefender.GriefDefenderConfig;
-import com.ryderbelserion.map.hook.claims.griefprevention.GriefPreventionConfig;
-import com.ryderbelserion.map.hook.claims.plotsquared.P2Config;
-import com.ryderbelserion.map.hook.claims.worldguard.WorldGuardConfig;
 import com.ryderbelserion.map.hook.warps.playerwarps.PlayerWarpsLayer;
-import com.ryderbelserion.map.listener.banners.BannerListener;
-import com.ryderbelserion.map.listener.banners.BannerWorldListener;
-import com.ryderbelserion.map.listener.claims.ClaimListener;
 import com.ryderbelserion.map.listener.mobs.MobEntityListener;
 import com.ryderbelserion.map.listener.mobs.MobWorldListener;
-import com.ryderbelserion.map.listener.signs.SignListener;
-import com.ryderbelserion.map.listener.signs.SignWorldListener;
-import com.ryderbelserion.map.listener.warps.WarpListener;
 import com.ryderbelserion.map.marker.banners.BannersLayer;
 import com.ryderbelserion.map.marker.mobs.MobsLayer;
 import com.ryderbelserion.map.marker.mobs.MobsManager;
@@ -48,8 +37,8 @@ public class ModuleUtil {
     }
 
     public static void toggleClaims(final boolean isShutdown) {
-        if (ConfigUtil.isClaimsEnabled() && !isShutdown) {
-            pluginManager.registerEvents(new ClaimListener(), plugin);
+        //if (ConfigUtil.isClaimsEnabled() && !isShutdown) {
+            /*pluginManager.registerEvents(new ClaimListener(), plugin);
 
             Pl3xMap.api().getWorldRegistry().forEach(ModuleUtil::registerWorld);
 
@@ -71,10 +60,10 @@ public class ModuleUtil {
 
             if (pluginManager.isPluginEnabled("ClaimChunk")) {
                 ClaimChunkConfig.reload();
-            }
+            }*/
 
-            return;
-        }
+            //return;
+        //}
 
         Pl3xMap.api().getWorldRegistry().forEach(ModuleUtil::unloadWorld);
 
@@ -84,11 +73,11 @@ public class ModuleUtil {
     }
 
     public static void toggleWarps(final boolean isShutdown) {
-        if (ConfigUtil.isWarpsEnabled() && !isShutdown) {
-            pluginManager.registerEvents(new WarpListener(), plugin);
+        //if (ConfigUtil.isWarpsEnabled() && !isShutdown) {
+            //pluginManager.registerEvents(new WarpListener(), plugin);
 
-            return;
-        }
+            //return;
+        //}
 
         Pl3xMap.api().getWorldRegistry().forEach(world -> {
             try {
@@ -98,12 +87,12 @@ public class ModuleUtil {
     }
 
     public static void toggleSigns(final boolean isShutdown) {
-        if (ConfigUtil.isSignsEnabled() && !isShutdown) {
-            pluginManager.registerEvents(new SignWorldListener(), plugin);
-            pluginManager.registerEvents(new SignListener(), plugin);
+        //if (ConfigUtil.isSignsEnabled() && !isShutdown) {
+            //pluginManager.registerEvents(new SignWorldListener(), plugin);
+            //pluginManager.registerEvents(new SignListener(), plugin);
 
-            return;
-        }
+            //return;
+        //}
 
         Pl3xMap.api().getWorldRegistry().forEach(world -> {
             try {
@@ -113,12 +102,12 @@ public class ModuleUtil {
     }
 
     public static void toggleBanners(final boolean isShutdown) {
-        if (ConfigUtil.isBannersEnabled() && !isShutdown) {
-            pluginManager.registerEvents(new BannerWorldListener(), plugin);
-            pluginManager.registerEvents(new BannerListener(), plugin);
+        //if (ConfigUtil.isBannersEnabled() && !isShutdown) {
+            //pluginManager.registerEvents(new BannerWorldListener(), plugin);
+            //pluginManager.registerEvents(new BannerListener(), plugin);
 
-            return;
-        }
+            //return;
+        //}
 
         Pl3xMap.api().getWorldRegistry().forEach(world -> {
             try {

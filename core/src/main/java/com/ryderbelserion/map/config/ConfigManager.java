@@ -18,19 +18,19 @@ public class ConfigManager {
         this.path = path;
     }
 
+    private JaluCustomFile config;
+
     public void load() {
         this.fileManager.addFile(this.path.resolve("config.yml"), consumer -> consumer.configurationData(ConfigKeys.class), YamlFileResourceOptions.builder().build(), false, true);
+
+        this.config = this.fileManager.getJaluFile(this.path.resolve("config.yml"));
     }
 
     public void reload() {
-        getConfig().load();
+        this.config.load();
     }
 
-    public final SettingsManager getSettings() {
-        return getConfig().getConfig();
-    }
-
-    public final JaluCustomFile getConfig() {
-        return this.fileManager.getJaluFile(this.path.resolve("config.yml"));
+    public SettingsManager getConfig() {
+        return this.config.getConfig();
     }
 }

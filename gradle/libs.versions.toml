@@ -22,7 +22,7 @@ hangar = "0.1.2"
 placeholderapi = "2.11.6"
 
 # Fusion API
-fusion = "1.4.0"
+fusion = "1.5.0"
 
 # Common API
 jetbrains = "24.1.0"

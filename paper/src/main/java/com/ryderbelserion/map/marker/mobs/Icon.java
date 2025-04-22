@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.function.Function;
-import java.util.logging.Level;
 
 public enum Icon {
 

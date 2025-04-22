@@ -91,7 +91,7 @@ public class Pl3xMapExtras extends JavaPlugin {
     }
 
     public @NotNull final Optional<MobsManager> getMobsManager() {
-        final SettingsManager config = getConfigManager().getConfig().getConfig();
+        final SettingsManager config = getConfigManager().getConfig();
 
         if (!config.getProperty(ConfigKeys.toggle_mobs)) {
             return Optional.empty();
