@@ -2,20 +2,24 @@ package com.ryderbelserion.map.marker.mobs;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.config.MobConfig;
-import com.ryderbelserion.map.util.ConfigUtil;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Marker;
 import org.bukkit.World;
 import org.bukkit.entity.Mob;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
+import java.util.Collections;
 
 public class MobsLayer extends WorldLayer {
 
     private @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
 
-    private @NotNull final MobsManager mobsManager = this.plugin.getMobsManager();
+    private @NotNull final ComponentLogger logger = this.plugin.getComponentLogger();
+
+    private @Nullable final MobsManager mobsManager = this.plugin.getMobsManager();
 
     public static final String KEY = "pl3xmap_mobs";
 
@@ -37,10 +41,20 @@ public class MobsLayer extends WorldLayer {
     public @NotNull Collection<Marker<?>> getMarkers() {
         retrieveMarkers();
 
+        if (this.mobsManager == null) { // return immutable empty list
+            return Collections.emptyList();
+        }
+
         return this.mobsManager.getActiveMarkers(getWorld().getName());
     }
 
     private void retrieveMarkers() {
+        if (this.mobsManager == null) {
+            this.logger.warn("The mob manager instance is null.");
+
+            return;
+        }
+
         World bukkitWorld = this.plugin.getServer().getWorld(this.config.getWorld().getName());
 
         // If world is null, do fuck all.

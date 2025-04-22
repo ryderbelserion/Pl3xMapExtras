@@ -18,12 +18,13 @@ import net.pl3x.map.core.world.World;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MobWorldListener implements EventListener, Listener {
 
     private @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
 
-    private @NotNull final MobsManager mobsManager = this.plugin.getMobsManager();
+    private @Nullable final MobsManager mobsManager = this.plugin.getMobsManager();
 
     public MobWorldListener() {
         if (!ConfigUtil.isMobsEnabled()) return;
@@ -56,7 +57,7 @@ public class MobWorldListener implements EventListener, Listener {
 
     @EventHandler
     public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
-        if (!ConfigUtil.isMobsEnabled()) return;
+        if (!ConfigUtil.isMobsEnabled() || this.mobsManager == null) return;
         
         try {
             // Clear when world is unloaded.
@@ -68,6 +69,8 @@ public class MobWorldListener implements EventListener, Listener {
     }
 
     private void registerWorld(@NotNull World world) {
+        if (this.mobsManager == null) return;
+
         // Add new world.
         this.mobsManager.addWorld(world.getName());
 

@@ -89,7 +89,7 @@ public class Pl3xMapExtras extends JavaPlugin {
         Provider.unregister();
     }
 
-    public MobsManager getMobsManager() {
+    public @Nullable final MobsManager getMobsManager() {
         if (!ConfigUtil.isMobsEnabled()) {
             getLogger().warning("The toggle for displaying a mob layer is turned off.");
 
