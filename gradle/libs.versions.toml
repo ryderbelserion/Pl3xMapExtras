@@ -9,16 +9,14 @@ shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 [versions]
 # Paper API
 paper = "1.21.4-R0.1-SNAPSHOT"
-velocity = "3.3.0-SNAPSHOT"
 minecraft = "1.21.4"
-brigadier = "1.3.10"
 
 # Gradle Plugins
+shadow = "9.0.0-beta12"
 paperweight = "2.0.0-beta.10"
 runPaper = "2.3.1"
 minotaur = "2.8.7"
 hangar = "0.1.2"
-shadow = "9.0.0-beta4"
 
 # Plugins
 decentholograms = "2.8.8"
@@ -32,15 +30,11 @@ fusion = "1.0.1"
 
 # Common API
 jetbrains = "24.1.0"
-adventure = "4.17.0"
+
+# Kyori API
+adventure = "4.20.0"
 
 [libraries]
-# Velocity API
-velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
-
-# Mojang API
-brigadier = { module = "com.mojang:brigadier", version.ref = "brigadier" }
-
 # Paper API
 paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 
@@ -58,13 +52,14 @@ oraxen = { module = "io.th0rgal:oraxen", version.ref = "oraxen" }
 cmi-api = { module = "CMI-API:CMI-API", version = "9.7.4.1" }
 cmi-lib = { module = "CMILib:CMILib", version = "1.5.1.4" }
 
-# Plugins
+# Pl3xMap API
 pl3xmap = { group = "maven.modrinth", name = "pl3xmap", version = "1.21-507" }
 
 # Fusion Core API
 fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }
 fusion-core = { module = "com.ryderbelserion.fusion:fusion-core", version.ref = "fusion" }
 
+# Common API
 jetbrains = { module = "org.jetbrains:annotations", version.ref = "jetbrains" }
 
 [bundles]
