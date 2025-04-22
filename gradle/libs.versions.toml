@@ -27,15 +27,12 @@ placeholderapi = "2.11.6"
 fancyholograms = "2.3.3"
 oraxen = "1.171.0"
 
-# Vital API
-vital-common = "0.0.4"
-vital-paper = "1.0.4"
+# Fusion API
+fusion = "1.0.1"
 
 # Common API
 jetbrains = "24.1.0"
 adventure = "4.17.0"
-
-jalu = "1.4.1"
 
 [libraries]
 # Velocity API
@@ -64,13 +61,11 @@ cmi-lib = { module = "CMILib:CMILib", version = "1.5.1.4" }
 # Plugins
 pl3xmap = { group = "maven.modrinth", name = "pl3xmap", version = "1.21-507" }
 
-# Vital API
-vital-common = { module = "com.ryderbelserion.vital:common", version.ref = "vital-common" }
-vital-paper = { module = "com.ryderbelserion.vital:paper", version.ref = "vital-paper" }
+# Fusion Core API
+fusion-paper = { module = "com.ryderbelserion.fusion:fusion-paper", version.ref = "fusion" }
+fusion-core = { module = "com.ryderbelserion.fusion:fusion-core", version.ref = "fusion" }
 
 jetbrains = { module = "org.jetbrains:annotations", version.ref = "jetbrains" }
-
-jalu = { module = "ch.jalu:configme", version.ref = "jalu" }
 
 [bundles]
 # Soft Depends
