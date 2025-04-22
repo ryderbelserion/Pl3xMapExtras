@@ -27,7 +27,9 @@ repositories {
 dependencies {
     paperweight.paperDevBundle(libs.versions.paper)
 
-    implementation(project(":common"))
+    implementation(libs.fusion.paper)
+
+    implementation(project(":core"))
 
     // Warps
     compileOnly("com.olziedev", "playerwarps-api", "6.30.0") {}

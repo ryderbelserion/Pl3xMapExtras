@@ -5,7 +5,7 @@ plugins {
 dependencies {
     compileOnlyApi(libs.pl3xmap)
 
-    compileOnly(libs.jetbrains)
+    compileOnly(libs.fusion.core)
 
-    api(libs.jalu)
+    compileOnly(libs.jetbrains)
 }
