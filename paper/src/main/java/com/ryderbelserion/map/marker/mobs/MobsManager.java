@@ -33,7 +33,7 @@ public class MobsManager {
     }
 
     public void clearMarkers(@NotNull String worldName) {
-        if (this.activeMarkers.isEmpty() || worldName.isEmpty() || worldName.isBlank()) return;
+        if (this.activeMarkers.isEmpty() || worldName.isBlank()) return;
 
         this.activeMarkers.remove(worldName);
     }
