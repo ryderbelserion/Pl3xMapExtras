@@ -17,7 +17,6 @@ import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 public class BannersLayer extends WorldLayer {
@@ -72,8 +71,6 @@ public class BannersLayer extends WorldLayer {
 
         if (banner.name() != null && !banner.name().isBlank()) {
             Options.Builder builder = new Options.Builder();
-
-            Bukkit.getLogger().warning("Name: " + banner.name());
 
             if (this.config.ICON_TOOLTIP_CONTENT != null) {
                 builder.tooltipContent(this.config.ICON_TOOLTIP_CONTENT.replace("<name>", banner.name()))
