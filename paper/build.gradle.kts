@@ -1,27 +1,27 @@
 plugins {
+    id("paper-plugin")
+
     alias(libs.plugins.paperweight)
     alias(libs.plugins.runPaper)
     alias(libs.plugins.shadow)
 }
 
 repositories {
-    maven("https://repo.papermc.io/repository/maven-public")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
 
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://repo.glaremasters.me/repository/bloodshot/")
 
-    maven("https://repo.glaremasters.me/repository/bloodshot")
+    maven("https://repo.essentialsx.net/snapshots/")
 
-    maven("https://repo.essentialsx.net/snapshots")
+    maven("https://repo.essentialsx.net/releases/")
 
-    maven("https://repo.essentialsx.net/releases")
+    maven("https://maven.enginehub.org/repo/")
 
-    maven("https://maven.enginehub.org/repo")
+    maven("https://repo.oraxen.com/releases/")
 
-    maven("https://repo.oraxen.com/releases")
-
-    maven("https://repo.olziedev.com")
+    maven("https://repo.olziedev.com/")
 }
 
 dependencies {
@@ -78,7 +78,7 @@ tasks {
 
     processResources {
         inputs.properties("name" to rootProject.name)
-        inputs.properties("version" to project.version)
+        inputs.properties("version" to rootProject.version)
         inputs.properties("group" to project.properties["group"])
         inputs.properties("apiVersion" to libs.versions.minecraft.get())
         inputs.properties("description" to project.properties["description"])
