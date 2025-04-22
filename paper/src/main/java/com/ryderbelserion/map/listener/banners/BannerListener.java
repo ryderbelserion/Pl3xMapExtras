@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.api.enums.Permissions;
-import com.ryderbelserion.map.config.BannerConfig;
+import com.ryderbelserion.map.config.v1.BannerConfig;
 import com.ryderbelserion.map.marker.banners.Banner;
 import com.ryderbelserion.map.marker.banners.BannersLayer;
 import com.ryderbelserion.map.marker.banners.Icon;

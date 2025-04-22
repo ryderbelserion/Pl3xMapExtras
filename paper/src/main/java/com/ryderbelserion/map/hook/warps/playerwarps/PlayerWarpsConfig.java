@@ -2,7 +2,7 @@ package com.ryderbelserion.map.hook.warps.playerwarps;
 
 import java.nio.file.Path;
 import com.ryderbelserion.map.Pl3xMapExtras;
-import com.ryderbelserion.map.config.WarpsConfig;
+import com.ryderbelserion.map.config.v1.WarpsConfig;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.Vector;
 import net.pl3x.map.core.markers.option.Tooltip;

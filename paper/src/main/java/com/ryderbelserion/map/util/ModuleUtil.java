@@ -1,6 +1,5 @@
 package com.ryderbelserion.map.util;
 
-import com.ryderbelserion.fusion.core.utils.FileUtils;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkConfig;
@@ -29,6 +28,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class ModuleUtil {
 
@@ -128,7 +128,9 @@ public class ModuleUtil {
     }
 
     public static void toggleMobs(final boolean isShutdown) {
-        if (ConfigUtil.isMobsEnabled() && !isShutdown) {
+        @NotNull final Optional<MobsManager> manager = plugin.getMobsManager();
+
+        if (manager.isPresent() && !isShutdown) {
             pluginManager.registerEvents(new MobWorldListener(), plugin);
             pluginManager.registerEvents(new MobEntityListener(), plugin);
 
@@ -141,11 +143,7 @@ public class ModuleUtil {
             } catch (Throwable ignore) {}
         });
 
-        MobsManager manager = plugin.getMobsManager();
-
-        if (manager != null) {
-            manager.clearAll();
-        }
+        manager.ifPresent(MobsManager::clearAll);
 
         if (!isShutdown) {
             server.getGlobalRegionScheduler().cancelTasks(plugin);
@@ -164,6 +162,7 @@ public class ModuleUtil {
         Arrays.stream(Hook.Impl.values()).forEach(impl -> {
             if (pluginManager.isPluginEnabled(impl.getPluginName())) {
                 plugin.getLogger().info("Hooking into " + impl.getPluginName());
+
                 Hook.add(impl);
             }
         });
@@ -196,20 +195,20 @@ public class ModuleUtil {
     public static void extract() {
         final Path path = plugin.getDataPath();
 
-        if (ConfigUtil.isBannersEnabled()) {
-            FileUtils.extract("banners/icons", path, true, false);
-        }
+        //if (ConfigUtil.isBannersEnabled()) {
+        //    FileUtils.extract("banners/icons", path, true, false);
+        //}
 
-        if (ConfigUtil.isWarpsEnabled()) {
-            FileUtils.extract("warps/icons", path, true, false);
-        }
+        //if (ConfigUtil.isWarpsEnabled()) {
+        //    FileUtils.extract("warps/icons", path, true, false);
+        //}
 
-        if (ConfigUtil.isSignsEnabled()) {
-            FileUtils.extract("signs/icons", path, true, false);
-        }
+        //if (ConfigUtil.isSignsEnabled()) {
+        //    FileUtils.extract("signs/icons", path, true, false);
+        //}
 
-        if (ConfigUtil.isMobsEnabled()) {
-            FileUtils.extract("mobs/icons", path, true, false);
-        }
+        //if (ConfigUtil.isMobsEnabled()) {
+        //    FileUtils.extract("mobs/icons", path, true, false);
+        //}
     }
 }

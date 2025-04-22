@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.config;
+package com.ryderbelserion.map.config.v1;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import com.ryderbelserion.fusion.core.FusionCore;
-import com.ryderbelserion.map.util.ConfigUtil;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.pl3x.map.core.Pl3xMap;
@@ -28,7 +27,7 @@ public abstract class WarpsConfig extends AbstractConfig {
     private static final ComponentLogger logger = provider.getLogger();
 
     public static void registerIcon(@NotNull final String image) {
-        if (!ConfigUtil.isWarpsEnabled()) return;
+        //if (!ConfigUtil.isWarpsEnabled()) return;
 
         final String fileName = String.format("icons%s%s.png", File.separator, image);
         final File icon = path.resolve("warps").resolve(fileName).toFile();

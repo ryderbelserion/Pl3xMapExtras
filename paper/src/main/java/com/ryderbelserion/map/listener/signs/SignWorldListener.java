@@ -1,8 +1,7 @@
 package com.ryderbelserion.map.listener.signs;
 
-import com.ryderbelserion.map.config.SignsConfig;
+import com.ryderbelserion.map.config.v1.SignsConfig;
 import com.ryderbelserion.map.util.ConfigUtil;
-import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
 import net.pl3x.map.core.event.EventListener;

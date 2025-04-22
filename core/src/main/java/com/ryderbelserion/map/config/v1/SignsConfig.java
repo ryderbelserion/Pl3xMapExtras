@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.config;
+package com.ryderbelserion.map.config.v1;
 
 import java.nio.file.Path;
 import java.util.Locale;

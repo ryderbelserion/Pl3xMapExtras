@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.ryderbelserion.map.config;
+package com.ryderbelserion.map.config.v1;
 
 import java.nio.file.Path;
 import java.util.Locale;

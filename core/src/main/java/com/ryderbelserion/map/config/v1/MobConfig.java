@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.config;
+package com.ryderbelserion.map.config.v1;
 
 import com.ryderbelserion.fusion.core.FusionCore;
 import libs.org.simpleyaml.configuration.ConfigurationSection;

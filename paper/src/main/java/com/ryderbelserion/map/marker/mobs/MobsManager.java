@@ -1,6 +1,6 @@
 package com.ryderbelserion.map.marker.mobs;
 
-import com.ryderbelserion.map.config.MobConfig;
+import com.ryderbelserion.map.config.v1.MobConfig;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.pl3x.map.core.markers.Point;

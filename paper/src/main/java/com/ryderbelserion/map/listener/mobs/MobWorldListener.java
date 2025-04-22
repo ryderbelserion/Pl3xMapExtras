@@ -1,12 +1,11 @@
 package com.ryderbelserion.map.listener.mobs;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
-import com.ryderbelserion.map.config.MobConfig;
+import com.ryderbelserion.map.config.v1.MobConfig;
 import com.ryderbelserion.map.marker.mobs.Icon;
 import com.ryderbelserion.map.marker.mobs.MobsLayer;
 import com.ryderbelserion.map.marker.mobs.MobsManager;
 import com.ryderbelserion.map.util.ConfigUtil;
-import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
 import net.pl3x.map.core.event.EventListener;
@@ -18,30 +17,30 @@ import net.pl3x.map.core.world.World;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.util.Optional;
 
 public class MobWorldListener implements EventListener, Listener {
 
     private @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
 
-    private @Nullable final MobsManager mobsManager = this.plugin.getMobsManager();
+    private @NotNull final Optional<MobsManager> mobsManager = this.plugin.getMobsManager();
 
     public MobWorldListener() {
-        if (!ConfigUtil.isMobsEnabled()) return;
+        if (this.mobsManager.isEmpty()) return;
         
         Pl3xMap.api().getEventRegistry().register(this);
     }
 
     @EventHandler
     public void onPl3xMapEnabled(@NotNull Pl3xMapEnabledEvent event) {
-        if (!ConfigUtil.isMobsEnabled()) return;
+        if (this.mobsManager.isEmpty()) return;
         
         Icon.register();
     }
 
     @EventHandler
     public void onServerLoaded(@NotNull ServerLoadedEvent event) {
-        if (!ConfigUtil.isMobsEnabled()) return;
+        if (this.mobsManager.isEmpty()) return;
         
         Icon.register();
 
@@ -50,7 +49,7 @@ public class MobWorldListener implements EventListener, Listener {
 
     @EventHandler
     public void onWorldLoaded(@NotNull WorldLoadedEvent event) {
-        if (!ConfigUtil.isMobsEnabled()) return;
+        if (this.mobsManager.isEmpty()) return;
         
         registerWorld(event.getWorld());
     }

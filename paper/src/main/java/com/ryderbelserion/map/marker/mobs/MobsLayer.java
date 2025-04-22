@@ -3,8 +3,7 @@ package com.ryderbelserion.map.marker.mobs;
 import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
 import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
 import com.ryderbelserion.map.Pl3xMapExtras;
-import com.ryderbelserion.map.config.MobConfig;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import com.ryderbelserion.map.config.v1.MobConfig;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Marker;
 import org.bukkit.Server;
@@ -12,9 +11,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Mob;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
 public class MobsLayer extends WorldLayer {
 
@@ -22,9 +21,7 @@ public class MobsLayer extends WorldLayer {
 
     private @NotNull final Server server = this.plugin.getServer();
 
-    private @NotNull final ComponentLogger logger = this.plugin.getComponentLogger();
-
-    private @Nullable final MobsManager mobsManager = this.plugin.getMobsManager();
+    private @NotNull final Optional<MobsManager> mobsManager = this.plugin.getMobsManager();
 
     public static final String KEY = "pl3xmap_mobs";
 
@@ -46,17 +43,15 @@ public class MobsLayer extends WorldLayer {
     public @NotNull Collection<Marker<?>> getMarkers() {
         retrieveMarkers();
 
-        if (this.mobsManager == null) { // return immutable empty list
+        if (this.mobsManager.isEmpty()) { // return immutable empty list
             return Collections.emptyList();
         }
 
-        return this.mobsManager.getActiveMarkers(getWorld().getName());
+        return this.mobsManager.get().getActiveMarkers(getWorld().getName());
     }
 
     private void retrieveMarkers() {
-        if (this.mobsManager == null) {
-            this.logger.warn("The mob manager instance is null.");
-
+        if (this.mobsManager.isEmpty()) {
             return;
         }
 
@@ -66,6 +61,8 @@ public class MobsLayer extends WorldLayer {
         if (bukkitWorld == null) {
             return;
         }
+
+        @NotNull final MobsManager manager = this.mobsManager.get();
 
         new FoliaScheduler(Scheduler.global_scheduler) {
             @Override
@@ -77,7 +74,7 @@ public class MobsLayer extends WorldLayer {
 
                     String key = String.format("%s_%s_%s", KEY, getWorld().getName(), mob.getUniqueId());
 
-                    mobsManager.addMarker(key, mob, config);
+                    manager.addMarker(key, mob, config);
                 });
             }
         }.runNow();

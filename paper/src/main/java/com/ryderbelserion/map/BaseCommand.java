@@ -1,7 +1,7 @@
 package com.ryderbelserion.map;
 
 import com.ryderbelserion.map.api.enums.Permissions;
-import com.ryderbelserion.map.config.PluginConfig;
+import com.ryderbelserion.map.config.types.ConfigKeys;
 import com.ryderbelserion.map.util.ModuleUtil;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -25,18 +25,18 @@ public class BaseCommand implements BasicCommand {
             case 1 -> {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!Permissions.reload.hasPermission(sender) && !(sender instanceof ConsoleCommandSender)) {
-                        sender.sendRichMessage(PluginConfig.no_permission.replace("{prefix}", PluginConfig.msg_prefix));
+                        sender.sendRichMessage(ConfigKeys.no_permission.replace("{prefix}", ConfigKeys.msg_prefix));
 
                         return;
                     }
 
-                    PluginConfig.reload();
+                    ConfigKeys.reload();
 
                     ModuleUtil.toggleAll(false);
 
                     ModuleUtil.extract();
 
-                    sender.sendRichMessage(PluginConfig.reload_plugin.replace("{prefix}", PluginConfig.msg_prefix));
+                    sender.sendRichMessage(ConfigKeys.reload_plugin.replace("{prefix}", ConfigKeys.msg_prefix));
 
                     return;
                 }
@@ -60,12 +60,12 @@ public class BaseCommand implements BasicCommand {
 
     private void help(@NotNull final CommandSender sender) {
         if (!Permissions.help.hasPermission(sender)) {
-            sender.sendRichMessage(PluginConfig.no_permission.replace("{prefix}", PluginConfig.msg_prefix));
+            sender.sendRichMessage(ConfigKeys.no_permission.replace("{prefix}", ConfigKeys.msg_prefix));
 
             return;
         }
 
-        sender.sendRichMessage(convertList(PluginConfig.help_message).replace("{prefix}", PluginConfig.msg_prefix));
+        sender.sendRichMessage(convertList(ConfigKeys.help_message).replace("{prefix}", ConfigKeys.msg_prefix));
     }
 
     private String convertList(@NotNull final List<String> list) {

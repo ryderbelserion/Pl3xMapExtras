@@ -1,34 +1,41 @@
 package com.ryderbelserion.map;
 
+import ch.jalu.configme.SettingsManager;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.api.MetricsWrapper;
 import com.ryderbelserion.map.api.enums.Permissions;
-import com.ryderbelserion.map.config.PluginConfig;
+import com.ryderbelserion.map.config.ConfigManager;
+import com.ryderbelserion.map.config.types.ConfigKeys;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.marker.mobs.MobsManager;
-import com.ryderbelserion.map.util.ConfigUtil;
 import com.ryderbelserion.map.util.ModuleUtil;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class Pl3xMapExtras extends JavaPlugin {
 
     private MobsManager mobsManager;
-
+    private ConfigManager configManager;
     private FusionPaper api;
 
     @Override
     public void onEnable() {
-        this.api = new FusionPaper(getComponentLogger(), getDataPath());
+        final ComponentLogger logger = getComponentLogger();
+        final Path path = getDataPath();
+
+        this.api = new FusionPaper(logger, path);
         this.api.enable(this);
 
-        // Load the config.
-        PluginConfig.reload();
+        final Pl3xMapExtrasCore core = new Pl3xMapExtrasCore(this.api.getFileManager(), logger, path);
+
+        this.configManager = core.getConfigManager();
 
         // Extract the files needed for the plugin.
         ModuleUtil.extract();
@@ -83,17 +90,21 @@ public class Pl3xMapExtras extends JavaPlugin {
         }
     }
 
-    public @Nullable final MobsManager getMobsManager() {
-        if (!ConfigUtil.isMobsEnabled()) {
-            getLogger().warning("The toggle for displaying a mob layer is turned off.");
+    public @NotNull final Optional<MobsManager> getMobsManager() {
+        final SettingsManager config = getConfigManager().getConfig().getConfig();
 
-            return null;
+        if (!config.getProperty(ConfigKeys.toggle_mobs)) {
+            return Optional.empty();
         }
 
-        return this.mobsManager;
+        return Optional.ofNullable(this.mobsManager);
     }
 
-    public final FusionPaper getFusion() {
+    public @NotNull final ConfigManager getConfigManager() {
+        return this.configManager;
+    }
+
+    public @NotNull final FusionPaper getFusion() {
         return this.api;
     }
 }
