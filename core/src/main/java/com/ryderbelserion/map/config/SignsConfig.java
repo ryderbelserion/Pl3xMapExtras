@@ -236,8 +236,9 @@ public class SignsConfig extends AbstractConfig {
 
     private final World world;
 
-    public SignsConfig(@NotNull World world) {
+    public SignsConfig(@NotNull final World world) {
         this.world = world;
+
         reload();
     }
 
@@ -255,7 +256,7 @@ public class SignsConfig extends AbstractConfig {
     }
 
     @Override
-    protected @Nullable Object getValue(@NotNull String path, @Nullable Object def) {
+    protected @Nullable Object getValue(@NotNull final String path, @Nullable final Object def) {
         if (getConfig().get("world-settings.default." + path) == null) {
             set("world-settings.default." + path, def);
         }
@@ -264,12 +265,12 @@ public class SignsConfig extends AbstractConfig {
     }
 
     @Override
-    protected void setComment(@NotNull String path, @Nullable String comment) {
+    protected void setComment(@NotNull final String path, @Nullable final String comment) {
         getConfig().setComment("world-settings.default." + path, comment);
     }
 
     @Override
-    protected @Nullable Object get(@NotNull String path) {
+    protected @Nullable Object get(@NotNull final String path) {
         Object value = getConfig().get(path);
 
         if (value == null) {

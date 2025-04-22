@@ -30,11 +30,11 @@ public abstract class WarpsConfig extends AbstractConfig {
     public static void registerIcon(@NotNull final String image) {
         if (!ConfigUtil.isWarpsEnabled()) return;
 
-        String fileName = String.format("icons%s%s.png", File.separator, image);
-        File icon = path.resolve("warps").resolve(fileName).toFile();
+        final String fileName = String.format("icons%s%s.png", File.separator, image);
+        final File icon = path.resolve("warps").resolve(fileName).toFile();
 
         try {
-            String key = String.format("pl3xmap_warps_%s", image);
+            final String key = String.format("pl3xmap_warps_%s", image);
             Pl3xMap.api().getIconRegistry().register(new IconImage(key, ImageIO.read(icon), "png"));
         } catch (final IOException exception) {
             logger.warn("Failed to register icon ({}) {}", image, fileName, exception);
@@ -43,7 +43,7 @@ public abstract class WarpsConfig extends AbstractConfig {
 
     @Override
     protected @Nullable Object get(@NotNull final String path) {
-        Object value = getConfig().get(path);
+        final Object value = getConfig().get(path);
 
         if (value == null) {
             return null;
@@ -59,7 +59,8 @@ public abstract class WarpsConfig extends AbstractConfig {
                     return Vector.of(section.getDouble("x"), section.getDouble("z"));
                 } else if (value instanceof Map<?, ?>) {
                     @SuppressWarnings("unchecked")
-                    Map<String, Double> vector = (Map<String, Double>) value;
+                    final Map<String, Double> vector = (Map<String, Double>) value;
+
                     return Vector.of(vector.get("x"), vector.get("z"));
                 }
                 break;
@@ -72,7 +73,8 @@ public abstract class WarpsConfig extends AbstractConfig {
                     return Point.of(section.getInt("x"), section.getInt("z"));
                 } else if (value instanceof Map<?, ?>) {
                     @SuppressWarnings("unchecked")
-                    Map<String, Integer> point = (Map<String, Integer>) value;
+                    final Map<String, Integer> point = (Map<String, Integer>) value;
+
                     return Point.of(point.get("x"), point.get("z"));
                 }
 
