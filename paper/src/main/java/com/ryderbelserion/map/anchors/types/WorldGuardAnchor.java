@@ -1,67 +1,50 @@
-package com.ryderbelserion.map.hook.claims.worldguard;
+package com.ryderbelserion.map.anchors.types;
 
-import com.ryderbelserion.map.hook.Hook;
-import com.ryderbelserion.map.util.ConfigUtil;
+import com.ryderbelserion.map.anchors.Anchor;
+import com.ryderbelserion.map.hook.claims.worldguard.WorldGuardClaim;
+import com.ryderbelserion.map.hook.claims.worldguard.WorldGuardConfig;
+import com.ryderbelserion.map.hook.claims.worldguard.WorldGuardLayer;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.RegionType;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.util.Colors;
 import net.pl3x.map.core.world.World;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class WorldGuardHook implements Hook {
-
-    public WorldGuardHook() {
-        WorldGuardConfig.reload();
-    }
-
-    private @Nullable RegionManager getRegionManager(@NotNull final World world) {
-        final org.bukkit.World bukkit = Bukkit.getWorld(world.getName());
-
-        return bukkit == null ? null : WorldGuard.getInstance().getPlatform()
-                .getRegionContainer().get(BukkitAdapter.adapt(bukkit));
-    }
+public class WorldGuardAnchor extends Anchor {
 
     @Override
     public void registerWorld(@NotNull final World world) {
-        if (getRegionManager(world) != null) {
-            world.getLayerRegistry().register(new WorldGuardLayer(this, world));
-        }
+        if (getRegionManager(world).isEmpty()) return;
+
+        //world.getLayerRegistry().register(new WorldGuardLayer(this, world));
     }
 
     @Override
-    public void unloadWorld(@NotNull final World world) {
+    public void deleteWorld(@NotNull final World world) {
         world.getLayerRegistry().unregister(WorldGuardLayer.KEY);
     }
 
     @Override
-    public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
-        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
-
-        final RegionManager manager = getRegionManager(world);
-
-        if (manager == null) {
-            return EMPTY_LIST;
-        }
-
-        return manager.getRegions().values().stream()
+    public @NotNull final Optional<Collection<Marker<?>>> process(@NotNull final World world) {
+        return getRegionManager(world).map(regionManager -> regionManager.getRegions().values().stream()
                 .filter(region -> !WorldGuardConfig.BLACKLISTED_REGIONS.contains(region.getId()))
                 .map(region -> new WorldGuardClaim(world, region))
                 .filter(claim -> claim.getType() == RegionType.CUBOID || claim.getType() == RegionType.POLYGON)
                 .map(claim -> {
                     final String key = "wg-claim-" + claim.getID();
+
                     Marker<?> marker;
 
                     if (claim.getType() == RegionType.POLYGON) {
@@ -72,7 +55,17 @@ public class WorldGuardHook implements Hook {
 
                     return marker.setOptions(getOptions(claim));
                 })
-                .collect(Collectors.toSet());
+                .collect(Collectors.toSet()));
+    }
+
+    private @NotNull Optional<RegionManager> getRegionManager(@NotNull final World world) {
+        final Optional<org.bukkit.World> bukkitWorld = Optional.ofNullable(this.plugin.getServer().getWorld(world.getName()));
+
+        if (bukkitWorld.isEmpty()) return Optional.empty();
+
+        final RegionManager instance = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(bukkitWorld.get()));
+
+        return Optional.ofNullable(instance);
     }
 
     private @NotNull Options getOptions(@NotNull final WorldGuardClaim claim) {
