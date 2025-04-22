@@ -1,5 +1,6 @@
 package com.ryderbelserion.map;
 
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.api.MetricsWrapper;
 import com.ryderbelserion.map.api.enums.Permissions;
 import com.ryderbelserion.map.config.PluginConfig;
@@ -13,11 +14,15 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Arrays;
 
 public class Pl3xMapExtras extends JavaPlugin {
 
     private MobsManager mobsManager;
+
+    private FusionPaper api;
 
     @Override
     public void onEnable() {
@@ -30,6 +35,9 @@ public class Pl3xMapExtras extends JavaPlugin {
 
             return;
         }
+
+        this.api = new FusionPaper(getComponentLogger(), getDataPath());
+        this.api.enable(this);
 
         // Register the provider.
         Provider.register(new Provider.MapExtras(getDataFolder(), getLogger()));
@@ -62,7 +70,7 @@ public class Pl3xMapExtras extends JavaPlugin {
 
         // Register the commands.
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            final @NotNull Commands registry = event.registrar();
+            @NotNull final Commands registry = event.registrar();
 
             registry.register("pl3xmapextras", "the command to handle the plugin", new BaseCommand());
         });
@@ -97,5 +105,9 @@ public class Pl3xMapExtras extends JavaPlugin {
         }
 
         return this.mobsManager;
+    }
+
+    public final FusionPaper getFusion() {
+        return this.api;
     }
 }
