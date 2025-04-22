@@ -197,19 +197,19 @@ public class ModuleUtil {
         final Path path = plugin.getDataFolder().toPath();
 
         if (ConfigUtil.isBannersEnabled()) {
-            FileUtils.extract("banners/icons", path, false);
+            FileUtils.extract("banners/icons", path, true, false);
         }
 
         if (ConfigUtil.isWarpsEnabled()) {
-            FileUtils.extract("warps/icons", path, false);
+            FileUtils.extract("warps/icons", path, true, false);
         }
 
         if (ConfigUtil.isSignsEnabled()) {
-            FileUtils.extract("signs/icons", path, false);
+            FileUtils.extract("signs/icons", path, true, false);
         }
 
         if (ConfigUtil.isMobsEnabled()) {
-            FileUtils.extract("mobs/icons", path, false);
+            FileUtils.extract("mobs/icons", path, true, false);
         }
     }
 }
