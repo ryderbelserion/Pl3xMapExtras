@@ -78,21 +78,21 @@ public class SignWorldListener implements EventListener, Listener {
         } catch (Throwable ignore) {}
     }
 
-    private void registerWorld(@NotNull World world) {
+    private void registerWorld(@NotNull final World world) {
         world.getLayerRegistry().register(new SignsLayer(new SignsConfig(world)));
     }
 
-    private void checkChunk(@NotNull Chunk chunk) {
-        org.bukkit.World bukkitWorld = chunk.getWorld();
+    private void checkChunk(@NotNull final Chunk chunk) {
+        final org.bukkit.World bukkitWorld = chunk.getWorld();
 
-        World world = Pl3xMap.api().getWorldRegistry().get(bukkitWorld.getName());
+        final World world = Pl3xMap.api().getWorldRegistry().get(bukkitWorld.getName());
 
         if (world == null) {
             // world is missing or not enabled; ignore
             return;
         }
 
-        SignsLayer layer = (SignsLayer) world.getLayerRegistry().get(SignsLayer.KEY);
+        final SignsLayer layer = (SignsLayer) world.getLayerRegistry().get(SignsLayer.KEY);
 
         if (layer == null) {
             // world has no signs layer; ignore

@@ -5,13 +5,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.api.enums.Permissions;
 import com.ryderbelserion.map.config.BannerConfig;
-import com.ryderbelserion.map.config.PluginConfig;
 import com.ryderbelserion.map.marker.banners.Banner;
 import com.ryderbelserion.map.marker.banners.BannersLayer;
 import com.ryderbelserion.map.marker.banners.Icon;
 import com.ryderbelserion.map.marker.banners.Position;
 import com.ryderbelserion.map.util.ConfigUtil;
-import com.ryderbelserion.map.util.ModuleUtil;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
@@ -38,14 +36,14 @@ public class BannerListener implements Listener {
     public void onClickBanner(@NotNull PlayerInteractEvent event) {
         if (!ConfigUtil.isBannersEnabled()) return;
 
-        Block block = event.getClickedBlock();
+        final Block block = event.getClickedBlock();
 
         if (block == null) {
             // no block was clicked; ignore
             return;
         }
 
-        BlockState state = block.getState();
+        final BlockState state = block.getState();
 
         if (!(state instanceof org.bukkit.block.Banner banner)) {
             // clicked block is not a banner; ignore
@@ -66,6 +64,7 @@ public class BannerListener implements Listener {
             case LEFT_CLICK_BLOCK -> {
                 // cancel event to stop banner from breaking
                 event.setCancelled(true);
+
                 tryRemoveBanner(banner);
             }
 
@@ -94,24 +93,25 @@ public class BannerListener implements Listener {
         tryRemoveBanner(event.getBlock().getState(false));
     }
 
-    protected void tryAddBanner(@NotNull BlockState state) {
+    protected void tryAddBanner(@NotNull final BlockState state) {
         if (state instanceof org.bukkit.block.Banner banner) {
-            Location loc = banner.getLocation();
-            Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+
+            final Location loc = banner.getLocation();
+            final Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 
             tryAddBanner(banner, pos);
         }
     }
 
-    protected void tryAddBanner(@NotNull org.bukkit.block.Banner banner, Position pos) {
-        BannersLayer layer = getLayer(banner);
+    protected void tryAddBanner(@NotNull final org.bukkit.block.Banner banner, @NotNull final Position pos) {
+        final BannersLayer layer = getLayer(banner);
 
         if (layer == null) {
             // world has no banners layer; ignore
             return;
         }
 
-        Icon icon = Icon.get(banner.getType());
+        final Icon icon = Icon.get(banner.getType());
 
         if (icon == null) {
             // material is not a registered banner; ignore
@@ -124,23 +124,23 @@ public class BannerListener implements Listener {
         particles(banner.getLocation(), Particle.HAPPY_VILLAGER, Sound.ENTITY_PLAYER_LEVELUP);
     }
 
-    protected void tryRemoveBanner(@NotNull BlockState state) {
+    protected void tryRemoveBanner(@NotNull final BlockState state) {
         if (state instanceof org.bukkit.block.Banner banner) {
             tryRemoveBanner(banner);
         }
     }
 
-    protected void tryRemoveBanner(@NotNull org.bukkit.block.Banner banner) {
-        BannersLayer layer = getLayer(banner);
+    protected void tryRemoveBanner(@NotNull final org.bukkit.block.Banner banner) {
+        final BannersLayer layer = getLayer(banner);
 
         if (layer == null) {
             // world has no banners layer; ignore
             return;
         }
 
-        Location loc = banner.getLocation();
+        final Location loc = banner.getLocation();
 
-        Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        final Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 
         // if it does not contain position, return.
         if (!layer.containsBanner(pos)) {
@@ -153,12 +153,12 @@ public class BannerListener implements Listener {
         particles(banner.getLocation(), Particle.WAX_ON, Sound.ENTITY_GHAST_HURT);
     }
 
-    protected String getCustomName(org.bukkit.block.Banner banner) {
+    protected String getCustomName(final org.bukkit.block.Banner banner) {
         try {
-            Method method = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
+            final Method method = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
             method.setAccessible(true);
 
-            BannerBlockEntity nms = (BannerBlockEntity) method.invoke(banner);
+            final BannerBlockEntity nms = (BannerBlockEntity) method.invoke(banner);
 
             return nms.hasCustomName() ? CraftChatMessage.fromComponent(nms.getCustomName()) : "";
         } catch (Throwable t) {
@@ -166,8 +166,8 @@ public class BannerListener implements Listener {
         }
     }
 
-    protected @Nullable BannersLayer getLayer(@NotNull BlockState state) {
-        World world = Pl3xMap.api().getWorldRegistry().get(state.getWorld().getName());
+    protected @Nullable BannersLayer getLayer(@NotNull final BlockState state) {
+        final World world = Pl3xMap.api().getWorldRegistry().get(state.getWorld().getName());
 
         if (world == null || !world.isEnabled()) {
             // world is missing or not enabled; ignore
@@ -177,16 +177,19 @@ public class BannerListener implements Listener {
         return (BannersLayer) world.getLayerRegistry().get(BannersLayer.KEY);
     }
 
-    protected void particles(@NotNull Location loc, @NotNull Particle particle, @NotNull Sound sound) {
-        loc.getWorld().playSound(loc, sound, 1.0F, 1.0F);
-        ThreadLocalRandom rand = ThreadLocalRandom.current();
+    protected void particles(@NotNull final Location loc, @NotNull final Particle particle, @NotNull final Sound sound) {
+        final org.bukkit.World world = loc.getWorld();
+
+        world.playSound(loc, sound, 1.0F, 1.0F);
+
+        final ThreadLocalRandom rand = ThreadLocalRandom.current();
 
         for (int i = 0; i < 20; ++i) {
             double x = loc.getX() + rand.nextGaussian();
             double y = loc.getY() + rand.nextGaussian();
             double z = loc.getZ() + rand.nextGaussian();
 
-            loc.getWorld().spawnParticle(particle, x, y, z, 1, 0, 0, 0, 0, null, true);
+            world.spawnParticle(particle, x, y, z, 1, 0, 0, 0, 0, null, true);
         }
     }
 }

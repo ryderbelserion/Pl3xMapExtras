@@ -51,17 +51,17 @@ public class SignListener implements Listener {
             return;
         }
 
-        BlockState state = event.getBlock().getState(false);
+        final BlockState state = event.getBlock().getState(false);
 
-        SignsLayer layer = getLayer(state);
+        final SignsLayer layer = getLayer(state);
 
         if (layer == null) {
             // world doesn't have a signs layer; ignore
             return;
         }
 
-        Location loc = state.getLocation();
-        Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        final Location loc = state.getLocation();
+        final Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 
         if (!layer.hasSign(pos)) {
             // not tracking any signs here; ignore
@@ -83,14 +83,15 @@ public class SignListener implements Listener {
     public void onClickSign(@NotNull PlayerInteractEvent event) {
         if (!ConfigUtil.isSignsEnabled()) return;
 
-        Block block = event.getClickedBlock();
+        final Block block = event.getClickedBlock();
 
         if (block == null) {
             // no block was clicked; ignore
             return;
         }
 
-        BlockState state = block.getState();
+        final BlockState state = block.getState();
+
         if (!(state instanceof org.bukkit.block.Sign sign)) {
             // clicked block is not a sign; ignore
             return;
@@ -178,13 +179,13 @@ public class SignListener implements Listener {
         tryRemoveSign(event.getToBlock().getState());
     }
 
-    private void tryAddSign(BlockState state, Position pos, Side side) {
+    private void tryAddSign(@NotNull final BlockState state, @NotNull final Position pos, @NotNull final Side side) {
         if (state instanceof org.bukkit.block.Sign sign) {
             tryAddSign(sign, pos, sign.getSide(side));
         }
     }
 
-    private void tryAddSign(@NotNull BlockState state, @NotNull SignSide side) {
+    private void tryAddSign(@NotNull final BlockState state, @NotNull final SignSide side) {
         if (state instanceof org.bukkit.block.Sign sign) {
             Location loc = sign.getLocation();
             Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
@@ -192,15 +193,16 @@ public class SignListener implements Listener {
         }
     }
 
-    private void tryAddSign(org.bukkit.block.Sign sign, Position pos, SignSide side) {
-        SignsLayer layer = getLayer(sign);
+    private void tryAddSign(@NotNull final org.bukkit.block.Sign sign, @NotNull final Position pos, @NotNull final SignSide side) {
+        final SignsLayer layer = getLayer(sign);
 
         if (layer == null) {
             // world has no signs layer; ignore
             return;
         }
 
-        Icon icon = Icon.get(sign);
+        final Icon icon = Icon.get(sign);
+
         if (icon == null) {
             // material is not a registered sign; ignore
             return;
@@ -213,22 +215,22 @@ public class SignListener implements Listener {
         particles(sign.getLocation(), ItemUtil.getParticleType(layer.getConfig().SIGN_ADD_PARTICLES), ItemUtil.getSound(layer.getConfig().SIGN_ADD_SOUND));
     }
 
-    protected void tryRemoveSign(@NotNull BlockState state) {
+    protected void tryRemoveSign(@NotNull final BlockState state) {
         if (state instanceof org.bukkit.block.Sign sign) {
             tryRemoveSign(sign);
         }
     }
 
-    private void tryRemoveSign(@NotNull org.bukkit.block.Sign sign) {
-        SignsLayer layer = getLayer(sign);
+    private void tryRemoveSign(@NotNull final org.bukkit.block.Sign sign) {
+        final SignsLayer layer = getLayer(sign);
 
         if (layer == null) {
             // world has no signs layer; ignore
             return;
         }
 
-        Location loc = sign.getLocation();
-        Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        final Location loc = sign.getLocation();
+        final Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 
         layer.removeSign(pos);
 
@@ -236,12 +238,12 @@ public class SignListener implements Listener {
         particles(sign.getLocation(), ItemUtil.getParticleType(layer.getConfig().SIGN_REMOVE_PARTICLES), ItemUtil.getSound(layer.getConfig().SIGN_REMOVE_SOUND));
     }
 
-    protected List<String> getLines(SignSide side) {
-        return List.of(side.getLines());
+    protected List<String> getLines(@NotNull final SignSide side) {
+        return List.of(side.getLines()); //todo() deprecated
     }
 
-    protected @Nullable SignsLayer getLayer(@NotNull BlockState state) {
-        World world = Pl3xMap.api().getWorldRegistry().get(state.getWorld().getName());
+    protected @Nullable SignsLayer getLayer(@NotNull final BlockState state) {
+        final World world = Pl3xMap.api().getWorldRegistry().get(state.getWorld().getName());
 
         if (world == null || !world.isEnabled()) {
             // world is missing or not enabled; ignore
@@ -251,21 +253,22 @@ public class SignListener implements Listener {
         return (SignsLayer) world.getLayerRegistry().get(SignsLayer.KEY);
     }
 
-    protected void particles(@NotNull Location loc, @Nullable Particle particle, @Nullable Sound sound) {
+    protected void particles(@NotNull final Location loc, @Nullable final Particle particle, @Nullable final Sound sound) {
+        final org.bukkit.World world = loc.getWorld();
 
         if (sound != null) {
-            loc.getWorld().playSound(loc, sound, 1.0F, 1.0F);
+            world.playSound(loc, sound, 1.0F, 1.0F);
         }
 
         if (particle != null) {
-            ThreadLocalRandom rand = ThreadLocalRandom.current();
+            final ThreadLocalRandom rand = ThreadLocalRandom.current();
 
             for (int i = 0; i < 20; ++i) {
                 double x = loc.getX() + rand.nextGaussian();
                 double y = loc.getY() + rand.nextGaussian();
                 double z = loc.getZ() + rand.nextGaussian();
 
-                loc.getWorld().spawnParticle(particle, x, y, z, 1, 0, 0, 0, 0, null, true);
+                world.spawnParticle(particle, x, y, z, 1, 0, 0, 0, 0, null, true);
             }
         }
     }

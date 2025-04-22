@@ -6,12 +6,13 @@ import org.bukkit.Particle;
 import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemUtil {
 
     private final static Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
 
-    public static Particle getParticleType(String value) {
+    public static Particle getParticleType(@NotNull final String value) {
         try {
             return Registry.PARTICLE_TYPE.get(getKey(value));
         } catch (Exception exception) {
@@ -21,7 +22,7 @@ public class ItemUtil {
         }
     }
 
-    public static Sound getSound(String value) {
+    public static Sound getSound(@NotNull final String value) {
         try {
             return Registry.SOUNDS.get(getKey(value));
         } catch (Exception exception) {
@@ -31,7 +32,7 @@ public class ItemUtil {
         }
     }
 
-    private static NamespacedKey getKey(String value) {
+    private static NamespacedKey getKey(@NotNull final String value) {
         return NamespacedKey.minecraft(value.toLowerCase());
     }
 }

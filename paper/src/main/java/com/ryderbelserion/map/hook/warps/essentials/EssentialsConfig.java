@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 @SuppressWarnings("CanBeFinal")
 public final class EssentialsConfig extends WarpsConfig {
+
     @Key("layer.label")
     @Comment("Label for map layer")
     public static String LAYER_LABEL = "Essentials Warps";
@@ -181,8 +182,10 @@ public final class EssentialsConfig extends WarpsConfig {
     private static final EssentialsConfig CONFIG = new EssentialsConfig();
 
     public static void reload() {
-        Path mainDir = JavaPlugin.getPlugin(Pl3xMapExtras.class).getDataFolder().toPath();
+        final Path mainDir = JavaPlugin.getPlugin(Pl3xMapExtras.class).getDataPath();
+
         CONFIG.reload(mainDir.resolve("essentials.yml"), EssentialsConfig.class);
+
         registerIcon(ICON_IMAGE);
         registerIcon(ICON_SHADOW_IMAGE);
     }

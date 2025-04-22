@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 @SuppressWarnings("CanBeFinal")
 public final class PlayerWarpsConfig extends WarpsConfig {
+
     @Key("layer.label")
     @Comment("Label for map layer")
     public static String LAYER_LABEL = "Player Warps";
@@ -190,8 +191,10 @@ public final class PlayerWarpsConfig extends WarpsConfig {
     private static final PlayerWarpsConfig CONFIG = new PlayerWarpsConfig();
 
     public static void reload() {
-        Path mainDir = JavaPlugin.getPlugin(Pl3xMapExtras.class).getDataFolder().toPath();
+        final Path mainDir = JavaPlugin.getPlugin(Pl3xMapExtras.class).getDataPath();
+
         CONFIG.reload(mainDir.resolve("playerwarps.yml"), PlayerWarpsConfig.class);
+
         registerIcon(ICON_IMAGE);
         registerIcon(ICON_SHADOW_IMAGE);
     }

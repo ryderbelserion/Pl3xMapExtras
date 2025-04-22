@@ -16,7 +16,7 @@ import java.util.List;
 public class BaseCommand implements BasicCommand {
 
     @Override
-    public void execute(@NotNull CommandSourceStack stack, @NotNull String[] args) {
+    public void execute(@NotNull CommandSourceStack stack, @NotNull String @NotNull [] args) {
         final CommandSender sender = stack.getSender();
 
         switch (args.length) {
@@ -47,8 +47,8 @@ public class BaseCommand implements BasicCommand {
     }
 
     @Override
-    public @NotNull Collection<String> suggest(@NotNull CommandSourceStack stack, @NotNull String[] args) {
-        Collection<String> suggestions = new ArrayList<>();
+    public @NotNull Collection<String> suggest(@NotNull CommandSourceStack stack, @NotNull String @NotNull [] args) {
+        final Collection<String> suggestions = new ArrayList<>();
 
         if (args.length == 0) {
             if (Permissions.reload.hasPermission(stack.getSender())) suggestions.add("reload");
@@ -58,7 +58,7 @@ public class BaseCommand implements BasicCommand {
         return suggestions;
     }
 
-    private void help(final CommandSender sender) {
+    private void help(@NotNull final CommandSender sender) {
         if (!Permissions.help.hasPermission(sender)) {
             sender.sendRichMessage(PluginConfig.no_permission.replace("{prefix}", PluginConfig.msg_prefix));
 

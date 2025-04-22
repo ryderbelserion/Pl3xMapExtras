@@ -30,8 +30,9 @@ public class SignsLayer extends WorldLayer {
 
     private final Map<Position, Sign> signs = new ConcurrentHashMap<>();
 
-    public SignsLayer(@NotNull SignsConfig config) {
+    public SignsLayer(@NotNull final SignsConfig config) {
         super(KEY, config.getWorld(), () -> config.LAYER_LABEL);
+
         this.config = config;
         this.dataFile = getWorld().getTilesDirectory().resolve("signs.dat");
 
@@ -55,7 +56,8 @@ public class SignsLayer extends WorldLayer {
     @Override
     public @NotNull Collection<Marker<?>> getMarkers() {
         return this.signs.values().stream().map(sign -> {
-            String key = String.format("%s_%s_%d_%d", KEY, getWorld().getName(), sign.pos().x(), sign.pos().z());
+            final String key = String.format("%s_%s_%d_%d", KEY, getWorld().getName(), sign.pos().x(), sign.pos().z());
+
             return Marker.icon(key, sign.pos().toPoint(), sign.icon().getKey(), getConfig().ICON_SIZE)
                     .setOptions(this.options.asBuilder()
                             .popupPane(String.format("%s_popup", sign.icon().getKey()))
@@ -76,16 +78,17 @@ public class SignsLayer extends WorldLayer {
         return Collections.unmodifiableCollection(this.signs.values());
     }
 
-    public boolean hasSign(@NotNull Position pos) {
+    public boolean hasSign(@NotNull final Position pos) {
         return this.signs.containsKey(pos);
     }
 
-    public void putSign(@NotNull Sign sign) {
+    public void putSign(@NotNull final Sign sign) {
         this.signs.put(sign.pos(), sign);
+
         saveData();
     }
 
-    public void removeSign(@NotNull Position pos) {
+    public void removeSign(@NotNull final Position pos) {
         this.signs.remove(pos);
         saveData();
     }
@@ -94,10 +97,13 @@ public class SignsLayer extends WorldLayer {
         if (!Files.exists(this.dataFile)) {
             return;
         }
+
         try (DataInputStream in = new DataInputStream(new GZIPInputStream(new FileInputStream(this.dataFile.toFile())))) {
             int size = in.readInt();
+
             for (int i = 0; i < size; i++) {
-                Sign sign = Sign.load(in);
+                final Sign sign = Sign.load(in);
+
                 this.signs.put(sign.pos(), sign);
             }
         } catch (Throwable t) {
@@ -108,11 +114,12 @@ public class SignsLayer extends WorldLayer {
     private void saveData() {
         try (DataOutputStream out = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(this.dataFile.toFile())))) {
             out.writeInt(this.signs.size());
-            for (Sign sign : this.signs.values()) {
+
+            for (final Sign sign : this.signs.values()) {
                 sign.save(out);
             }
+
             out.flush();
-        } catch (Throwable ignore) {
-        }
+        } catch (Throwable ignore) {}
     }
 }

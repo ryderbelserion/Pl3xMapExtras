@@ -27,9 +27,6 @@ public class Pl3xMapExtras extends JavaPlugin {
         this.api = new FusionPaper(getComponentLogger(), getDataPath());
         this.api.enable(this);
 
-        // Register the provider.
-        Provider.register(new Provider.MapExtras(getDataFolder(), getLogger()));
-
         // Load the config.
         PluginConfig.reload();
 
@@ -81,8 +78,9 @@ public class Pl3xMapExtras extends JavaPlugin {
         // Clear plugin hooks.
         Hook.clear();
 
-        // Unregister provider.
-        Provider.unregister();
+        if (this.api != null) {
+            this.api.disable();
+        }
     }
 
     public @Nullable final MobsManager getMobsManager() {

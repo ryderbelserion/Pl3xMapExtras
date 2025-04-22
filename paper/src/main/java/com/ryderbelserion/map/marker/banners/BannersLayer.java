@@ -29,7 +29,7 @@ public class BannersLayer extends WorldLayer {
     private final Map<Position, Marker<?>> markers = new ConcurrentHashMap<>();
     private final Map<Position, Banner> banners = new ConcurrentHashMap<>();
 
-    public BannersLayer(@NotNull BannerConfig config) {
+    public BannersLayer(@NotNull final BannerConfig config) {
         super(KEY, config.getWorld(), () -> config.LAYER_LABEL);
 
         this.config = config;
@@ -54,11 +54,11 @@ public class BannersLayer extends WorldLayer {
         return Collections.unmodifiableCollection(this.banners.values());
     }
 
-    public void putBanner(@NotNull Banner banner) {
+    public void putBanner(@NotNull final Banner banner) {
         putBanner(banner, true);
     }
 
-    public void putBanner(@NotNull Banner banner, boolean saveData) {
+    public void putBanner(@NotNull final Banner banner, final boolean saveData) {
         String key = String.format("%s_%s_%d_%d", KEY, getWorld().getName(), banner.pos().x(), banner.pos().z());
 
         Icon icon = Marker.icon(key, banner.pos().toPoint(), banner.icon().getKey(), this.config.ICON_SIZE)
@@ -111,14 +111,14 @@ public class BannersLayer extends WorldLayer {
         }
     }
 
-    public void removeBanner(@NotNull Position pos) {
+    public void removeBanner(@NotNull final Position pos) {
         this.markers.remove(pos);
         this.banners.remove(pos);
 
         saveData();
     }
 
-    public boolean containsBanner(@NotNull Position pos) {
+    public boolean containsBanner(@NotNull final Position pos) {
         return this.markers.containsKey(pos) && this.banners.containsKey(pos);
     }
 

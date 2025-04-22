@@ -27,30 +27,30 @@ public class WorldGuardHook implements Hook {
         WorldGuardConfig.reload();
     }
 
-    private @Nullable RegionManager getRegionManager(@NotNull World world) {
-        org.bukkit.World bukkit = Bukkit.getWorld(world.getName());
+    private @Nullable RegionManager getRegionManager(@NotNull final World world) {
+        final org.bukkit.World bukkit = Bukkit.getWorld(world.getName());
 
         return bukkit == null ? null : WorldGuard.getInstance().getPlatform()
                 .getRegionContainer().get(BukkitAdapter.adapt(bukkit));
     }
 
     @Override
-    public void registerWorld(@NotNull World world) {
+    public void registerWorld(@NotNull final World world) {
         if (getRegionManager(world) != null) {
             world.getLayerRegistry().register(new WorldGuardLayer(this, world));
         }
     }
 
     @Override
-    public void unloadWorld(@NotNull World world) {
+    public void unloadWorld(@NotNull final World world) {
         world.getLayerRegistry().unregister(WorldGuardLayer.KEY);
     }
 
     @Override
-    public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+    public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
         if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
 
-        RegionManager manager = getRegionManager(world);
+        final RegionManager manager = getRegionManager(world);
 
         if (manager == null) {
             return EMPTY_LIST;
@@ -61,12 +61,11 @@ public class WorldGuardHook implements Hook {
                 .map(region -> new WorldGuardClaim(world, region))
                 .filter(claim -> claim.getType() == RegionType.CUBOID || claim.getType() == RegionType.POLYGON)
                 .map(claim -> {
-                    String key = "wg-claim-" + claim.getID();
+                    final String key = "wg-claim-" + claim.getID();
                     Marker<?> marker;
+
                     if (claim.getType() == RegionType.POLYGON) {
-                        marker = Marker.polygon(key, Marker.polyline(key + "line",
-                                claim.getPoints().stream().map(point ->
-                                        Point.of(point.getX(), point.getZ())).toList()));
+                        marker = Marker.polygon(key, Marker.polyline(key + "line", claim.getPoints().stream().map(point -> Point.of(point.getX(), point.getZ())).toList()));
                     } else {
                         marker = Marker.rectangle(key, claim.getMin(), claim.getMax());
                     }
@@ -76,7 +75,7 @@ public class WorldGuardHook implements Hook {
                 .collect(Collectors.toSet());
     }
 
-    private @NotNull Options getOptions(@NotNull WorldGuardClaim claim) {
+    private @NotNull Options getOptions(@NotNull final WorldGuardClaim claim) {
         return Options.builder()
                 .strokeWeight(WorldGuardConfig.MARKER_STROKE_WEIGHT)
                 .strokeColor(Colors.fromHex(WorldGuardConfig.MARKER_STROKE_COLOR))
@@ -85,7 +84,7 @@ public class WorldGuardHook implements Hook {
                 .build();
     }
 
-    private @NotNull String processPopup(@NotNull String popup, @NotNull WorldGuardClaim claim) {
+    private @NotNull String processPopup(@NotNull final String popup, @NotNull final WorldGuardClaim claim) {
         return popup.replace("<world>", claim.getWorld().getName())
                 .replace("<regionname>", claim.getID())
                 .replace("<owners>", getOwners(claim))
@@ -95,8 +94,8 @@ public class WorldGuardHook implements Hook {
                 .replace("<flags>", getFlags(claim));
     }
 
-    private @NotNull String getOwners(@NotNull WorldGuardClaim claim) {
-        Set<String> set = new HashSet<>();
+    private @NotNull String getOwners(@NotNull final WorldGuardClaim claim) {
+        final Set<String> set = new HashSet<>();
         set.addAll(claim.getOwners().getPlayers());
         set.addAll(claim.getOwners().getGroups());
 
@@ -104,8 +103,8 @@ public class WorldGuardHook implements Hook {
                 .replace("<owners>", String.join(", ", set));
     }
 
-    private @NotNull String getMembers(@NotNull WorldGuardClaim claim) {
-        Set<String> set = new HashSet<>();
+    private @NotNull String getMembers(@NotNull final WorldGuardClaim claim) {
+        final Set<String> set = new HashSet<>();
         set.addAll(claim.getMembers().getPlayers());
         set.addAll(claim.getMembers().getGroups());
 
@@ -113,9 +112,10 @@ public class WorldGuardHook implements Hook {
                 .replace("<members>", String.join(", ", set));
     }
 
-    private @NotNull String getFlags(@NotNull WorldGuardClaim claim) {
-        Map<Flag<?>, Object> flags = claim.getFlags();
-        Set<String> set = flags.keySet().stream()
+    private @NotNull String getFlags(@NotNull final WorldGuardClaim claim) {
+        final Map<Flag<?>, Object> flags = claim.getFlags();
+
+        final Set<String> set = flags.keySet().stream()
                 .map(flag -> WorldGuardConfig.MARKER_POPUP_FLAGS_ENTRY
                         .replace("<flag>", flag.getName())
                         .replace("<value>", String.valueOf(flags.get(flag))))

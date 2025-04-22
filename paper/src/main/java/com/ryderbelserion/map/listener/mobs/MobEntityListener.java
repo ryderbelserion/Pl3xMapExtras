@@ -23,7 +23,7 @@ public class MobEntityListener implements Listener {
     public void onEntityRemove(EntityRemoveFromWorldEvent event) {
         if (!ConfigUtil.isMobsEnabled() || this.mobsManager == null) return;
 
-        Entity entity = event.getEntity();
+        final Entity entity = event.getEntity();
 
         if (entity instanceof Mob mob) {
             this.mobsManager.removeMarker(mob);

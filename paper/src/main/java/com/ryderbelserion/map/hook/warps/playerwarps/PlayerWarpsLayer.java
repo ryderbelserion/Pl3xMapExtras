@@ -11,8 +11,9 @@ public class PlayerWarpsLayer extends WorldLayer {
 
     private final PlayerWarpsHook playerWarpsHook;
 
-    public PlayerWarpsLayer(@NotNull PlayerWarpsHook playerWarpsHook, @NotNull World world) {
+    public PlayerWarpsLayer(@NotNull final PlayerWarpsHook playerWarpsHook, @NotNull final World world) {
         super(KEY, world, () -> PlayerWarpsConfig.LAYER_LABEL);
+
         this.playerWarpsHook = playerWarpsHook;
 
         setShowControls(PlayerWarpsConfig.LAYER_SHOW_CONTROLS);

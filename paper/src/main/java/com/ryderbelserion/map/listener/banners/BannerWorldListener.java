@@ -78,24 +78,26 @@ public class BannerWorldListener implements EventListener, Listener {
         } catch (Throwable ignore) {}
     }
 
-    private void registerWorld(@NotNull World world) {
+    private void registerWorld(@NotNull final World world) {
         if (!ConfigUtil.isBannersEnabled()) return;
 
         world.getLayerRegistry().register(new BannersLayer(new BannerConfig(world)));
     }
 
-    private void checkChunk(@NotNull Chunk chunk) {
+    private void checkChunk(@NotNull final Chunk chunk) {
         if (!ConfigUtil.isBannersEnabled()) return;
 
-        org.bukkit.World bukkitWorld = chunk.getWorld();
+        final org.bukkit.World bukkitWorld = chunk.getWorld();
 
-        World world = Pl3xMap.api().getWorldRegistry().get(bukkitWorld.getName());
+        final World world = Pl3xMap.api().getWorldRegistry().get(bukkitWorld.getName());
+
         if (world == null) {
             // world is missing or not enabled; ignore
             return;
         }
 
-        BannersLayer layer = (BannersLayer) world.getLayerRegistry().get(BannersLayer.KEY);
+        final BannersLayer layer = (BannersLayer) world.getLayerRegistry().get(BannersLayer.KEY);
+
         if (layer == null) {
             // world has no banners layer; ignore
             return;

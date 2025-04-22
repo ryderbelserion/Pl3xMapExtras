@@ -12,8 +12,9 @@ public class GriefDefenderLayer extends WorldLayer {
 
     private final GriefDefenderHook griefDefenderHook;
 
-    public GriefDefenderLayer(@NotNull GriefDefenderHook griefDefenderHook, @NotNull World world) {
+    public GriefDefenderLayer(@NotNull final GriefDefenderHook griefDefenderHook, @NotNull final World world) {
         super(KEY, world, () -> GriefDefenderConfig.LAYER_LABEL);
+
         this.griefDefenderHook = griefDefenderHook;
 
         setShowControls(GriefDefenderConfig.LAYER_SHOW_CONTROLS);

@@ -1,9 +1,10 @@
 package com.ryderbelserion.map.marker.mobs;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
-import com.ryderbelserion.map.config.MobConfig;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.image.IconImage;
+import net.pl3x.map.core.registry.IconRegistry;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Bee;
@@ -387,6 +388,12 @@ public enum Icon {
 
     WITCH(EntityType.WITCH, "uncategorized");
 
+    private static @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
+
+    private static @NotNull final Path path = plugin.getDataPath();
+
+    private static @NotNull final ComponentLogger logger = plugin.getComponentLogger();
+
     private final String name;
     private final String key;
     private final EntityType type;
@@ -394,16 +401,16 @@ public enum Icon {
 
     private final String directory;
 
-    Icon(@NotNull EntityType type) {
+    Icon(@NotNull final EntityType type) {
         this(type, null, type.name().toLowerCase(Locale.ROOT));
     }
 
-    Icon(@NotNull EntityType type, String directory) {
+    Icon(@NotNull final EntityType type, final String directory) {
         this(type, null, directory);
     }
 
     @SuppressWarnings("unchecked")
-    <T extends Mob> Icon(@NotNull EntityType type, @Nullable Function<T, Boolean> predicate) {
+    <T extends Mob> Icon(@NotNull final EntityType type, @Nullable final Function<T, Boolean> predicate) {
         this.name = name().toLowerCase(Locale.ROOT);
         this.key = String.format("pl3xmap_%s_mob", name);
         this.type = type;
@@ -412,7 +419,7 @@ public enum Icon {
     }
 
     @SuppressWarnings("unchecked")
-    <T extends Mob> Icon(@NotNull EntityType type, @Nullable Function<T, Boolean> predicate, String directory) {
+    <T extends Mob> Icon(@NotNull final EntityType type, @Nullable final Function<T, Boolean> predicate, final String directory) {
         this.name = name().toLowerCase(Locale.ROOT);
         this.key = String.format("pl3xmap_%s_mob", name);
         this.type = type;
@@ -421,7 +428,7 @@ public enum Icon {
     }
 
 
-    public @NotNull String getKey() {
+    public @NotNull final String getKey() {
         return this.key;
     }
 
@@ -429,12 +436,12 @@ public enum Icon {
         return this.directory;
     }
 
-    public @NotNull EntityType getType() {
+    public @NotNull final EntityType getType() {
         return this.type;
     }
 
-    public static @NotNull Icon get(@NotNull Mob mob) {
-        for (Icon icon : values()) {
+    public static @NotNull Icon get(@NotNull final Mob mob) {
+        for (final Icon icon : values()) {
             if (icon.getType() == mob.getType()) {
                 if (icon.predicate == null || icon.predicate.apply(mob)) {
                     return icon;
@@ -445,15 +452,15 @@ public enum Icon {
         throw new IllegalStateException();
     }
 
-    private static <T extends Mob> @NotNull Function<T, Boolean> predicate(@NotNull Function<T, Boolean> predicate) {
+    private static <T extends Mob> @NotNull Function<T, Boolean> predicate(@NotNull final Function<T, Boolean> predicate) {
         return predicate;
     }
 
-    private static @NotNull Horse.Style getHorse(@NotNull Horse horse) {
+    private static @NotNull Horse.Style getHorse(@NotNull final Horse horse) {
         return horse.getStyle();
     }
 
-    private static @NotNull Panda.Gene getTrait(@NotNull Panda panda) {
+    private static @NotNull Panda.Gene getTrait(@NotNull final Panda panda) {
         Panda.Gene mainGene = panda.getMainGene();
 
         if (!mainGene.isRecessive()) {
@@ -468,11 +475,11 @@ public enum Icon {
     }
 
     public static void register() {
-        Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
+        @NotNull final Path iconFolder = path.resolve("mobs");
 
-        Path iconFolder = plugin.getDataFolder().toPath().resolve("mobs");
+        @NotNull final IconRegistry registry = Pl3xMap.api().getIconRegistry();
 
-        for (Icon icon : values()) {
+        for (final Icon icon : values()) {
             // icons/directory_name/8x8/file_name
             final String fileName = String.format("icons%s%s%s%s%s%s.png", File.separator, icon.getDirectory(), File.separator, "8x8", File.separator, icon.name);
 
@@ -480,10 +487,10 @@ public enum Icon {
 
             try {
                 if (file.exists()) {
-                    Pl3xMap.api().getIconRegistry().register(new IconImage(icon.key, ImageIO.read(file), "png"));
+                    registry.register(new IconImage(icon.key, ImageIO.read(file), "png"));
                 }
-            } catch (IOException e) {
-                plugin.getLogger().log(Level.WARNING,"Failed to register icon (" + icon.name + ") " + fileName, e);
+            } catch (final IOException exception) {
+                logger.warn("Failed to register icon ({}) {}", icon.type, fileName, exception);
             }
         }
     }

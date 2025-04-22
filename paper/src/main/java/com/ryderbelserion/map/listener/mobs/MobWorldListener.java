@@ -68,7 +68,7 @@ public class MobWorldListener implements EventListener, Listener {
         } catch (Throwable ignore) {}
     }
 
-    private void registerWorld(@NotNull World world) {
+    private void registerWorld(@NotNull final World world) {
         if (this.mobsManager == null) return;
 
         // Add new world.

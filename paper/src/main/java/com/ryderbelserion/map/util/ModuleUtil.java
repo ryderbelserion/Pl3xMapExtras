@@ -38,7 +38,7 @@ public class ModuleUtil {
 
     private static final PluginManager pluginManager = server.getPluginManager();
 
-    public static void toggleAll(boolean isShutdown) {
+    public static void toggleAll(final boolean isShutdown) {
         toggleSigns(isShutdown);
         toggleWarps(isShutdown);
         toggleBanners(isShutdown);
@@ -152,11 +152,11 @@ public class ModuleUtil {
         }
     }
 
-    public static void registerWorld(@NotNull World world) {
+    public static void registerWorld(@NotNull final World world) {
         Hook.hooks().forEach(hook -> hook.registerWorld(world));
     }
 
-    public static void unloadWorld(@NotNull World world) {
+    public static void unloadWorld(@NotNull final World world) {
         Hook.hooks().forEach(hook -> hook.unloadWorld(world));
     }
 
@@ -194,7 +194,7 @@ public class ModuleUtil {
     }
 
     public static void extract() {
-        final Path path = plugin.getDataFolder().toPath();
+        final Path path = plugin.getDataPath();
 
         if (ConfigUtil.isBannersEnabled()) {
             FileUtils.extract("banners/icons", path, true, false);

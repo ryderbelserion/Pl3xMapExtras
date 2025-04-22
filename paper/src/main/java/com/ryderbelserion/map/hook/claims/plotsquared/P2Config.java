@@ -43,7 +43,8 @@ public final class P2Config extends AbstractConfig {
     private static final P2Config CONFIG = new P2Config();
 
     public static void reload() {
-        Path mainDir = Pl3xMapExtras.getPlugin(Pl3xMapExtras.class).getDataFolder().toPath();
+        final Path mainDir = Pl3xMapExtras.getPlugin(Pl3xMapExtras.class).getDataPath();
+
         CONFIG.reload(mainDir.resolve("claims").resolve("plotsquared.yml"), P2Config.class);
     }
 }

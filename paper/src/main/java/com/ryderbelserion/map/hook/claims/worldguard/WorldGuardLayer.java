@@ -12,8 +12,9 @@ public class WorldGuardLayer extends WorldLayer {
 
     private final WorldGuardHook worldGuardHook;
 
-    public WorldGuardLayer(@NotNull WorldGuardHook worldGuardHook, @NotNull World world) {
+    public WorldGuardLayer(@NotNull final WorldGuardHook worldGuardHook, @NotNull final World world) {
         super(KEY, world, () -> WorldGuardConfig.LAYER_LABEL);
+
         this.worldGuardHook = worldGuardHook;
 
         setShowControls(WorldGuardConfig.LAYER_SHOW_CONTROLS);

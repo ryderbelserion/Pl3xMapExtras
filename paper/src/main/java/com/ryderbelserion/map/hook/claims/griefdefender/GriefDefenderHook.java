@@ -20,17 +20,17 @@ public class GriefDefenderHook implements Listener, Hook {
     }
 
     @Override
-    public void registerWorld(@NotNull World world) {
+    public void registerWorld(@NotNull final World world) {
         world.getLayerRegistry().register(new GriefDefenderLayer(this, world));
     }
 
     @Override
-    public void unloadWorld(@NotNull World world) {
+    public void unloadWorld(@NotNull final World world) {
         world.getLayerRegistry().unregister(GriefDefenderLayer.KEY);
     }
 
     @Override
-    public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+    public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
         if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
 
         return GriefDefender.getCore().getAllClaims().stream()
@@ -44,7 +44,7 @@ public class GriefDefenderHook implements Listener, Hook {
                 .collect(Collectors.toSet());
     }
 
-    private @NotNull Options getOptions(@NotNull GriefDefenderClaim claim) {
+    private @NotNull Options getOptions(@NotNull final GriefDefenderClaim claim) {
         Options.Builder builder;
 
         if (claim.isAdminClaim()) {
@@ -64,7 +64,7 @@ public class GriefDefenderHook implements Listener, Hook {
         return builder.build();
     }
 
-    private @NotNull String processPopup(@NotNull String popup, @NotNull GriefDefenderClaim claim) {
+    private @NotNull String processPopup(@NotNull final String popup, @NotNull final GriefDefenderClaim claim) {
         return popup.replace("<world>", claim.getWorld().getName())
                 .replace("<id>", claim.getID().toString())
                 .replace("<owner>", claim.getOwnerName())

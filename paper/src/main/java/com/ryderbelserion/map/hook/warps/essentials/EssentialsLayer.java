@@ -11,8 +11,9 @@ public class EssentialsLayer extends WorldLayer {
 
     private final EssentialsHook essentialsHook;
 
-    public EssentialsLayer(@NotNull EssentialsHook essentialsHook, @NotNull World world) {
+    public EssentialsLayer(@NotNull final EssentialsHook essentialsHook, @NotNull final World world) {
         super(KEY, world, () -> EssentialsConfig.LAYER_LABEL);
+
         this.essentialsHook = essentialsHook;
 
         setShowControls(EssentialsConfig.LAYER_SHOW_CONTROLS);

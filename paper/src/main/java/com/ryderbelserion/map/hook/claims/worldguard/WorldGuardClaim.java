@@ -20,7 +20,7 @@ public class WorldGuardClaim {
     private final Point min;
     private final Point max;
 
-    public WorldGuardClaim(@NotNull World world, @NotNull ProtectedRegion region) {
+    public WorldGuardClaim(@NotNull final World world, @NotNull final ProtectedRegion region) {
         this.world = world;
         this.region = region;
 
