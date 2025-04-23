@@ -7,6 +7,8 @@ dependencies {
 
     compileOnly(libs.bundles.adventure)
 
+    compileOnly(libs.configurate.yaml)
+
     compileOnly(libs.fusion.core)
 
     compileOnly(libs.jetbrains)

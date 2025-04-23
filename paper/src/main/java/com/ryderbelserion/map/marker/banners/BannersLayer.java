@@ -30,17 +30,18 @@ public class BannersLayer extends WorldLayer {
     private final Map<Position, Banner> banners = new ConcurrentHashMap<>();
 
     public BannersLayer(@NotNull final BannerConfig config) {
-        super(KEY, config.getWorld(), () -> config.LAYER_LABEL);
+        super(KEY, config.getWorld(), () -> "label_example");
+        //super(KEY, config.getWorld(), () -> config.LAYER_LABEL);
 
         this.config = config;
         this.dataFile = getWorld().getTilesDirectory().resolve("banners.dat");
 
-        setShowControls(config.LAYER_SHOW_CONTROLS);
-        setDefaultHidden(config.LAYER_DEFAULT_HIDDEN);
-        setUpdateInterval(config.LAYER_UPDATE_INTERVAL);
-        setPriority(config.LAYER_PRIORITY);
-        setZIndex(config.LAYER_ZINDEX);
-        setCss(config.LAYER_CSS);
+        //setShowControls(config.LAYER_SHOW_CONTROLS);
+        //setDefaultHidden(config.LAYER_DEFAULT_HIDDEN);
+        //setUpdateInterval(config.LAYER_UPDATE_INTERVAL);
+        //setPriority(config.LAYER_PRIORITY);
+        //setZIndex(config.LAYER_ZINDEX);
+        //setCss(config.LAYER_CSS);
 
         loadData();
     }
@@ -59,7 +60,7 @@ public class BannersLayer extends WorldLayer {
     }
 
     public void putBanner(@NotNull final Banner banner, final boolean saveData) {
-        String key = String.format("%s_%s_%d_%d", KEY, getWorld().getName(), banner.pos().x(), banner.pos().z());
+        /*String key = String.format("%s_%s_%d_%d", KEY, getWorld().getName(), banner.pos().x(), banner.pos().z());
 
         Icon icon = Marker.icon(key, banner.pos().toPoint(), banner.icon().getKey(), this.config.ICON_SIZE)
                 .setAnchor(this.config.ICON_ANCHOR)
@@ -108,7 +109,7 @@ public class BannersLayer extends WorldLayer {
 
         if (saveData) {
             saveData();
-        }
+        }*/
     }
 
     public void removeBanner(@NotNull final Position pos) {

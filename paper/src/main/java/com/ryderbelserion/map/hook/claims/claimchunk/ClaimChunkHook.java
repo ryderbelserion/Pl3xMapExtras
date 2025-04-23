@@ -14,7 +14,6 @@ import com.cjburkey.claimchunk.chunk.DataChunk;
 import com.cjburkey.claimchunk.data.newdata.IClaimChunkDataHandler;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.util.ChunkUtil;
-import com.ryderbelserion.map.util.ConfigUtil;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Rectangle;
@@ -45,7 +44,7 @@ public class ClaimChunkHook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
-        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
+        //if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
 
         final ClaimChunk cc = ClaimChunk.getInstance();
 

@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.hook.claims.worldguard;
 
 import java.util.Collection;
+import java.util.Collections;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
@@ -10,12 +11,12 @@ public class WorldGuardLayer extends WorldLayer {
 
     public static final String KEY = "worldguard";
 
-    private final WorldGuardHook worldGuardHook;
+    //private final WorldGuardHook worldGuardHook;
 
-    public WorldGuardLayer(@NotNull final WorldGuardHook worldGuardHook, @NotNull final World world) {
+    public WorldGuardLayer(@NotNull final World world) {
         super(KEY, world, () -> WorldGuardConfig.LAYER_LABEL);
 
-        this.worldGuardHook = worldGuardHook;
+        //this.worldGuardHook = worldGuardHook;
 
         setShowControls(WorldGuardConfig.LAYER_SHOW_CONTROLS);
         setDefaultHidden(WorldGuardConfig.LAYER_DEFAULT_HIDDEN);
@@ -26,6 +27,7 @@ public class WorldGuardLayer extends WorldLayer {
 
     @Override
     public @NotNull Collection<Marker<?>> getMarkers() {
-        return this.worldGuardHook.getData(getWorld());
+        //return this.worldGuardHook.getData(getWorld());
+        return Collections.emptyList();
     }
 }

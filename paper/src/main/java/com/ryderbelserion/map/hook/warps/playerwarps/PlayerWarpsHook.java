@@ -1,13 +1,11 @@
 package com.ryderbelserion.map.hook.warps.playerwarps;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 import com.olziedev.playerwarps.api.PlayerWarpsAPI;
 import com.olziedev.playerwarps.api.warp.WCategory;
 import com.olziedev.playerwarps.api.warp.WLocation;
 import com.olziedev.playerwarps.api.warp.Warp;
-import com.ryderbelserion.map.util.ConfigUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Icon;
@@ -64,7 +62,7 @@ public class PlayerWarpsHook implements Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
-        if (!ConfigUtil.isWarpsEnabled()) return EMPTY_LIST;
+        //if (!ConfigUtil.isWarpsEnabled()) return EMPTY_LIST;
 
         return PlayerWarpsAPI.getInstance().getPlayerWarps(PlayerWarpsConfig.SHOW_LOCKED).stream()
                 .filter(warp -> warp.getWarpLocation().getWorld().equals(world.getName()) || warp.isWarpLocked())

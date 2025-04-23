@@ -19,6 +19,7 @@ public class Pl3xMapExtrasCore {
         this.path = path;
 
         this.configManager = new ConfigManager(this.fileManager, path);
+        this.configManager.load();
     }
 
     public @NotNull final ConfigManager getConfigManager() {

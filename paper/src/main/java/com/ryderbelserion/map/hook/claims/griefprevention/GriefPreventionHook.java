@@ -2,12 +2,10 @@ package com.ryderbelserion.map.hook.claims.griefprevention;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import com.ryderbelserion.map.hook.Hook;
-import com.ryderbelserion.map.util.ConfigUtil;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
@@ -42,7 +40,7 @@ public class GriefPreventionHook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
-        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
+        //if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
 
         if (!isWorldEnabled(world.getName())) {
             return EMPTY_LIST;

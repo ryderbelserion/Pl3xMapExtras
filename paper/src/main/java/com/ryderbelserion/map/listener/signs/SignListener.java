@@ -4,16 +4,13 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.api.enums.Permissions;
-import com.ryderbelserion.map.util.ConfigUtil;
 import com.ryderbelserion.map.util.ItemUtil;
-import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
 import com.ryderbelserion.map.marker.signs.Icon;
 import com.ryderbelserion.map.marker.signs.Position;
 import com.ryderbelserion.map.marker.signs.Sign;
 import com.ryderbelserion.map.marker.signs.SignsLayer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -33,7 +30,6 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -44,7 +40,7 @@ public class SignListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignEdit(@NotNull SignChangeEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         if (!Permissions.signs_admin.hasPermission(event.getPlayer())) {
             // player doesn't have permission to track signs; ignore
@@ -74,14 +70,14 @@ public class SignListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockDestroyEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         tryRemoveSign(event.getBlock().getState());
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onClickSign(@NotNull PlayerInteractEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         final Block block = event.getClickedBlock();
 
@@ -132,49 +128,49 @@ public class SignListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockDropItemEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         tryRemoveSign(event.getBlockState());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockBurnEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         tryRemoveSign(event.getBlock().getState());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockExplodeEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         event.blockList().forEach(block -> tryRemoveSign(block.getState()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull EntityExplodeEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         event.blockList().forEach(block -> tryRemoveSign(block.getState()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockPistonExtendEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         event.getBlocks().forEach(block -> tryRemoveSign(block.getState()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockPistonRetractEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         event.getBlocks().forEach(block -> tryRemoveSign(block.getState()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockFromToEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         tryRemoveSign(event.getToBlock().getState());
     }

@@ -5,12 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
-
 import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkHook;
 import com.ryderbelserion.map.hook.claims.griefdefender.GriefDefenderHook;
 import com.ryderbelserion.map.hook.claims.griefprevention.GriefPreventionHook;
 import com.ryderbelserion.map.hook.claims.plotsquared.P2Hook;
-import com.ryderbelserion.map.hook.claims.worldguard.WorldGuardHook;
 import com.ryderbelserion.map.hook.warps.essentials.EssentialsHook;
 import com.ryderbelserion.map.hook.warps.playerwarps.PlayerWarpsHook;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -57,8 +55,8 @@ public interface Hook {
         CLAIMCHUNK("ClaimChunk", ClaimChunkHook::new),
         GRIEFDEFENDER("GriefDefender", GriefDefenderHook::new),
         GRIEFPREVENTION("GriefPrevention", GriefPreventionHook::new),
-        PLOTSQUARED("PlotSquared", P2Hook::new),
-        WORLDGUARD("WorldGuard", WorldGuardHook::new);
+        PLOTSQUARED("PlotSquared", P2Hook::new);
+        //WORLDGUARD("WorldGuard", WorldGuardHook::new);
 
         private final String name;
         private final Supplier<Hook> hook;

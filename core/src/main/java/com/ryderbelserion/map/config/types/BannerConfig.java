@@ -1,22 +1,28 @@
 package com.ryderbelserion.map.config.types;
 
-import ch.jalu.configme.Comment;
 import ch.jalu.configme.SettingsHolder;
+import ch.jalu.configme.configurationdata.CommentsConfiguration;
 import ch.jalu.configme.properties.Property;
-import net.pl3x.map.core.markers.Vector;
-
+import com.ryderbelserion.map.config.types.objects.MapSettings;
+import org.jetbrains.annotations.NotNull;
 import static ch.jalu.configme.properties.PropertyInitializer.newBeanProperty;
-import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
 public class BannerConfig implements SettingsHolder {
 
-    @Comment("Should banners be displayed on block place?")
-    public static final Property<Boolean> banners_block_place = newProperty("root.banners.block-place", true);
+    @Override
+    public void registerComments(@NotNull CommentsConfiguration conf) {
+        conf.setComment("layer", "The configuration handling the Banner Layer!");
+    }
 
-    @Comment("The label for the map layer!")
-    public static final Property<String> layer_label = newProperty("layer.label", "Banners");
+    public static final Property<MapSettings> banner_settings = newBeanProperty(MapSettings.class, "layer", new MapSettings("Banners"));
 
-    @Comment("Shows controls for the map layer.")
+    //@Comment("Should banners be displayed on block place?")
+    //public static final Property<Boolean> banners_block_place = newProperty("root.banners.block-place", true);
+
+    //@Comment("The label for the map layer!")
+    //public static final Property<String> layer_label = newProperty("layer.label", "Banners");
+
+    /*@Comment("Shows controls for the map layer.")
     public static final Property<Boolean> layer_show_controls = newProperty("layer.show-controls", false);
 
     @Comment("Whether the map layer is hidden by default.")
@@ -62,6 +68,6 @@ public class BannerConfig implements SettingsHolder {
     public static final Property<Boolean> icon_shadow_anchor_enabled = newProperty("marker.icon.shadow-anchor.toggle", false);
 
     @Comment("The coordinates of the `tip` of the shadow (relative to its top left corner) (the same as icon anchor if not specified).")
-    public static final Property<Vector> icon_shadow_anchor  = newBeanProperty(Vector.class, "marker.icon.shadow-anchor.vector", new Vector(32, 32));
+    public static final Property<Vector> icon_shadow_anchor  = newBeanProperty(Vector.class, "marker.icon.shadow-anchor.vector", new Vector(32, 32));*/
 
 }

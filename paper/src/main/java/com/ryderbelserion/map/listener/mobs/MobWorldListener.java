@@ -5,7 +5,6 @@ import com.ryderbelserion.map.config.v1.MobConfig;
 import com.ryderbelserion.map.marker.mobs.Icon;
 import com.ryderbelserion.map.marker.mobs.MobsLayer;
 import com.ryderbelserion.map.marker.mobs.MobsManager;
-import com.ryderbelserion.map.util.ConfigUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
 import net.pl3x.map.core.event.EventListener;
@@ -56,11 +55,11 @@ public class MobWorldListener implements EventListener, Listener {
 
     @EventHandler
     public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
-        if (!ConfigUtil.isMobsEnabled() || this.mobsManager == null) return;
+        //if (!ConfigUtil.isMobsEnabled() || this.mobsManager == null) return;
         
         try {
             // Clear when world is unloaded.
-            this.mobsManager.clearMarkers(event.getWorld().getName());
+            //this.mobsManager.clearMarkers(event.getWorld().getName());
 
             // Unregister layer.
             event.getWorld().getLayerRegistry().unregister(MobsLayer.KEY);
@@ -68,10 +67,10 @@ public class MobWorldListener implements EventListener, Listener {
     }
 
     private void registerWorld(@NotNull final World world) {
-        if (this.mobsManager == null) return;
+        //if (this.mobsManager == null) return;
 
         // Add new world.
-        this.mobsManager.addWorld(world.getName());
+        //this.mobsManager.addWorld(world.getName());
 
         // Add new layer.
         world.getLayerRegistry().register(new MobsLayer(new MobConfig(world)));

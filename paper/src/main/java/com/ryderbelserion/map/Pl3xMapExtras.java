@@ -37,7 +37,7 @@ public class Pl3xMapExtras extends JavaPlugin {
 
         this.configManager = core.getConfigManager();
 
-        // Extract the files needed for the plugin.
+        /*// Extract the files needed for the plugin.
         ModuleUtil.extract();
 
         // Find all plugin hooks and load them.
@@ -67,11 +67,12 @@ public class Pl3xMapExtras extends JavaPlugin {
             registry.register("pl3xmapextras", "the command to handle the plugin", new BaseCommand());
         });
 
-        new MetricsWrapper(this, 22296);
+        new MetricsWrapper(this, 22296);*/
     }
 
     @Override
     public void onDisable() {
+        /*
         // Cancel the tasks regardless
         getServer().getGlobalRegionScheduler().cancelTasks(this);
         getServer().getAsyncScheduler().cancelTasks(this);
@@ -83,7 +84,7 @@ public class Pl3xMapExtras extends JavaPlugin {
         ModuleUtil.toggleAll(true);
 
         // Clear plugin hooks.
-        Hook.clear();
+        Hook.clear();*/
 
         if (this.api != null) {
             this.api.disable();

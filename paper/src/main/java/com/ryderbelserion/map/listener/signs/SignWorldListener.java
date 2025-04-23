@@ -1,7 +1,6 @@
 package com.ryderbelserion.map.listener.signs;
 
 import com.ryderbelserion.map.config.v1.SignsConfig;
-import com.ryderbelserion.map.util.ConfigUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
 import net.pl3x.map.core.event.EventListener;
@@ -22,14 +21,14 @@ import org.jetbrains.annotations.NotNull;
 public class SignWorldListener implements EventListener, Listener {
 
     public SignWorldListener() {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         Pl3xMap.api().getEventRegistry().register(this);
     }
 
     @org.bukkit.event.EventHandler(priority = EventPriority.MONITOR)
     public void onChunkLoad(@NotNull ChunkLoadEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         if (event.isNewChunk()) {
             // chunk is new; ignore
@@ -41,21 +40,21 @@ public class SignWorldListener implements EventListener, Listener {
 
     @org.bukkit.event.EventHandler(priority = EventPriority.MONITOR)
     public void onChunkUnload(@NotNull ChunkUnloadEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         checkChunk(event.getChunk());
     }
 
     @EventHandler
     public void onPl3xMapEnabled(@NotNull Pl3xMapEnabledEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         Icon.register();
     }
 
     @EventHandler
     public void onServerLoaded(@NotNull ServerLoadedEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         Icon.register();
         Pl3xMap.api().getWorldRegistry().forEach(this::registerWorld);
@@ -63,14 +62,14 @@ public class SignWorldListener implements EventListener, Listener {
 
     @EventHandler
     public void onWorldLoaded(@NotNull WorldLoadedEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         registerWorld(event.getWorld());
     }
 
     @EventHandler
     public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
-        if (!ConfigUtil.isSignsEnabled()) return;
+        //if (!ConfigUtil.isSignsEnabled()) return;
 
         try {
             event.getWorld().getLayerRegistry().unregister(SignsLayer.KEY);

@@ -28,10 +28,15 @@ fusion = "1.5.0"
 jetbrains = "24.1.0"
 bStats = "3.1.0"
 
+# Configurate API
+configurate = "4.2.0"
+
 # Kyori API
 adventure = "4.20.0"
 
 [libraries]
+configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
+
 # Paper API
 paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 
