@@ -1,5 +1,6 @@
 package com.ryderbelserion.map.util;
 
+import com.ryderbelserion.fusion.core.files.FileAction;
 import com.ryderbelserion.fusion.core.utils.FileUtils;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.hook.Hook;
@@ -28,6 +29,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ModuleUtil {
@@ -196,20 +198,24 @@ public class ModuleUtil {
     public static void extract() {
         final Path path = plugin.getDataPath();
 
+        final ArrayList<FileAction> actions = new ArrayList<>() {{
+            add(FileAction.FOLDER);
+        }};
+
         if (ConfigUtil.isBannersEnabled()) {
-            FileUtils.extract("banners/icons", path, true, false);
+            FileUtils.extract("banners/icons", path, actions);
         }
 
         if (ConfigUtil.isWarpsEnabled()) {
-            FileUtils.extract("warps/icons", path, true, false);
+            FileUtils.extract("warps/icons", path, actions);
         }
 
         if (ConfigUtil.isSignsEnabled()) {
-            FileUtils.extract("signs/icons", path, true, false);
+            FileUtils.extract("signs/icons", path, actions);
         }
 
         if (ConfigUtil.isMobsEnabled()) {
-            FileUtils.extract("mobs/icons", path, true, false);
+            FileUtils.extract("mobs/icons", path, actions);
         }
     }
 }
