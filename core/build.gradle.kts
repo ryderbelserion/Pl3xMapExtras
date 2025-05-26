@@ -11,3 +11,9 @@ dependencies {
 
     compileOnlyApi(libs.pl3xmap)
 }
+
+tasks {
+    build {
+        dependsOn(shadowJar)
+    }
+}
