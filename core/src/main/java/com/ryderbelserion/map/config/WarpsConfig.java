@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.map.util.ConfigUtil;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.image.IconImage;
@@ -23,9 +23,9 @@ public abstract class WarpsConfig extends AbstractConfig {
 
     private static final FusionCore provider = FusionCore.Provider.get();
 
-    private static final Path path = provider.getDataPath();
+    private static final Path path = provider.getPath();
 
-    private static final ComponentLogger logger = provider.getLogger();
+    private static final Logger logger = provider.getLogger();
 
     public static void registerIcon(@NotNull final String image) {
         if (!ConfigUtil.isWarpsEnabled()) return;
@@ -37,7 +37,7 @@ public abstract class WarpsConfig extends AbstractConfig {
             final String key = String.format("pl3xmap_warps_%s", image);
             Pl3xMap.api().getIconRegistry().register(new IconImage(key, ImageIO.read(icon), "png"));
         } catch (final IOException exception) {
-            logger.warn("Failed to register icon ({}) {}", image, fileName, exception);
+            logger.warning(String.format("Failed to register icon (%s) %s, %s", image, fileName, exception.getMessage()));
         }
     }
 

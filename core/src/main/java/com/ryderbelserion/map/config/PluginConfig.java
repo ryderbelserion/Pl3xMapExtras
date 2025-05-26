@@ -10,7 +10,7 @@ public class PluginConfig extends AbstractConfig {
 
     private static final FusionCore provider = FusionCore.Provider.get();
 
-    private static final Path path = provider.getDataPath();
+    private static final Path path = provider.getPath();
 
     @Key("marker.banners")
     @Comment("Should we display banner markers on pl3xmap?")

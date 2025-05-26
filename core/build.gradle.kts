@@ -1,13 +1,17 @@
 plugins {
-    id("root-plugin")
+    `config-java`
+}
+
+repositories {
+    maven("https://api.modrinth.com/maven/")
 }
 
 dependencies {
-    compileOnlyApi(libs.pl3xmap)
-
     compileOnly(libs.bundles.adventure)
 
     compileOnly(libs.fusion.core)
 
-    compileOnly(libs.jetbrains)
+    compileOnly(libs.annotations)
+
+    compileOnlyApi(libs.pl3xmap)
 }

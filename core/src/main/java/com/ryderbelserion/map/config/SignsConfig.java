@@ -15,7 +15,7 @@ public class SignsConfig extends AbstractConfig {
 
     private static final FusionCore provider = FusionCore.Provider.get();
 
-    private static final Path path = provider.getDataPath();
+    private static final Path path = provider.getPath();
 
     @Key("layer.label")
     @Comment("""

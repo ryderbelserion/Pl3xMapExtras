@@ -1,3 +1,3 @@
 rootProject.name = "Pl3xMapExtras"
 
-include("publish", "paper", "core")
+include("paper", "core")

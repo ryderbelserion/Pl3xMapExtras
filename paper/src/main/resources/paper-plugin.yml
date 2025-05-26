@@ -2,9 +2,8 @@ name: '${name}'
 main: '${group}.Pl3xMapExtras'
 
 version: '${version}'
-api-version: '${apiVersion}'
+api-version: '${minecraft}'
 description: '${description}'
-website: '${website}'
 
 dependencies:
   server:
