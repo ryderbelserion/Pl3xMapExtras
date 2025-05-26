@@ -2,10 +2,6 @@ plugins {
     `config-java`
 }
 
-repositories {
-    maven("https://api.modrinth.com/maven/")
-}
-
 dependencies {
     compileOnly(libs.bundles.adventure)
 
