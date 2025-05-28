@@ -60,7 +60,7 @@ tasks {
             "version" to rootProject.version,
             "description" to rootProject.description,
             "minecraft" to libs.versions.minecraft.get(),
-            "group" to project.group
+            "group" to rootProject.group
         )
 
         with(copySpec {
