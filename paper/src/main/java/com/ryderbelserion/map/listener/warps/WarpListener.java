@@ -70,7 +70,7 @@ public class WarpListener implements EventListener, Listener {
         } catch (Throwable ignore) {}
     }
 
-    private void registerWorld(@NotNull World world) {
+    private void registerWorld(@NotNull final World world) {
         Hook.hooks().forEach(hook -> hook.registerWorld(world));
     }
 }

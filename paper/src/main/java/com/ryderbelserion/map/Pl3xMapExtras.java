@@ -1,5 +1,6 @@
 package com.ryderbelserion.map;
 
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.api.MetricsWrapper;
 import com.ryderbelserion.map.api.enums.Permissions;
 import com.ryderbelserion.map.config.PluginConfig;
@@ -10,29 +11,21 @@ import com.ryderbelserion.map.util.ModuleUtil;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 public class Pl3xMapExtras extends JavaPlugin {
 
     private MobsManager mobsManager;
 
+    private FusionPaper api;
+
     @Override
     public void onEnable() {
-        final PluginManager pluginManager = getServer().getPluginManager();
-
-        if (!pluginManager.isPluginEnabled("Pl3xMap")) {
-            getLogger().severe("Pl3xMap not found!");
-
-            pluginManager.disablePlugin(this);
-
-            return;
-        }
-
-        // Register the provider.
-        Provider.register(new Provider.MapExtras(getDataFolder(), getLogger()));
+        this.api = new FusionPaper(getLogger(), getDataPath());
+        this.api.enable(this);
 
         // Load the config.
         PluginConfig.reload();
@@ -62,12 +55,12 @@ public class Pl3xMapExtras extends JavaPlugin {
 
         // Register the commands.
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            final @NotNull Commands registry = event.registrar();
+            @NotNull final Commands registry = event.registrar();
 
             registry.register("pl3xmapextras", "the command to handle the plugin", new BaseCommand());
         });
 
-        new MetricsWrapper(this, 22296).start();
+        new MetricsWrapper(this, 22296);
     }
 
     @Override
@@ -85,11 +78,12 @@ public class Pl3xMapExtras extends JavaPlugin {
         // Clear plugin hooks.
         Hook.clear();
 
-        // Unregister provider.
-        Provider.unregister();
+        if (this.api != null) {
+            this.api.disable();
+        }
     }
 
-    public MobsManager getMobsManager() {
+    public @Nullable final MobsManager getMobsManager() {
         if (!ConfigUtil.isMobsEnabled()) {
             getLogger().warning("The toggle for displaying a mob layer is turned off.");
 
@@ -97,5 +91,9 @@ public class Pl3xMapExtras extends JavaPlugin {
         }
 
         return this.mobsManager;
+    }
+
+    public final FusionPaper getFusion() {
+        return this.api;
     }
 }

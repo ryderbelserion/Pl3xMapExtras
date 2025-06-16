@@ -20,12 +20,13 @@ public class GriefPreventionClaim {
     private UUID ownerId;
     private String ownerName;
 
-    public GriefPreventionClaim(@NotNull World world, @NotNull Claim claim) {
+    public GriefPreventionClaim(@NotNull final World world, @NotNull final Claim claim) {
         this.world = world;
         this.claim = claim;
 
-        Location min = this.claim.getLesserBoundaryCorner();
-        Location max = this.claim.getGreaterBoundaryCorner();
+        final Location min = this.claim.getLesserBoundaryCorner();
+        final Location max = this.claim.getGreaterBoundaryCorner();
+
         this.min = Point.of(min.getX(), min.getZ());
         this.max = Point.of(max.getX(), max.getZ());
     }
@@ -76,10 +77,10 @@ public class GriefPreventionClaim {
     }
 
     public void getPermissions(
-            @NotNull ArrayList<String> builders,
-            @NotNull ArrayList<String> containers,
-            @NotNull ArrayList<String> accessors,
-            @NotNull ArrayList<String> managers
+            @NotNull final ArrayList<String> builders,
+            @NotNull final ArrayList<String> containers,
+            @NotNull final ArrayList<String> accessors,
+            @NotNull final ArrayList<String> managers
     ) {
         this.claim.getPermissions(builders, containers, accessors, managers);
     }

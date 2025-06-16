@@ -12,8 +12,9 @@ public class ClaimChunkLayer extends WorldLayer {
 
     private final ClaimChunkHook claimChunkHook;
 
-    public ClaimChunkLayer(@NotNull ClaimChunkHook claimChunkHook, @NotNull World world) {
+    public ClaimChunkLayer(@NotNull final ClaimChunkHook claimChunkHook, @NotNull final World world) {
         super(KEY, world, () -> ClaimChunkConfig.LAYER_LABEL);
+
         this.claimChunkHook = claimChunkHook;
 
         setShowControls(ClaimChunkConfig.LAYER_SHOW_CONTROLS);

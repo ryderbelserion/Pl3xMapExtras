@@ -34,35 +34,36 @@ public class P2Hook implements Listener, Hook {
     }
 
     @Override
-    public void registerWorld(@NotNull World world) {
+    public void registerWorld(@NotNull final World world) {
         world.getLayerRegistry().register(new P2Layer(this, world));
     }
 
     @Override
-    public void unloadWorld(@NotNull World world) {
+    public void unloadWorld(@NotNull final World world) {
         world.getLayerRegistry().unregister(P2Layer.KEY);
     }
 
     @Override
-    public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+    public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
         if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
 
-        Collection<Marker<?>> markers = new ArrayList<>();
+        final Collection<Marker<?>> markers = new ArrayList<>();
 
-        for (PlotArea plotArea : PlotSquared.get().getPlotAreaManager().getPlotAreasSet(world.getName())) {
-            Map<String, Boolean> visitedRegions = new HashMap<>();
+        for (final PlotArea plotArea : PlotSquared.get().getPlotAreaManager().getPlotAreasSet(world.getName())) {
+            final Map<String, Boolean> visitedRegions = new HashMap<>();
 
-            for (Plot plot : plotArea.getPlots()) {
-                String key = String.format("p2_%s_%s", world.getName(), plot.getId());
-                Collection<P2Plot> p2plots = new HashSet<>();
+            for (final Plot plot : plotArea.getPlots()) {
+                final String key = String.format("p2_%s_%s", world.getName(), plot.getId());
+                final Collection<P2Plot> p2plots = new HashSet<>();
 
-                for (CuboidRegion region : plot.getRegions()) {
+                for (final CuboidRegion region : plot.getRegions()) {
                     if (visitedRegions.putIfAbsent(region.toString(), true) != null) {
                         continue; // dont draw regions we've already drawn...
                     }
 
-                    BlockVector3 max = region.getMaximumPoint();
-                    BlockVector3 min = region.getMinimumPoint();
+                    final BlockVector3 max = region.getMaximumPoint();
+                    final BlockVector3 min = region.getMinimumPoint();
+
                     p2plots.add(new P2Plot(min.getX() - 1, max.getX() + 1, min.getZ() - 1, max.getZ() + 1, null));
                 }
 
@@ -70,7 +71,8 @@ public class P2Hook implements Listener, Hook {
                     continue; // no p2plots added
                 }
 
-                Polygon poly = ChunkUtil.getPoly(key, p2plots);
+                final Polygon poly = ChunkUtil.getPoly(key, p2plots);
+
                 markers.add(poly.setOptions(options(world, plot.getOwner())));
             }
         }
@@ -78,9 +80,9 @@ public class P2Hook implements Listener, Hook {
         return markers;
     }
 
-    private @NotNull Options.Builder options(@NotNull World world, @Nullable UUID owner) {
-        OfflinePlayer player = owner == null ? null : Bukkit.getOfflinePlayer(owner);
-        String ownerName = player == null || player.getName() == null ? "unknown" : player.getName();
+    private @NotNull Options.Builder options(@NotNull final World world, @Nullable final UUID owner) {
+        final OfflinePlayer player = owner == null ? null : Bukkit.getOfflinePlayer(owner);  //todo() wtf
+        final String ownerName = player == null || player.getName() == null ? "unknown" : player.getName();
 
         return Options.builder()
                 .strokeColor(Colors.fromHex(P2Config.MARKER_STROKE_COLOR))

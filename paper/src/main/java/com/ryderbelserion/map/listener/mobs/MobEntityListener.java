@@ -11,18 +11,19 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MobEntityListener implements Listener {
 
     private @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
 
-    private @NotNull final MobsManager mobsManager = this.plugin.getMobsManager();
+    private @Nullable final MobsManager mobsManager = this.plugin.getMobsManager();
 
     @EventHandler
     public void onEntityRemove(EntityRemoveFromWorldEvent event) {
-        if (!ConfigUtil.isMobsEnabled()) return;
+        if (!ConfigUtil.isMobsEnabled() || this.mobsManager == null) return;
 
-        Entity entity = event.getEntity();
+        final Entity entity = event.getEntity();
 
         if (entity instanceof Mob mob) {
             this.mobsManager.removeMarker(mob);

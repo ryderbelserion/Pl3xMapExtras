@@ -47,7 +47,7 @@ public final class ClaimChunkConfig extends AbstractConfig {
     private static final ClaimChunkConfig CONFIG = new ClaimChunkConfig();
 
     public static void reload() {
-        Path mainDir = Pl3xMapExtras.getPlugin(Pl3xMapExtras.class).getDataFolder().toPath();
+        Path mainDir = Pl3xMapExtras.getPlugin(Pl3xMapExtras.class).getDataPath();
         CONFIG.reload(mainDir.resolve("claims").resolve("claimchunk.yml"), ClaimChunkConfig.class);
     }
 }

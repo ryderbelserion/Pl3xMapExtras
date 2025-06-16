@@ -24,24 +24,24 @@ public class GriefPreventionHook implements Listener, Hook {
         GriefPreventionConfig.reload();
     }
 
-    private boolean isWorldEnabled(@NotNull String name) {
+    private boolean isWorldEnabled(@NotNull final String name) {
         return GriefPrevention.instance.claimsEnabledForWorld(Bukkit.getWorld(name));
     }
 
     @Override
-    public void registerWorld(@NotNull World world) {
+    public void registerWorld(@NotNull final World world) {
         if (isWorldEnabled(world.getName())) {
             world.getLayerRegistry().register(new GriefPreventionLayer(this, world));
         }
     }
 
     @Override
-    public void unloadWorld(@NotNull World world) {
+    public void unloadWorld(@NotNull final World world) {
         world.getLayerRegistry().unregister(GriefPreventionLayer.KEY);
     }
 
     @Override
-    public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+    public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
         if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
 
         if (!isWorldEnabled(world.getName())) {
@@ -59,7 +59,7 @@ public class GriefPreventionHook implements Listener, Hook {
                 .collect(Collectors.toSet());
     }
 
-    private @NotNull Options getOptions(@NotNull GriefPreventionClaim claim) {
+    private @NotNull Options getOptions(@NotNull final GriefPreventionClaim claim) {
         Options.Builder builder;
 
         if (claim.isAdminClaim()) {
@@ -79,7 +79,7 @@ public class GriefPreventionHook implements Listener, Hook {
         return builder.build();
     }
 
-    private @NotNull String processPopup(@NotNull String popup, @NotNull GriefPreventionClaim claim) {
+    private @NotNull String processPopup(@NotNull final String popup, @NotNull final GriefPreventionClaim claim) {
         return popup.replace("<world>", claim.getWorld().getName())
                 .replace("<id>", Long.toString(claim.getID()))
                 .replace("<owner>", claim.getOwnerName())
@@ -89,44 +89,51 @@ public class GriefPreventionHook implements Listener, Hook {
                 .replace("<height>", Integer.toString(claim.getHeight()));
     }
 
-    private @NotNull String getTrusts(@NotNull GriefPreventionClaim claim) {
-        ArrayList<String> builders = new ArrayList<>();
-        ArrayList<String> containers = new ArrayList<>();
-        ArrayList<String> accessors = new ArrayList<>();
-        ArrayList<String> managers = new ArrayList<>();
+    private @NotNull String getTrusts(@NotNull final GriefPreventionClaim claim) {
+        final ArrayList<String> builders = new ArrayList<>();
+        final ArrayList<String> containers = new ArrayList<>();
+        final ArrayList<String> accessors = new ArrayList<>();
+        final ArrayList<String> managers = new ArrayList<>();
+
         claim.getPermissions(builders, containers, accessors, managers);
-        StringBuilder sb = new StringBuilder();
+
+        final StringBuilder sb = new StringBuilder();
 
         if (!builders.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
+
             sb.append(GriefPreventionConfig.MARKER_POPUP_TRUST.replace("<builders>", getNames(builders)));
         }
 
         if (!containers.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
+
             sb.append(GriefPreventionConfig.MARKER_POPUP_CONTAINER.replace("<containers>", getNames(containers)));
         }
 
         if (!accessors.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
+
             sb.append(GriefPreventionConfig.MARKER_POPUP_ACCESS.replace("<accessors>", getNames(accessors)));
         }
 
         if (!managers.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
+
             sb.append(GriefPreventionConfig.MARKER_POPUP_PERMISSION.replace("<managers>", getNames(managers)));
         }
 
         return sb.toString();
     }
 
-    private @NotNull String getNames(@NotNull List<String> list) {
-        List<String> names = new ArrayList<>();
+    private @NotNull String getNames(@NotNull final List<String> list) {
+        final List<String> names = new ArrayList<>();
 
-        for (String str : list) {
+        for (final String str : list) { // todo() wtf
             try {
-                UUID uuid = UUID.fromString(str);
-                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+                final UUID uuid = UUID.fromString(str);
+                final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+
                 names.add(offlinePlayer.getName());
             } catch (Exception e) {
                 names.add(str);

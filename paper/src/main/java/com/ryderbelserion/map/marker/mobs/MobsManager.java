@@ -22,8 +22,8 @@ public class MobsManager {
 
     private final Map<String, Collection<Marker<?>>> activeMarkers = new ConcurrentHashMap<>();
 
-    public Collection<Marker<?>> getActiveMarkers(@NotNull String worldName) {
-        Collection<Marker<?>> markers = this.activeMarkers.get(worldName);
+    public Collection<Marker<?>> getActiveMarkers(@NotNull final String worldName) {
+        final Collection<Marker<?>> markers = this.activeMarkers.get(worldName);
 
         if (markers != null) {
             return markers;
@@ -32,8 +32,8 @@ public class MobsManager {
         return Collections.emptySet();
     }
 
-    public void clearMarkers(@NotNull String worldName) {
-        if (this.activeMarkers.isEmpty() || worldName.isEmpty() || worldName.isBlank()) return;
+    public void clearMarkers(@NotNull final String worldName) {
+        if (this.activeMarkers.isEmpty() || worldName.isBlank()) return;
 
         this.activeMarkers.remove(worldName);
     }
@@ -42,14 +42,14 @@ public class MobsManager {
         this.activeMarkers.clear();
     }
 
-    public void addWorld(@NotNull String worldName) {
+    public void addWorld(@NotNull final String worldName) {
         if (this.activeMarkers.containsKey(worldName)) return;
 
         this.activeMarkers.put(worldName, new HashSet<>());
     }
 
-    public void addMarker(@NotNull String key, @NotNull Mob mob, @NotNull MobConfig config) {
-        net.pl3x.map.core.markers.marker.Icon icon = getIcon(key, mob, config);
+    public void addMarker(@NotNull final String key, @NotNull final Mob mob, @NotNull final MobConfig config) {
+        final net.pl3x.map.core.markers.marker.Icon icon = getIcon(key, mob, config);
 
         // Remove it if it exists.
         removeMarker(mob);
@@ -58,27 +58,27 @@ public class MobsManager {
         this.activeMarkers.get(mob.getWorld().getName()).add(icon);
     }
 
-    public void removeMarker(@NotNull Mob mob) {
-        String worldName = mob.getWorld().getName();
+    public void removeMarker(@NotNull final Mob mob) {
+        final String worldName = mob.getWorld().getName();
 
-        String key = String.format("%s_%s_%s", "pl3xmap_mobs", worldName, mob.getUniqueId());
+        final String key = String.format("%s_%s_%s", "pl3xmap_mobs", worldName, mob.getUniqueId());
 
         if (!this.activeMarkers.containsKey(worldName)) return;
 
         this.activeMarkers.get(worldName).removeIf(marker -> marker.getKey().equals(key));
     }
 
-    private @NotNull String mob(@NotNull Mob mob) {
-        @Nullable Component name = mob.customName();
+    private @NotNull String mob(@NotNull final Mob mob) {
+        @Nullable final Component name = mob.customName();
 
         return name == null ? mob.getName() : PlainTextComponentSerializer.plainText().serialize(name);
     }
 
-    private @NotNull Point point(@NotNull Location loc) {
+    private @NotNull Point point(@NotNull final Location loc) {
         return Point.of(loc.getBlockX(), loc.getBlockZ());
     }
 
-    public net.pl3x.map.core.markers.marker.Icon getIcon(String key, Mob mob, MobConfig config) {
+    public net.pl3x.map.core.markers.marker.Icon getIcon(@NotNull final String key, @NotNull final Mob mob, @NotNull final MobConfig config) {
         return Marker.icon(key, point(mob.getLocation()), Icon.get(mob).getKey(), config.ICON_SIZE)
                 .setOptions(Options.builder()
                         .tooltipDirection(Tooltip.Direction.TOP)

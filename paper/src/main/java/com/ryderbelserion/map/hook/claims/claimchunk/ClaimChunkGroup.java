@@ -10,48 +10,51 @@ public class ClaimChunkGroup {
     private final List<ClaimChunkClaim> claims = new ArrayList<>();
     private final UUID owner;
 
-    public ClaimChunkGroup(@NotNull ClaimChunkClaim claim, @NotNull UUID owner) {
+    public ClaimChunkGroup(@NotNull final ClaimChunkClaim claim, @NotNull final UUID owner) {
         add(claim);
         this.owner = owner;
     }
 
-    public boolean isTouching(@NotNull ClaimChunkClaim claim) {
-        for (ClaimChunkClaim toChk : claims) {
+    public boolean isTouching(@NotNull final ClaimChunkClaim claim) {
+        for (final ClaimChunkClaim toChk : this.claims) {
             if (toChk.isTouching(claim)) {
                 return true;
             }
         }
+
         return false;
     }
 
-    public boolean isTouching(@NotNull ClaimChunkGroup group) {
-        for (ClaimChunkClaim claim : group.claims()) {
+    public boolean isTouching(@NotNull final ClaimChunkGroup group) {
+        for (final ClaimChunkClaim claim : group.claims()) {
             if (isTouching(claim)) {
                 return true;
             }
         }
+
         return false;
     }
 
-    public void add(@NotNull ClaimChunkClaim claim) {
-        claims.add(claim);
+    public void add(@NotNull final ClaimChunkClaim claim) {
+        this.claims.add(claim);
     }
 
-    public void add(@NotNull ClaimChunkGroup group) {
-        claims.addAll(group.claims());
+    public void add(@NotNull final ClaimChunkGroup group) {
+        this.claims.addAll(group.claims());
     }
 
     public @NotNull List<ClaimChunkClaim> claims() {
-        return claims;
+        return this.claims;
     }
 
     public @NotNull UUID owner() {
-        return owner;
+        return this.owner;
     }
 
     public @NotNull String id() {
-        if (!claims.isEmpty()) {
-            ClaimChunkClaim claim = claims.getFirst();
+        if (!this.claims.isEmpty()) {
+            final ClaimChunkClaim claim = this.claims.getFirst();
+
             return claim.minX() + "_" + claim.minZ();
         } else {
             return "NaN_NaN";

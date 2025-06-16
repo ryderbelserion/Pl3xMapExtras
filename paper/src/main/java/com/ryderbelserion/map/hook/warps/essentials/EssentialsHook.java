@@ -26,8 +26,10 @@ public class EssentialsHook implements Listener, Hook {
 
     public EssentialsHook() {
         EssentialsConfig.reload();
+
         this.imageKey = String.format("pl3xmap_warps_%s", EssentialsConfig.ICON_IMAGE);
         this.shadowKey = String.format("pl3xmap_warps_%s", EssentialsConfig.ICON_SHADOW_IMAGE);
+
         this.options = new Options.Builder()
                 .tooltipPane(EssentialsConfig.ICON_TOOLTIP_PANE)
                 .tooltipOffset(EssentialsConfig.ICON_TOOLTIP_OFFSET)
@@ -53,23 +55,23 @@ public class EssentialsHook implements Listener, Hook {
     }
 
     @Override
-    public void registerWorld(@NotNull World world) {
+    public void registerWorld(@NotNull final World world) {
         world.getLayerRegistry().register(new EssentialsLayer(this, world));
     }
 
     @Override
-    public void unloadWorld(@NotNull World world) {
+    public void unloadWorld(@NotNull final World world) {
         world.getLayerRegistry().unregister(EssentialsLayer.KEY);
     }
 
     @Override
-    public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+    public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
         if (!ConfigUtil.isWarpsEnabled()) return EMPTY_LIST;
 
-        Map<String, Location> map = new HashMap<>();
-        Warps warps = Essentials.getPlugin(Essentials.class).getWarps();
+        final Map<String, Location> map = new HashMap<>();
+        final Warps warps = Essentials.getPlugin(Essentials.class).getWarps();
 
-        for (String warp : warps.getList()) {
+        for (final String warp : warps.getList()) {
             try {
                 map.put(warp, warps.getWarp(warp));
             } catch (Exception ignore) {}
@@ -80,20 +82,21 @@ public class EssentialsHook implements Listener, Hook {
                 .map(this::createIcon).collect(Collectors.toList());
     }
 
-    private Icon createIcon(Map.Entry<String, Location> warp) {
-        String name = warp.getKey();
-        Location loc = warp.getValue();
-        Point point = Point.of(loc.getX(), loc.getZ());
-        String key = String.format("essentialswarps_%s_%s", loc.getWorld(), name);
+    private Icon createIcon(@NotNull final Map.Entry<String, Location> warp) {
+        final String name = warp.getKey();
+        final Location loc = warp.getValue();
+        final Point point = Point.of(loc.getX(), loc.getZ());
+        final String key = String.format("essentialswarps_%s_%s", loc.getWorld(), name);
 
-        Icon icon = Marker.icon(key, point, this.imageKey, EssentialsConfig.ICON_SIZE)
+        final Icon icon = Marker.icon(key, point, this.imageKey, EssentialsConfig.ICON_SIZE)
                 .setAnchor(EssentialsConfig.ICON_ANCHOR)
                 .setRotationAngle(EssentialsConfig.ICON_ROTATION_ANGLE)
                 .setRotationOrigin(EssentialsConfig.ICON_ROTATION_ORIGIN)
                 .setShadow(this.shadowKey)
                 .setShadowSize(EssentialsConfig.ICON_SHADOW_SIZE)
                 .setShadowAnchor(EssentialsConfig.ICON_SHADOW_ANCHOR);
-        Options.Builder builder = this.options.asBuilder();
+
+        final Options.Builder builder = this.options.asBuilder();
 
         if (EssentialsConfig.ICON_POPUP_CONTENT != null) {
             builder.popupContent(EssentialsConfig.ICON_POPUP_CONTENT.replace("<warp>", name));

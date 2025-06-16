@@ -1,60 +1,183 @@
 plugins {
-    `maven-publish`
-    `java-library`
+    alias(libs.plugins.minotaur)
+    alias(libs.plugins.feather)
+    //alias(libs.plugins.hangar)
+
+    `config-java`
 }
 
-val buildNumber: String? = System.getenv("BUILD_NUMBER")
+val git = feather.getGit()
 
-rootProject.version = if (buildNumber != null) "${libs.versions.minecraft.get()}-$buildNumber" else "1.2.1-FORK"
+val commitHash: String? = git.getCurrentCommitHash().subSequence(0, 7).toString()
+val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
+val content: String = if (isSnapshot) "[$commitHash](https://github.com/ryderbelserion/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
+val minecraft = libs.versions.minecraft.get()
 
-subprojects.filter { it.name != "api" }.forEach {
-    it.project.version = rootProject.version
+val versions = listOf(
+    minecraft
+)
+
+rootProject.group = "com.ryderbelserion.map"
+rootProject.version = version()
+rootProject.description = "Adds extra features to Pl3xMap"
+
+fun version(): String {
+    if (isSnapshot) {
+        return "$minecraft-$commitHash"
+    }
+
+    return "1.3.0"
 }
 
-subprojects {
-    apply(plugin = "maven-publish")
-    apply(plugin = "java-library")
+feather {
+    rootDirectory = rootProject.rootDir.toPath()
 
-    group = "com.ryderbelserion.map"
-    description = "An addon adding extra additions to Pl3xMap."
+    val data = git.getGithubCommit("ryderbelserion/${rootProject.name}")
 
-    repositories {
-        maven("https://repo.codemc.io/repository/maven-public")
+    val user = data.user
 
-        maven("https://repo.crazycrew.us/libraries")
-        maven("https://repo.crazycrew.us/releases")
+    discord {
+        webhook {
+            group(rootProject.name.lowercase())
+            task("dev-build")
 
-        maven("https://jitpack.io")
-
-        exclusiveContent {
-            forRepository {
-                maven("https://api.modrinth.com/maven")
+            if (System.getenv("BUILD_WEBHOOK") != null) {
+                post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            filter { includeGroup("maven.modrinth") }
+            username(user.getName())
+
+            avatar(user.avatar)
+
+            embeds {
+                embed {
+                    color("#ffa347")
+
+                    title("A new dev version of ${rootProject.name} is ready!")
+
+                    fields {
+                        field(
+                            "Version ${rootProject.version}",
+                            "Click [here](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version}) to download!"
+                        )
+
+                        field(
+                            ":bug: Report Bugs",
+                            "https://github.com/ryderbelserion/${rootProject.name}/issues"
+                        )
+
+                        field(
+                            ":hammer: Changelog",
+                            content
+                        )
+                    }
+                }
+            }
         }
 
-        mavenCentral()
+        webhook {
+            group(rootProject.name.lowercase())
+            task("release-build")
+
+            if (System.getenv("BUILD_WEBHOOK") != null) {
+                post(System.getenv("BUILD_WEBHOOK"))
+            }
+
+            username(user.getName())
+
+            avatar(user.avatar)
+
+            content("<@&1375580815492382820>")
+
+            embeds {
+                embed {
+                    color("#1bd96a")
+
+                    title("A new release version of ${rootProject.name} is ready!")
+
+                    fields {
+                        field(
+                            "Version ${rootProject.version}",
+                            "Click [here](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version}) to download!"
+                        )
+
+                        field(
+                            ":bug: Report Bugs",
+                            "https://github.com/ryderbelserion/${rootProject.name}/issues"
+                        )
+
+                        field(
+                            ":hammer: Changelog",
+                            content
+                        )
+                    }
+                }
+            }
+        }
     }
+}
 
-    java {
-        toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
+allprojects { //todo() why? the gradle shit in buildSrc already applies this...
+    apply(plugin = "java-library")
+}
+
+tasks {
+    withType<Jar> {
+        subprojects {
+            dependsOn(project.tasks.build)
+        }
+
+        // get subproject's built jars
+        val jars = subprojects.map { zipTree(it.tasks.jar.get().archiveFile.get().asFile) }
+
+        // merge them into main jar (except their manifests)
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        from(jars) {
+            exclude("META-INF/MANIFEST.MF")
+        }
+
+        // put behind an action because files don't exist at configuration time
+        doFirst {
+            // merge all subproject's manifests into main manifest
+            jars.forEach { jar ->
+                jar.matching { include("META-INF/MANIFEST.MF") }
+                    .files.forEach { file ->
+                        manifest.from(file)
+                    }
+            }
         }
     }
+}
 
-    tasks {
-        compileJava {
-            options.encoding = Charsets.UTF_8.name()
-            options.release.set(21)
-        }
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
 
-        javadoc {
-            options.encoding = Charsets.UTF_8.name()
-        }
+    projectId = rootProject.name
 
-        processResources {
-            filteringCharset = Charsets.UTF_8.name()
-        }
+    versionName = "${rootProject.name} ${rootProject.version}"
+    versionNumber = "${rootProject.version}"
+    versionType = if (isSnapshot) "beta" else "release"
+
+    changelog = content
+
+    gameVersions.addAll(versions)
+
+    uploadFile = tasks.jar.get().archiveFile.get()
+
+    loaders.addAll(listOf("paper", "folia", "purpur"))
+
+    syncBodyFrom = rootProject.file("description.md").readText(Charsets.UTF_8)
+
+    autoAddDependsOn = false
+    detectLoaders = false
+
+    dependencies {
+        required.project("Pl3xMap")
+
+        optional.project("ClaimChunk")
+        optional.project("WorldGuard")
+        optional.project("EssentialsX")
+        optional.project("GriefPrevention")
     }
 }

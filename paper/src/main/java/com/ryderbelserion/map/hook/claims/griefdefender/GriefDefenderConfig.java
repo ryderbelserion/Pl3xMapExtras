@@ -1,7 +1,6 @@
 package com.ryderbelserion.map.hook.claims.griefdefender;
 
 import java.nio.file.Path;
-
 import com.ryderbelserion.map.Pl3xMapExtras;
 import net.pl3x.map.core.configuration.AbstractConfig;
 
@@ -58,7 +57,8 @@ public final class GriefDefenderConfig extends AbstractConfig {
     private static final GriefDefenderConfig CONFIG = new GriefDefenderConfig();
 
     public static void reload() {
-        Path mainDir = Pl3xMapExtras.getPlugin(Pl3xMapExtras.class).getDataFolder().toPath();
+        final Path mainDir = Pl3xMapExtras.getPlugin(Pl3xMapExtras.class).getDataPath();
+
         CONFIG.reload(mainDir.resolve("claims").resolve("griefdefender.yml"), GriefDefenderConfig.class);
     }
 }

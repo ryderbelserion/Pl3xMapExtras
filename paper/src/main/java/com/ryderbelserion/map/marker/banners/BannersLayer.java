@@ -17,7 +17,6 @@ import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 public class BannersLayer extends WorldLayer {
@@ -30,7 +29,7 @@ public class BannersLayer extends WorldLayer {
     private final Map<Position, Marker<?>> markers = new ConcurrentHashMap<>();
     private final Map<Position, Banner> banners = new ConcurrentHashMap<>();
 
-    public BannersLayer(@NotNull BannerConfig config) {
+    public BannersLayer(@NotNull final BannerConfig config) {
         super(KEY, config.getWorld(), () -> config.LAYER_LABEL);
 
         this.config = config;
@@ -59,11 +58,11 @@ public class BannersLayer extends WorldLayer {
         return Collections.unmodifiableCollection(this.banners.values());
     }
 
-    public void putBanner(@NotNull Banner banner) {
+    public void putBanner(@NotNull final Banner banner) {
         putBanner(banner, true);
     }
 
-    public void putBanner(@NotNull Banner banner, boolean saveData) {
+    public void putBanner(@NotNull final Banner banner, final boolean saveData) {
         String key = String.format("%s_%s_%d_%d", KEY, getWorld().getName(), banner.pos().x(), banner.pos().z());
 
         Icon icon = Marker.icon(key, banner.pos().toPoint(), banner.icon().getKey(), this.config.ICON_SIZE)
@@ -76,8 +75,6 @@ public class BannersLayer extends WorldLayer {
 
         if (banner.name() != null && !banner.name().isBlank()) {
             Options.Builder builder = new Options.Builder();
-
-            Bukkit.getLogger().warning("Name: " + banner.name());
 
             if (this.config.ICON_TOOLTIP_CONTENT != null) {
                 builder.tooltipContent(this.config.ICON_TOOLTIP_CONTENT.replace("<name>", banner.name()))
@@ -118,14 +115,14 @@ public class BannersLayer extends WorldLayer {
         }
     }
 
-    public void removeBanner(@NotNull Position pos) {
+    public void removeBanner(@NotNull final Position pos) {
         this.markers.remove(pos);
         this.banners.remove(pos);
 
         saveData();
     }
 
-    public boolean containsBanner(@NotNull Position pos) {
+    public boolean containsBanner(@NotNull final Position pos) {
         return this.markers.containsKey(pos) && this.banners.containsKey(pos);
     }
 

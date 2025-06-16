@@ -25,6 +25,7 @@ public class PlayerWarpsHook implements Hook {
 
     public PlayerWarpsHook() {
         PlayerWarpsConfig.reload();
+
         this.imageKey = String.format("pl3xmap_warps_%s", PlayerWarpsConfig.ICON_IMAGE);
         this.shadowKey = String.format("pl3xmap_warps_%s", PlayerWarpsConfig.ICON_SHADOW_IMAGE);
         this.options = new Options.Builder()
@@ -52,17 +53,17 @@ public class PlayerWarpsHook implements Hook {
     }
 
     @Override
-    public void registerWorld(@NotNull World world) {
+    public void registerWorld(@NotNull final World world) {
         world.getLayerRegistry().register(new PlayerWarpsLayer(this, world));
     }
 
     @Override
-    public void unloadWorld(@NotNull World world) {
+    public void unloadWorld(@NotNull final World world) {
         world.getLayerRegistry().unregister(PlayerWarpsLayer.KEY);
     }
 
     @Override
-    public @NotNull Collection<Marker<?>> getData(@NotNull World world) {
+    public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
         if (!ConfigUtil.isWarpsEnabled()) return EMPTY_LIST;
 
         return PlayerWarpsAPI.getInstance().getPlayerWarps(PlayerWarpsConfig.SHOW_LOCKED).stream()
@@ -70,28 +71,31 @@ public class PlayerWarpsHook implements Hook {
                 .map(this::createIcon).collect(Collectors.toList());
     }
 
-    private Icon createIcon(Warp warp) {
-        WLocation loc = warp.getWarpLocation();
-        Point point = Point.of(loc.getX(), loc.getZ());
-        String key = String.format("playerwarps_%s_%s_%s", loc.getWorld(), warp.getWarpPlayer().getName(), warp.getWarpName());
-        Icon icon = Marker.icon(key, point, this.imageKey, PlayerWarpsConfig.ICON_SIZE)
+    private Icon createIcon(@NotNull final Warp warp) {
+        final WLocation loc = warp.getWarpLocation();
+        final Point point = Point.of(loc.getX(), loc.getZ());
+        final String key = String.format("playerwarps_%s_%s_%s", loc.getWorld(), warp.getWarpPlayer().getName(), warp.getWarpName());
+        final Icon icon = Marker.icon(key, point, this.imageKey, PlayerWarpsConfig.ICON_SIZE)
                 .setAnchor(PlayerWarpsConfig.ICON_ANCHOR)
                 .setRotationAngle(PlayerWarpsConfig.ICON_ROTATION_ANGLE)
                 .setRotationOrigin(PlayerWarpsConfig.ICON_ROTATION_ORIGIN)
                 .setShadow(this.shadowKey)
                 .setShadowSize(PlayerWarpsConfig.ICON_SHADOW_SIZE)
                 .setShadowAnchor(PlayerWarpsConfig.ICON_SHADOW_ANCHOR);
-        Options.Builder builder = this.options.asBuilder();
+
+        final Options.Builder builder = this.options.asBuilder();
         if (PlayerWarpsConfig.ICON_POPUP_CONTENT != null) {
             builder.popupContent(populateTooltip(PlayerWarpsConfig.ICON_POPUP_CONTENT, warp));
         }
+
         if (PlayerWarpsConfig.ICON_TOOLTIP_CONTENT != null) {
             builder.tooltipContent(populateTooltip(PlayerWarpsConfig.ICON_TOOLTIP_CONTENT, warp));
         }
+
         return icon.setOptions(builder.build());
     }
 
-    private String populateTooltip(String value, Warp warp) {
+    private String populateTooltip(@NotNull final String value, @NotNull final Warp warp) {
         return value
                 .replace("<warp>", warp.getWarpName())
                 .replace("<owner>", warp.getWarpPlayer().getName())
@@ -104,11 +108,11 @@ public class PlayerWarpsHook implements Hook {
                 .replace("<rates-stars>", strip(warp.getWarpRate().getRateStars()));
     }
 
-    private String strip(String str) {
+    private String strip(@NotNull final String str) { //todo() this is dumb
         return ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', str));
     }
 
-    private String formatDate(long timestamp) {
+    private String formatDate(final long timestamp) {
         return timestamp + "";
     }
 }

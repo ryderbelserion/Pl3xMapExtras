@@ -74,7 +74,8 @@ public final class GriefPreventionConfig extends AbstractConfig {
     private static final GriefPreventionConfig CONFIG = new GriefPreventionConfig();
 
     public static void reload() {
-        Path mainDir = Pl3xMapExtras.getPlugin(Pl3xMapExtras.class).getDataFolder().toPath();
+        final Path mainDir = Pl3xMapExtras.getPlugin(Pl3xMapExtras.class).getDataPath();
+
         CONFIG.reload(mainDir.resolve("claims").resolve("griefprevention.yml"), GriefPreventionConfig.class);
     }
 }

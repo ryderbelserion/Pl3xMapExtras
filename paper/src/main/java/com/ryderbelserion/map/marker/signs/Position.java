@@ -12,11 +12,11 @@ public record Position(int x, int y, int z) {
         return Point.of(x(), z());
     }
 
-    public static @NotNull Position load(@NotNull DataInputStream in) throws IOException {
+    public static @NotNull Position load(@NotNull final DataInputStream in) throws IOException {
         return new Position(in.readInt(), in.readInt(), in.readInt());
     }
 
-    public void save(@NotNull DataOutputStream out) throws IOException {
+    public void save(@NotNull final DataOutputStream out) throws IOException {
         out.writeInt(x());
         out.writeInt(y());
         out.writeInt(z());

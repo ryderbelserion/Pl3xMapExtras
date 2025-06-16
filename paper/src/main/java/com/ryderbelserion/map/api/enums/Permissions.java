@@ -29,7 +29,7 @@ public enum Permissions {
         return JavaPlugin.getProvidingPlugin(Pl3xMapExtras.class).getPluginMeta().getName() + this.node;
     }
 
-    public final boolean hasPermission(final CommandSender player) {
+    public final boolean hasPermission(@NotNull final CommandSender player) {
         return player.hasPermission(getPermission()) && !(player instanceof ConsoleCommandSender);
     }
 

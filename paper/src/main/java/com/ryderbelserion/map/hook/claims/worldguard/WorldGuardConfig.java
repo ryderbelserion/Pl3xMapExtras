@@ -71,7 +71,8 @@ public final class WorldGuardConfig extends AbstractConfig {
     private static final WorldGuardConfig CONFIG = new WorldGuardConfig();
 
     public static void reload() {
-        Path mainDir = Pl3xMapExtras.getPlugin(Pl3xMapExtras.class).getDataFolder().toPath();
+        Path mainDir = Pl3xMapExtras.getPlugin(Pl3xMapExtras.class).getDataPath();
+
         CONFIG.reload(mainDir.resolve("claims").resolve("worldguard.yml"), WorldGuardConfig.class);
     }
 }

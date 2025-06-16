@@ -12,7 +12,7 @@ public class P2Layer extends WorldLayer {
 
     private final P2Hook p2Hook;
 
-    public P2Layer(@NotNull P2Hook p2Hook, @NotNull World world) {
+    public P2Layer(@NotNull final P2Hook p2Hook, @NotNull final World world) {
         super(KEY, world, () -> P2Config.LAYER_LABEL);
         this.p2Hook = p2Hook;
 

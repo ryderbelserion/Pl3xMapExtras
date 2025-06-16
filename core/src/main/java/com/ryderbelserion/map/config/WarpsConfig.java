@@ -2,10 +2,12 @@ package com.ryderbelserion.map.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import com.ryderbelserion.map.Provider;
+import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.map.util.ConfigUtil;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.Pl3xMap;
@@ -19,25 +21,29 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class WarpsConfig extends AbstractConfig {
 
-    public static void registerIcon(String image) {
+    private static final FusionCore provider = FusionCore.Provider.get();
+
+    private static final Path path = provider.getPath();
+
+    private static final Logger logger = provider.getLogger();
+
+    public static void registerIcon(@NotNull final String image) {
         if (!ConfigUtil.isWarpsEnabled()) return;
 
-        String fileName = String.format("icons%s%s.png", File.separator, image);
-        File icon = Provider.getInstance().getDataFolder().resolve("warps").resolve(fileName).toFile();
+        final String fileName = String.format("icons%s%s.png", File.separator, image);
+        final File icon = path.resolve("warps").resolve(fileName).toFile();
 
         try {
-            String key = String.format("pl3xmap_warps_%s", image);
+            final String key = String.format("pl3xmap_warps_%s", image);
             Pl3xMap.api().getIconRegistry().register(new IconImage(key, ImageIO.read(icon), "png"));
-        } catch (IOException e) {
-            Provider.getInstance().getLogger().warning("Failed to register icon (" + image + ") " + fileName);
-
-            e.printStackTrace();
+        } catch (final IOException exception) {
+            logger.warning(String.format("Failed to register icon (%s) %s, %s", image, fileName, exception.getMessage()));
         }
     }
 
     @Override
-    protected @Nullable Object get(@NotNull String path) {
-        Object value = getConfig().get(path);
+    protected @Nullable Object get(@NotNull final String path) {
+        final Object value = getConfig().get(path);
 
         if (value == null) {
             return null;
@@ -53,7 +59,8 @@ public abstract class WarpsConfig extends AbstractConfig {
                     return Vector.of(section.getDouble("x"), section.getDouble("z"));
                 } else if (value instanceof Map<?, ?>) {
                     @SuppressWarnings("unchecked")
-                    Map<String, Double> vector = (Map<String, Double>) value;
+                    final Map<String, Double> vector = (Map<String, Double>) value;
+
                     return Vector.of(vector.get("x"), vector.get("z"));
                 }
                 break;
@@ -66,7 +73,8 @@ public abstract class WarpsConfig extends AbstractConfig {
                     return Point.of(section.getInt("x"), section.getInt("z"));
                 } else if (value instanceof Map<?, ?>) {
                     @SuppressWarnings("unchecked")
-                    Map<String, Integer> point = (Map<String, Integer>) value;
+                    final Map<String, Integer> point = (Map<String, Integer>) value;
+
                     return Point.of(point.get("x"), point.get("z"));
                 }
 
@@ -80,10 +88,10 @@ public abstract class WarpsConfig extends AbstractConfig {
 
     @Override
     protected void set(@NotNull String path, @Nullable Object value) {
-        if (value instanceof Point point) {
-            value = Map.of("x", point.x(), "z", point.z());
-        } else if (value instanceof Vector vector) {
-            value = Map.of("x", vector.x(), "z", vector.z());
+        if (value instanceof Point(int x, int z)) {
+            value = Map.of("x", x, "z", z);
+        } else if (value instanceof Vector(double x, double z)) {
+            value = Map.of("x", x, "z", z);
         } else if (value instanceof Tooltip.Direction direction) {
             value = direction.name();
         }

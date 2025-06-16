@@ -1,8 +1,9 @@
 package com.ryderbelserion.map.config;
 
+import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
-import com.ryderbelserion.map.Provider;
+import com.ryderbelserion.fusion.core.FusionCore;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.markers.Vector;
@@ -11,6 +12,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SignsConfig extends AbstractConfig {
+
+    private static final FusionCore provider = FusionCore.Provider.get();
+
+    private static final Path path = provider.getPath();
+
     @Key("layer.label")
     @Comment("""
             Label for map layer""")
@@ -227,11 +233,15 @@ public class SignsConfig extends AbstractConfig {
             The sound to play when a sign is removed from Pl3xMap.
             https://minecraft.wiki/w/Sounds.json#Java_Edition_values""")
     public String SIGN_REMOVE_SOUND = "entity.ghast.hurt";
+    @Key("sign.block-place")
+    @Comment("Should signs be displayed on block place?")
+    public boolean SIGN_BLOCK_PLACE = true;
 
     private final World world;
 
-    public SignsConfig(@NotNull World world) {
+    public SignsConfig(@NotNull final World world) {
         this.world = world;
+
         reload();
     }
 
@@ -240,7 +250,7 @@ public class SignsConfig extends AbstractConfig {
     }
 
     public void reload() {
-        reload(Provider.getInstance().getDataFolder().resolve("signs").resolve("config.yml"), SignsConfig.class);
+        reload(path.resolve("signs").resolve("config.yml"), SignsConfig.class);
     }
 
     @Override
@@ -249,7 +259,7 @@ public class SignsConfig extends AbstractConfig {
     }
 
     @Override
-    protected @Nullable Object getValue(@NotNull String path, @Nullable Object def) {
+    protected @Nullable Object getValue(@NotNull final String path, @Nullable final Object def) {
         if (getConfig().get("world-settings.default." + path) == null) {
             set("world-settings.default." + path, def);
         }
@@ -258,12 +268,12 @@ public class SignsConfig extends AbstractConfig {
     }
 
     @Override
-    protected void setComment(@NotNull String path, @Nullable String comment) {
+    protected void setComment(@NotNull final String path, @Nullable final String comment) {
         getConfig().setComment("world-settings.default." + path, comment);
     }
 
     @Override
-    protected @Nullable Object get(@NotNull String path) {
+    protected @Nullable Object get(@NotNull final String path) {
         Object value = getConfig().get(path);
 
         if (value == null) {
@@ -299,8 +309,8 @@ public class SignsConfig extends AbstractConfig {
 
     @Override
     protected void set(@NotNull String path, @Nullable Object value) {
-        if (value instanceof Vector vector) {
-            value = Map.of("x", vector.x(), "z", vector.z());
+        if (value instanceof Vector(double x, double z)) {
+            value = Map.of("x", x, "z", z);
         } else if (value instanceof Enum<?> enumeration) {
             value = enumeration.name();
         }

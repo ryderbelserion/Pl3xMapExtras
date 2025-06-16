@@ -1,7 +1,8 @@
 package com.ryderbelserion.map.util;
 
+import com.ryderbelserion.fusion.core.files.FileAction;
+import com.ryderbelserion.fusion.core.utils.FileUtils;
 import com.ryderbelserion.map.Pl3xMapExtras;
-import com.ryderbelserion.map.config.PluginConfig;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkConfig;
 import com.ryderbelserion.map.hook.claims.griefdefender.GriefDefenderConfig;
@@ -27,6 +28,8 @@ import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ModuleUtil {
@@ -37,7 +40,7 @@ public class ModuleUtil {
 
     private static final PluginManager pluginManager = server.getPluginManager();
 
-    public static void toggleAll(boolean isShutdown) {
+    public static void toggleAll(final boolean isShutdown) {
         toggleSigns(isShutdown);
         toggleWarps(isShutdown);
         toggleBanners(isShutdown);
@@ -151,11 +154,11 @@ public class ModuleUtil {
         }
     }
 
-    public static void registerWorld(@NotNull World world) {
+    public static void registerWorld(@NotNull final World world) {
         Hook.hooks().forEach(hook -> hook.registerWorld(world));
     }
 
-    public static void unloadWorld(@NotNull World world) {
+    public static void unloadWorld(@NotNull final World world) {
         Hook.hooks().forEach(hook -> hook.unloadWorld(world));
     }
 
@@ -193,12 +196,26 @@ public class ModuleUtil {
     }
 
     public static void extract() {
-        if (ConfigUtil.isBannersEnabled()) FileUtil.extracts(plugin.getClass(), "/banners/icons/", plugin.getDataFolder().toPath().resolve("banners").resolve("icons"), false);
+        final Path path = plugin.getDataPath();
 
-        if (ConfigUtil.isWarpsEnabled()) FileUtil.extracts(plugin.getClass(), "/warps/icons/", plugin.getDataFolder().toPath().resolve("warps").resolve("icons"), false);
+        final ArrayList<FileAction> actions = new ArrayList<>() {{
+            add(FileAction.FOLDER);
+        }};
 
-        if (ConfigUtil.isSignsEnabled()) FileUtil.extracts(plugin.getClass(), "/signs/icons/", plugin.getDataFolder().toPath().resolve("signs").resolve("icons"), false);
+        if (ConfigUtil.isBannersEnabled()) {
+            FileUtils.extract("banners/icons", path, actions);
+        }
 
-        if (ConfigUtil.isMobsEnabled()) FileUtil.extracts(plugin.getClass(), "/mobs/icons/", plugin.getDataFolder().toPath().resolve("mobs").resolve("icons"), false);
+        if (ConfigUtil.isWarpsEnabled()) {
+            FileUtils.extract("warps/icons", path, actions);
+        }
+
+        if (ConfigUtil.isSignsEnabled()) {
+            FileUtils.extract("signs/icons", path, actions);
+        }
+
+        if (ConfigUtil.isMobsEnabled()) {
+            FileUtils.extract("mobs/icons", path, actions);
+        }
     }
 }

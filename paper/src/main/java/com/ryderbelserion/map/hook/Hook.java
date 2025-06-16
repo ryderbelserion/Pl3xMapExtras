@@ -27,17 +27,17 @@ public interface Hook {
         return HOOKS.values();
     }
 
-    static void add(@NotNull String name) {
+    static void add(@NotNull final String name) {
         add(Impl.get(name));
     }
 
-    static void add(@Nullable Impl impl) {
+    static void add(@Nullable final Impl impl) {
         if (impl != null) {
             HOOKS.put(impl.name, impl.hook.get());
         }
     }
 
-    static void remove(@NotNull String name) {
+    static void remove(@NotNull final String name) {
         HOOKS.remove(name);
     }
 
@@ -45,11 +45,11 @@ public interface Hook {
         HOOKS.clear();
     }
 
-    void registerWorld(@NotNull World world);
+    void registerWorld(@NotNull final World world);
 
-    void unloadWorld(@NotNull World world);
+    void unloadWorld(@NotNull final World world);
 
-    @NotNull Collection<Marker<?>> getData(@NotNull World world);
+    @NotNull Collection<Marker<?>> getData(@NotNull final World world);
 
     enum Impl {
         ESSENTIALS("Essentials", EssentialsHook::new),
@@ -63,24 +63,24 @@ public interface Hook {
         private final String name;
         private final Supplier<Hook> hook;
 
-        Impl(@NotNull String name, @NotNull Supplier<Hook> hook) {
+        Impl(@NotNull final String name, @NotNull final Supplier<Hook> hook) {
             this.name = name;
             this.hook = hook;
         }
 
-        public @NotNull String getPluginName() {
+        public @NotNull final String getPluginName() {
             return this.name;
         }
 
         static final @NotNull Map<String, Impl> MAP = new HashMap<>();
 
         static {
-            for (Impl impl : values()) {
+            for (final Impl impl : values()) {
                 MAP.put(impl.name, impl);
             }
         }
 
-        static @Nullable Impl get(@NotNull String name) {
+        static @Nullable Impl get(@NotNull final String name) {
             return MAP.get(name);
         }
     }
