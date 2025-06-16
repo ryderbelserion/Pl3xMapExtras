@@ -1,6 +1,5 @@
 package com.ryderbelserion.map.listener.banners;
 
-import java.lang.reflect.Method;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.api.enums.Permissions;
@@ -10,7 +9,6 @@ import com.ryderbelserion.map.marker.banners.BannersLayer;
 import com.ryderbelserion.map.marker.banners.Icon;
 import com.ryderbelserion.map.marker.banners.Position;
 import com.ryderbelserion.map.util.ConfigUtil;
-import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
 import org.bukkit.Location;
@@ -19,8 +17,6 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.block.CraftBlockEntityState;
-import org.bukkit.craftbukkit.util.CraftChatMessage;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -118,7 +114,7 @@ public class BannerListener implements Listener {
             return;
         }
 
-        layer.putBanner(new Banner(pos, icon, getCustomName(banner)));
+        layer.putBanner(new Banner(pos, icon, banner.getCustomName()));
 
         // play fancy particles as visualizer
         particles(banner.getLocation(), Particle.HAPPY_VILLAGER, Sound.ENTITY_PLAYER_LEVELUP);
@@ -151,19 +147,6 @@ public class BannerListener implements Listener {
 
         // play fancy particles as visualizer
         particles(banner.getLocation(), Particle.WAX_ON, Sound.ENTITY_GHAST_HURT);
-    }
-
-    protected String getCustomName(final org.bukkit.block.Banner banner) {
-        try {
-            final Method method = CraftBlockEntityState.class.getDeclaredMethod("getTileEntity");
-            method.setAccessible(true);
-
-            final BannerBlockEntity nms = (BannerBlockEntity) method.invoke(banner);
-
-            return nms.hasCustomName() ? CraftChatMessage.fromComponent(nms.getCustomName()) : "";
-        } catch (Throwable t) {
-            return "";
-        }
     }
 
     protected @Nullable BannersLayer getLayer(@NotNull final BlockState state) {

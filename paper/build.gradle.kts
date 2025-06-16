@@ -74,6 +74,12 @@ tasks {
 
     runServer {
         jvmArgs("-Dnet.kyori.ansi.colorLevel=truecolor")
+        jvmArgs("-Dcom.mojang.eula.agree=true")
+
+        downloadPlugins {
+            modrinth("pl3xmap", libs.versions.pl3xmap.get())
+            modrinth("luckperms", "v5.5.0-bukkit")
+        }
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
 
