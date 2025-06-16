@@ -22,7 +22,7 @@ fun version(): String {
         return "$minecraft-$commitHash"
     }
 
-    return libs.versions.pl3xmapextras.get()
+    return "1.3.0"
 }
 
 feather {
@@ -167,7 +167,11 @@ modrinth {
     detectLoaders = false
 
     dependencies {
-        optional.project("fancyholograms")
-        optional.project("DecentHolograms")
+        required.project("Pl3xMap")
+
+        optional.project("ClaimChunk")
+        optional.project("WorldGuard")
+        optional.project("EssentialsX")
+        optional.project("GriefPrevention")
     }
 }
