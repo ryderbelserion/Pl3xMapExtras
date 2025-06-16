@@ -167,7 +167,7 @@ modrinth {
 
     loaders.addAll(listOf("paper", "folia", "purpur"))
 
-    syncBodyFrom = rootProject.file("description.md").readText(Charsets.UTF_8)
+    syncBodyFrom = rootProject.file("README.md").readText(Charsets.UTF_8)
 
     autoAddDependsOn = false
     detectLoaders = false
