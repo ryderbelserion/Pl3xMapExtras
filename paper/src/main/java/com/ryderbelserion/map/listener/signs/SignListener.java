@@ -1,28 +1,24 @@
 package com.ryderbelserion.map.listener.signs;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.api.enums.Permissions;
 import com.ryderbelserion.map.util.ConfigUtil;
 import com.ryderbelserion.map.util.ItemUtil;
-import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
 import com.ryderbelserion.map.marker.signs.Icon;
 import com.ryderbelserion.map.marker.signs.Position;
 import com.ryderbelserion.map.marker.signs.Sign;
 import com.ryderbelserion.map.marker.signs.SignsLayer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -42,11 +38,18 @@ import org.jetbrains.annotations.Nullable;
 
 public class SignListener implements Listener {
 
+    private final List<Location> placedSigns;
+
+    public SignListener() {
+        this.placedSigns = new ArrayList<>();
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignEdit(@NotNull SignChangeEvent event) {
         if (!ConfigUtil.isSignsEnabled()) return;
+        boolean placedSign = this.placedSigns.remove(event.getBlock().getLocation());
 
-        if (!Permissions.signs_admin.hasPermission(event.getPlayer())) {
+        if (!placedSign && !Permissions.signs_admin.hasPermission(event.getPlayer())) {
             // player doesn't have permission to track signs; ignore
             return;
         }
@@ -63,7 +66,7 @@ public class SignListener implements Listener {
         final Location loc = state.getLocation();
         final Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 
-        if (!layer.hasSign(pos)) {
+        if (!(placedSign && layer.getConfig().SIGN_BLOCK_PLACE) && !layer.hasSign(pos)) {
             // not tracking any signs here; ignore
             return;
         }
@@ -129,6 +132,29 @@ public class SignListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onSignPlace(@NotNull BlockPlaceEvent event) {
+        if (!ConfigUtil.isSignsEnabled()) return;
+
+        if (!(event.getBlock().getState(false) instanceof org.bukkit.block.Sign sign)) {
+            return;
+        }
+
+        final SignsLayer layer = getLayer(sign);
+
+        if (layer == null) {
+            // world has no signs layer; ignore
+            return;
+        }
+
+        if (!layer.getConfig().SIGN_BLOCK_PLACE) {
+            // signs should not be shown on place; ignore
+            return;
+        }
+
+        placedSigns.add(event.getBlock().getLocation());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onSignBreak(@NotNull BlockDropItemEvent event) {
         if (!ConfigUtil.isSignsEnabled()) return;
 
@@ -177,12 +203,10 @@ public class SignListener implements Listener {
         tryRemoveSign(event.getToBlock().getState());
     }
 
-    private void tryAddSign(@NotNull final BlockState state, @NotNull final SignSide side) {
-        if (state instanceof org.bukkit.block.Sign sign) {
-            Location loc = sign.getLocation();
-            Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-            tryAddSign(sign, pos, getLines(side));
-        }
+    private void tryAddSign(@NotNull final org.bukkit.block.Sign sign, @NotNull final SignSide side) {
+        Location loc = sign.getLocation();
+        Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        tryAddSign(sign, pos, getLines(side));
     }
 
     private void tryAddSign(@NotNull final org.bukkit.block.Sign sign, @NotNull final Position pos, List<String> lines) {
@@ -214,6 +238,7 @@ public class SignListener implements Listener {
     }
 
     private void tryRemoveSign(@NotNull final org.bukkit.block.Sign sign) {
+        this.placedSigns.remove(sign.getLocation());
         final SignsLayer layer = getLayer(sign);
 
         if (layer == null) {

@@ -233,6 +233,9 @@ public class SignsConfig extends AbstractConfig {
             The sound to play when a sign is removed from Pl3xMap.
             https://minecraft.wiki/w/Sounds.json#Java_Edition_values""")
     public String SIGN_REMOVE_SOUND = "entity.ghast.hurt";
+    @Key("sign.block-place")
+    @Comment("Should signs be displayed on block place?")
+    public boolean SIGN_BLOCK_PLACE = true;
 
     private final World world;
 
