@@ -123,13 +123,7 @@ public class SignListener implements Listener {
                 // cancel event to stop sign editor from opening
                 event.setCancelled(true);
 
-                BlockFace facing = event.getBlockFace();
-
-                if (state.getBlockData() instanceof Directional directional) {
-                    facing = directional.getFacing();
-                }
-
-                tryAddSign(sign, sign.getSide(event.getBlockFace() == facing ? Side.FRONT : Side.BACK));
+                tryAddSign(sign, sign.getTargetSide(event.getPlayer()));
             }
         }
     }
