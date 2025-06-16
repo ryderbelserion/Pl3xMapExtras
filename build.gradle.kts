@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.minotaur)
     alias(libs.plugins.feather)
-    alias(libs.plugins.hangar)
+    //alias(libs.plugins.hangar)
 
     `config-java`
 }
@@ -9,9 +9,13 @@ plugins {
 val git = feather.getGit()
 
 val commitHash: String? = git.getCurrentCommitHash().subSequence(0, 7).toString()
-val isSnapshot: Boolean = System.getenv("IS_SNAPSHOT") != null
+val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
 val content: String = if (isSnapshot) "[$commitHash](https://github.com/ryderbelserion/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
 val minecraft = libs.versions.minecraft.get()
+
+val versions = listOf(
+    minecraft
+)
 
 rootProject.group = "com.ryderbelserion.map"
 rootProject.version = version()
@@ -28,7 +32,9 @@ fun version(): String {
 feather {
     rootDirectory = rootProject.rootDir.toPath()
 
-    val data = git.getCurrentCommitAuthorData()
+    val data = git.getGithubCommit("ryderbelserion/${rootProject.name}")
+
+    val user = data.user
 
     discord {
         webhook {
@@ -39,9 +45,9 @@ feather {
                 post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            username(data.author)
+            username(user.getName())
 
-            avatar(data.avatar)
+            avatar(user.avatar)
 
             embeds {
                 embed {
@@ -77,9 +83,9 @@ feather {
                 post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            username(data.author)
+            username(user.getName())
 
-            avatar(data.avatar)
+            avatar(user.avatar)
 
             content("<@&1375580815492382820>")
 
@@ -155,7 +161,7 @@ modrinth {
 
     changelog = content
 
-    gameVersions.addAll(listOf(libs.versions.minecraft.get()))
+    gameVersions.addAll(versions)
 
     uploadFile = tasks.jar.get().archiveFile.get()
 
