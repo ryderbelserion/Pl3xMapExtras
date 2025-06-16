@@ -68,7 +68,11 @@ public class SignListener implements Listener {
             return;
         }
 
-        tryAddSign(state, pos, event.getSide());
+        if (!(state instanceof org.bukkit.block.Sign sign)) {
+            return;
+        }
+
+        tryAddSign(sign, pos, List.of(event.getLines()));
     }
 
 
@@ -179,21 +183,15 @@ public class SignListener implements Listener {
         tryRemoveSign(event.getToBlock().getState());
     }
 
-    private void tryAddSign(@NotNull final BlockState state, @NotNull final Position pos, @NotNull final Side side) {
-        if (state instanceof org.bukkit.block.Sign sign) {
-            tryAddSign(sign, pos, sign.getSide(side));
-        }
-    }
-
     private void tryAddSign(@NotNull final BlockState state, @NotNull final SignSide side) {
         if (state instanceof org.bukkit.block.Sign sign) {
             Location loc = sign.getLocation();
             Position pos = new Position(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-            tryAddSign(sign, pos, side);
+            tryAddSign(sign, pos, getLines(side));
         }
     }
 
-    private void tryAddSign(@NotNull final org.bukkit.block.Sign sign, @NotNull final Position pos, @NotNull final SignSide side) {
+    private void tryAddSign(@NotNull final org.bukkit.block.Sign sign, @NotNull final Position pos, List<String> lines) {
         final SignsLayer layer = getLayer(sign);
 
         if (layer == null) {
@@ -209,7 +207,7 @@ public class SignListener implements Listener {
         }
 
         // add sign to layer
-        layer.putSign(new Sign(pos, icon, getLines(side)));
+        layer.putSign(new Sign(pos, icon, lines));
 
         // play fancy particles as visualizer
         particles(sign.getLocation(), ItemUtil.getParticleType(layer.getConfig().SIGN_ADD_PARTICLES), ItemUtil.getSound(layer.getConfig().SIGN_ADD_SOUND));
