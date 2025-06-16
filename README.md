@@ -13,6 +13,18 @@ https://modrinth.com/project/pl3xmapextras
     - ClaimChunk, GriefDefender, GriefPrevention, PlotSquared, WorldGuard
 - Ability to show warps on the webview from plugins like EssentialsX or PlayerWarps
 
+### How to use in-game
+
+#### Add sign/banner
+- Place sign/banner (will auto-add to webview if the `block-place` option is enabled in the sign/banner config)
+- Right-click on the sign/banner with a filled map
+- Now your sign/banner is visible on webview!
+
+#### Remove sign/banner
+- Left-click on the sign/banner with a filled map
+##### OR
+- Break sign/banner without a filled map in hand
+
 ### Installation
 1) Place [Pl3xMap](https://modrinth.com/plugin/pl3xmap) in your `plugins` folder
 2) Place Pl3xMapExtras inside your server's `plugins` folder
