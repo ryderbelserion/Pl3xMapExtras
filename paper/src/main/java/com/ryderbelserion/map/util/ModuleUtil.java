@@ -199,7 +199,7 @@ public class ModuleUtil {
         final Path path = plugin.getDataPath();
 
         final ArrayList<FileAction> actions = new ArrayList<>() {{
-            add(FileAction.FOLDER);
+            add(FileAction.EXTRACT_FOLDER);
         }};
 
         if (ConfigUtil.isBannersEnabled()) {
