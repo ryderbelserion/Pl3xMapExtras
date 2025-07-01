@@ -5,7 +5,7 @@ An addon to [Pl3xMap](https://modrinth.com/plugin/pl3xmap)
 https://modrinth.com/project/pl3xmapextras
 
 ### Contact
-[![Join us on Discord](https://discord.com/api/guilds/931330926653358090/widget.png?style=banner2)](https://discord.gg/w7yCw4M9za)
+[![Join us on Discord](https://discord.com/api/guilds/931330926653358090/widget.png?style=banner2)](https://discord.gg/ktxCyUd7Ny)
 
 ### Features
 - Ability to show mobs/signs/banners on the webview
