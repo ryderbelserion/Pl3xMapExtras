@@ -1,5 +1,7 @@
 package com.ryderbelserion.map.hook.claims.worldguard;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.util.ConfigUtil;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -11,6 +13,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -22,6 +26,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WorldGuardHook implements Hook {
+
+    private final Cache<UUID, String> userCache = CacheBuilder.newBuilder()
+            .expireAfterAccess(30, TimeUnit.MINUTES)
+            .build();
 
     public WorldGuardHook() {
         WorldGuardConfig.reload();
@@ -96,8 +104,20 @@ public class WorldGuardHook implements Hook {
 
     private @NotNull String getOwners(@NotNull final WorldGuardClaim claim) {
         final Set<String> set = new HashSet<>();
-        set.addAll(claim.getOwners().getPlayers());
         set.addAll(claim.getOwners().getGroups());
+        set.addAll(claim.getOwners().getPlayers());
+        set.addAll(claim.getOwners().getUniqueIds().stream().map(uniqueId -> {
+            String username = userCache.getIfPresent(uniqueId);
+            if (username != null) {
+                return username;
+            }
+            username = Bukkit.getOfflinePlayer(uniqueId).getName();
+            if (username != null) {
+                userCache.put(uniqueId, username);
+                return username;
+            }
+            return uniqueId.toString();
+        }).toList());
 
         return set.isEmpty() ? "" : WorldGuardConfig.MARKER_POPUP_OWNERS
                 .replace("<owners>", String.join(", ", set));
@@ -105,8 +125,20 @@ public class WorldGuardHook implements Hook {
 
     private @NotNull String getMembers(@NotNull final WorldGuardClaim claim) {
         final Set<String> set = new HashSet<>();
-        set.addAll(claim.getMembers().getPlayers());
         set.addAll(claim.getMembers().getGroups());
+        set.addAll(claim.getMembers().getPlayers());
+        set.addAll(claim.getMembers().getUniqueIds().stream().map(uniqueId -> {
+            String username = userCache.getIfPresent(uniqueId);
+            if (username != null) {
+                return username;
+            }
+            username = Bukkit.getOfflinePlayer(uniqueId).getName();
+            if (username != null) {
+                userCache.put(uniqueId, username);
+                return username;
+            }
+            return uniqueId.toString();
+        }).toList());
 
         return set.isEmpty() ? "" : WorldGuardConfig.MARKER_POPUP_MEMBERS
                 .replace("<members>", String.join(", ", set));
