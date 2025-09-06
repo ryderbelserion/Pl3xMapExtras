@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.config;
 
 import com.ryderbelserion.fusion.core.FusionCore;
+import com.ryderbelserion.fusion.core.FusionProvider;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.markers.Vector;
@@ -12,9 +13,9 @@ import java.util.Map;
 
 public class MobConfig extends AbstractConfig {
 
-    private static final FusionCore provider = FusionCore.Provider.get();
+    private static final FusionCore provider = FusionProvider.getInstance();
 
-    private static final Path path = provider.getPath();
+    private static final Path path = provider.getDataPath();
 
     @Key("layer.label")
     @Comment("""

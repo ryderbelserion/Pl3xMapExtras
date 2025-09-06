@@ -1,7 +1,6 @@
 package com.ryderbelserion.map.util;
 
-import com.ryderbelserion.fusion.core.files.FileAction;
-import com.ryderbelserion.fusion.core.utils.FileUtils;
+import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkConfig;
@@ -29,7 +28,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ModuleUtil {
@@ -195,27 +193,26 @@ public class ModuleUtil {
         findHooks();
     }
 
+    // I'm not 100% sure if this is the equivalent of old method.
     public static void extract() {
         final Path path = plugin.getDataPath();
 
-        final ArrayList<FileAction> actions = new ArrayList<>() {{
-            add(FileAction.FOLDER);
-        }};
+        FileManager fileManager = new FileManager(plugin.getFusion());
 
         if (ConfigUtil.isBannersEnabled()) {
-            FileUtils.extract("banners/icons", path, actions);
+            fileManager.extractFolder("banners/icons", path);
         }
 
         if (ConfigUtil.isWarpsEnabled()) {
-            FileUtils.extract("warps/icons", path, actions);
+            fileManager.extractFolder("warps/icons", path);
         }
 
         if (ConfigUtil.isSignsEnabled()) {
-            FileUtils.extract("signs/icons", path, actions);
+            fileManager.extractFolder("signs/icons", path);
         }
 
         if (ConfigUtil.isMobsEnabled()) {
-            FileUtils.extract("mobs/icons", path, actions);
+            fileManager.extractFolder("mobs/icons", path);
         }
     }
 }

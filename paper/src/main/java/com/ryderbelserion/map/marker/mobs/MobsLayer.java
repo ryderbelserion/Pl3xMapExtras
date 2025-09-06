@@ -1,7 +1,7 @@
 package com.ryderbelserion.map.marker.mobs;
 
-import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
-import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.config.MobConfig;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -67,7 +67,7 @@ public class MobsLayer extends WorldLayer {
             return;
         }
 
-        new FoliaScheduler(Scheduler.global_scheduler) {
+        new FoliaScheduler(plugin, Scheduler.global_scheduler) {
             @Override
             public void run() {
                 bukkitWorld.getEntitiesByClass(Mob.class).forEach(mob -> {

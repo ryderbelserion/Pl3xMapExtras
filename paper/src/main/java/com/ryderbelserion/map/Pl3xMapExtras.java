@@ -24,8 +24,7 @@ public class Pl3xMapExtras extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.api = new FusionPaper(getLogger(), getDataPath());
-        this.api.enable(this);
+        this.api = new FusionPaper(this);
 
         // Load the config.
         PluginConfig.reload();
@@ -77,10 +76,6 @@ public class Pl3xMapExtras extends JavaPlugin {
 
         // Clear plugin hooks.
         Hook.clear();
-
-        if (this.api != null) {
-            this.api.disable();
-        }
     }
 
     public @Nullable final MobsManager getMobsManager() {
