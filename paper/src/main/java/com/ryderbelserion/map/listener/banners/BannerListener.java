@@ -114,7 +114,8 @@ public class BannerListener implements Listener {
             return;
         }
 
-        layer.putBanner(new Banner(pos, icon, banner.getCustomName()));
+        String bannerName = banner.getCustomName() == null ? "unnamed" : banner.getCustomName();
+        layer.putBanner(new Banner(pos, icon, bannerName));
 
         // play fancy particles as visualizer
         particles(banner.getLocation(), Particle.HAPPY_VILLAGER, Sound.ENTITY_PLAYER_LEVELUP);
