@@ -54,6 +54,7 @@ public enum Icon {
             case PURPLE_BANNER, PURPLE_WALL_BANNER -> PURPLE;
             case RED_BANNER, RED_WALL_BANNER -> RED;
             case YELLOW_BANNER, YELLOW_WALL_BANNER -> YELLOW;
+            case WHITE_BANNER, WHITE_WALL_BANNER -> WHITE;
             default -> null;
         };
     }
