@@ -1,7 +1,7 @@
 package com.ryderbelserion.map.util;
 
-import com.ryderbelserion.fusion.core.files.FileAction;
-import com.ryderbelserion.fusion.core.utils.FileUtils;
+import com.ryderbelserion.fusion.core.api.enums.FileAction;
+import com.ryderbelserion.fusion.core.api.utils.FileUtils;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkConfig;
@@ -199,7 +199,7 @@ public class ModuleUtil {
         final Path path = plugin.getDataPath();
 
         final ArrayList<FileAction> actions = new ArrayList<>() {{
-            add(FileAction.FOLDER);
+            add(FileAction.EXTRACT_FOLDER);
         }};
 
         if (ConfigUtil.isBannersEnabled()) {

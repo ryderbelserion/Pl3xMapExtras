@@ -26,7 +26,8 @@ package com.ryderbelserion.map.config;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
-import com.ryderbelserion.fusion.core.FusionCore;
+import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.fusion.core.api.FusionCore;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.markers.Point;
@@ -38,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BannerConfig extends AbstractConfig {
 
-    private static final FusionCore provider = FusionCore.Provider.get();
+    private static final FusionCore provider = FusionProvider.get();
 
     private static final Path path = provider.getPath();
 
@@ -213,6 +214,28 @@ public class BannerConfig extends AbstractConfig {
     @Key("root.banners.block-place")
     @Comment("Should banners be displayed on block place?")
     public static boolean banners_block_place = true;
+
+    @Key("banner.add.particles")
+    @Comment("""
+            The particles to play when a banner is added to Pl3xMap.
+            https://minecraft.wiki/w/Particles_(Java_Edition)""")
+    public String BANNER_ADD_PARTICLES = "happy_villager";
+    @Key("banner.add.sound")
+    @Comment("""
+            The sound to play when a banner is added to Pl3xMap.
+            https://minecraft.wiki/w/Sounds.json#Java_Edition_values""")
+    public String BANNER_ADD_SOUND = "entity.player.levelup";
+    @Key("banner.remove.particles")
+    @Comment("""
+            The particles to play when a banner is removed from Pl3xMap.
+            https://minecraft.wiki/w/Particles_(Java_Edition)""")
+    public String BANNER_REMOVE_PARTICLES = "wax_on";
+    @Key("banner.remove.sound")
+    @Comment("""
+            The sound to play when a banner is removed from Pl3xMap.
+            https://minecraft.wiki/w/Sounds.json#Java_Edition_values""")
+    public String BANNER_REMOVE_SOUND = "entity.ghast.hurt";
+
 
     private final World world;
 

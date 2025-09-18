@@ -1,7 +1,6 @@
 package com.ryderbelserion.map.hook.warps.playerwarps;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 import com.olziedev.playerwarps.api.PlayerWarpsAPI;
 import com.olziedev.playerwarps.api.warp.WCategory;

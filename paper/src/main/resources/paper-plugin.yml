@@ -1,5 +1,5 @@
 name: '${name}'
-main: '${group}.Pl3xMapExtras'
+main: '${group}.${name}'
 
 version: '${version}'
 api-version: '${minecraft}'
@@ -36,6 +36,10 @@ dependencies:
       required: false
       join-classpath: true
     WorldGuard:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    HeadDatabase:
       load: BEFORE
       required: false
       join-classpath: true

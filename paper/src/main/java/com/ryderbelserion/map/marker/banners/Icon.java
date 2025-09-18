@@ -37,7 +37,7 @@ public enum Icon {
 
     private static @NotNull final ComponentLogger logger = plugin.getComponentLogger();
 
-    public static @Nullable Icon get(@NotNull final Material type) {
+    public static @NotNull Icon get(@NotNull final Material type) {
         return switch (type) {
             case BLACK_BANNER, BLACK_WALL_BANNER -> BLACK;
             case BLUE_BANNER, BLUE_WALL_BANNER -> BLUE;
@@ -54,7 +54,7 @@ public enum Icon {
             case PURPLE_BANNER, PURPLE_WALL_BANNER -> PURPLE;
             case RED_BANNER, RED_WALL_BANNER -> RED;
             case YELLOW_BANNER, YELLOW_WALL_BANNER -> YELLOW;
-            default -> null;
+            default -> WHITE;
         };
     }
 

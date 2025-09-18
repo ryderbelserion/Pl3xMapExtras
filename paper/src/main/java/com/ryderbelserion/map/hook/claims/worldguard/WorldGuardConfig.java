@@ -3,7 +3,6 @@ package com.ryderbelserion.map.hook.claims.worldguard;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.ryderbelserion.map.Pl3xMapExtras;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import org.jetbrains.annotations.NotNull;
