@@ -45,6 +45,10 @@ public class BannersLayer extends WorldLayer {
         loadData();
     }
 
+    public @NotNull BannerConfig getConfig() {
+        return this.config;
+    }
+
     @Override
     public @NotNull Collection<Marker<?>> getMarkers() {
         return this.markers.values();

@@ -3,8 +3,8 @@ package com.ryderbelserion.map.config;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.Map;
-import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.fusion.core.api.FusionCore;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.markers.Vector;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SignsConfig extends AbstractConfig {
 
-    private static final FusionCore provider = FusionProvider.getInstance();
+    private static final FusionCore provider = FusionProvider.get();
 
     private static final Path path = provider.getDataPath();
 
@@ -234,6 +234,9 @@ public class SignsConfig extends AbstractConfig {
             The sound to play when a sign is removed from Pl3xMap.
             https://minecraft.wiki/w/Sounds.json#Java_Edition_values""")
     public String SIGN_REMOVE_SOUND = "entity.ghast.hurt";
+    @Key("sign.block-place")
+    @Comment("Should signs be displayed on block place?")
+    public boolean SIGN_BLOCK_PLACE = true;
 
     private final World world;
 

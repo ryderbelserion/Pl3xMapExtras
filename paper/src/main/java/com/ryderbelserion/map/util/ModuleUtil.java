@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.util;
 
-import com.ryderbelserion.fusion.core.files.FileManager;
+import com.ryderbelserion.fusion.core.api.enums.FileAction;
+import com.ryderbelserion.fusion.core.api.utils.FileUtils;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkConfig;
@@ -193,26 +194,27 @@ public class ModuleUtil {
         findHooks();
     }
 
-    // I'm not 100% sure if this is the equivalent of old method.
     public static void extract() {
         final Path path = plugin.getDataPath();
 
-        FileManager fileManager = new FileManager(plugin.getFusion());
+        final ArrayList<FileAction> actions = new ArrayList<>() {{
+            add(FileAction.EXTRACT_FOLDER);
+        }};
 
         if (ConfigUtil.isBannersEnabled()) {
-            fileManager.extractFolder("banners/icons", path);
+            FileUtils.extract("banners/icons", path, actions);
         }
 
         if (ConfigUtil.isWarpsEnabled()) {
-            fileManager.extractFolder("warps/icons", path);
+            FileUtils.extract("warps/icons", path, actions);
         }
 
         if (ConfigUtil.isSignsEnabled()) {
-            fileManager.extractFolder("signs/icons", path);
+            FileUtils.extract("signs/icons", path, actions);
         }
 
         if (ConfigUtil.isMobsEnabled()) {
-            fileManager.extractFolder("mobs/icons", path);
+            FileUtils.extract("mobs/icons", path, actions);
         }
     }
 }

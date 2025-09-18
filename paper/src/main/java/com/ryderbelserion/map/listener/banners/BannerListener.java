@@ -1,5 +1,6 @@
 package com.ryderbelserion.map.listener.banners;
 
+import com.ryderbelserion.map.util.ItemUtil;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.api.enums.Permissions;
@@ -109,7 +110,7 @@ public class BannerListener implements Listener {
 
         final Icon icon = Icon.get(banner.getType());
 
-        if (icon == null) {
+        if (icon == null) { //todo() check this
             // material is not a registered banner; ignore
             return;
         }
@@ -118,7 +119,7 @@ public class BannerListener implements Listener {
         layer.putBanner(new Banner(pos, icon, bannerName));
 
         // play fancy particles as visualizer
-        particles(banner.getLocation(), Particle.HAPPY_VILLAGER, Sound.ENTITY_PLAYER_LEVELUP);
+        particles(banner.getLocation(), ItemUtil.getParticleType(layer.getConfig().BANNER_ADD_PARTICLES), ItemUtil.getSound(layer.getConfig().BANNER_ADD_SOUND));
     }
 
     protected void tryRemoveBanner(@NotNull final BlockState state) {
@@ -147,7 +148,7 @@ public class BannerListener implements Listener {
         layer.removeBanner(pos);
 
         // play fancy particles as visualizer
-        particles(banner.getLocation(), Particle.WAX_ON, Sound.ENTITY_GHAST_HURT);
+        particles(banner.getLocation(), ItemUtil.getParticleType(layer.getConfig().BANNER_REMOVE_PARTICLES), ItemUtil.getSound(layer.getConfig().BANNER_REMOVE_SOUND));
     }
 
     protected @Nullable BannersLayer getLayer(@NotNull final BlockState state) {
@@ -161,19 +162,23 @@ public class BannerListener implements Listener {
         return (BannersLayer) world.getLayerRegistry().get(BannersLayer.KEY);
     }
 
-    protected void particles(@NotNull final Location loc, @NotNull final Particle particle, @NotNull final Sound sound) {
+    protected void particles(@NotNull final Location loc, @Nullable final Particle particle, @Nullable final Sound sound) {
         final org.bukkit.World world = loc.getWorld();
 
-        world.playSound(loc, sound, 1.0F, 1.0F);
+        if (sound != null) {
+            world.playSound(loc, sound, 1.0F, 1.0F);
+        }
 
-        final ThreadLocalRandom rand = ThreadLocalRandom.current();
+        if (particle != null) {
+            final ThreadLocalRandom rand = ThreadLocalRandom.current();
 
-        for (int i = 0; i < 20; ++i) {
-            double x = loc.getX() + rand.nextGaussian();
-            double y = loc.getY() + rand.nextGaussian();
-            double z = loc.getZ() + rand.nextGaussian();
+            for (int i = 0; i < 20; ++i) {
+                double x = loc.getX() + rand.nextGaussian();
+                double y = loc.getY() + rand.nextGaussian();
+                double z = loc.getZ() + rand.nextGaussian();
 
-            world.spawnParticle(particle, x, y, z, 1, 0, 0, 0, 0, null, true);
+                world.spawnParticle(particle, x, y, z, 1, 0, 0, 0, 0, null, true);
+            }
         }
     }
 }

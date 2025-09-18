@@ -24,7 +24,8 @@ public class Pl3xMapExtras extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.api = new FusionPaper(this);
+        this.api = new FusionPaper(getComponentLogger(), getDataPath());
+        this.api.enable(this);
 
         // Load the config.
         PluginConfig.reload();

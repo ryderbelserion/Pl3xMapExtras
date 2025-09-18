@@ -1,34 +1,29 @@
 plugins {
     alias(libs.plugins.minotaur)
     alias(libs.plugins.feather)
-    alias(libs.plugins.hangar)
 
     `config-java`
 }
 
 val git = feather.getGit()
 
-val commitHash: String? = git.getCurrentCommitHash().subSequence(0, 7).toString()
-val isSnapshot: Boolean = System.getenv("IS_SNAPSHOT") != null
+val commitHash: String = git.getCurrentCommitHash().subSequence(0, 7).toString()
+val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
 val content: String = if (isSnapshot) "[$commitHash](https://github.com/ryderbelserion/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
 val minecraft = libs.versions.minecraft.get()
 
+val versions = listOf(minecraft)
+
 rootProject.group = "com.ryderbelserion.map"
-rootProject.version = version()
+rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else "1.3.0."
 rootProject.description = "Adds extra features to Pl3xMap"
-
-fun version(): String {
-    if (isSnapshot) {
-        return "$minecraft-$commitHash"
-    }
-
-    return "1.3.0"
-}
 
 feather {
     rootDirectory = rootProject.rootDir.toPath()
 
-    val data = git.getCurrentCommitAuthorData()
+    val data = git.getGithubCommit("ryderbelserion/${rootProject.name}")
+
+    val user = data.user
 
     discord {
         webhook {
@@ -39,9 +34,9 @@ feather {
                 post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            username(data.author)
+            username(user.getName())
 
-            avatar(data.avatar)
+            avatar(user.avatar)
 
             embeds {
                 embed {
@@ -77,9 +72,9 @@ feather {
                 post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            username(data.author)
+            username(user.getName())
 
-            avatar(data.avatar)
+            avatar(user.avatar)
 
             content("<@&1375580815492382820>")
 
@@ -111,7 +106,7 @@ feather {
     }
 }
 
-allprojects { //todo() why? the gradle shit in buildSrc already applies this...
+allprojects {
     apply(plugin = "java-library")
 }
 
@@ -149,19 +144,19 @@ modrinth {
 
     projectId = rootProject.name
 
-    versionName = "${rootProject.name} ${rootProject.version}"
+    versionName = "${rootProject.version}"
     versionNumber = "${rootProject.version}"
     versionType = if (isSnapshot) "beta" else "release"
 
     changelog = content
 
-    gameVersions.addAll(listOf(libs.versions.minecraft.get()))
+    gameVersions.addAll(versions)
 
     uploadFile = tasks.jar.get().archiveFile.get()
 
     loaders.addAll(listOf("paper", "folia", "purpur"))
 
-    syncBodyFrom = rootProject.file("description.md").readText(Charsets.UTF_8)
+    syncBodyFrom = rootProject.file("README.md").readText(Charsets.UTF_8)
 
     autoAddDependsOn = false
     detectLoaders = false

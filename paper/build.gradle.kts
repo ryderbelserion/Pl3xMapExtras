@@ -3,19 +3,19 @@ plugins {
 }
 
 repositories {
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
 
-    maven("https://repo.glaremasters.me/repository/bloodshot")
+    maven("https://repo.glaremasters.me/repository/bloodshot/")
 
-    maven("https://repo.essentialsx.net/snapshots")
+    maven("https://repo.essentialsx.net/snapshots/")
 
-    maven("https://repo.essentialsx.net/releases")
+    maven("https://repo.essentialsx.net/releases/")
 
-    maven("https://maven.enginehub.org/repo")
+    maven("https://maven.enginehub.org/repo/")
 
-    maven("https://repo.olziedev.com")
+    maven("https://repo.olziedev.com/")
 }
 
 dependencies {
@@ -23,9 +23,7 @@ dependencies {
 
     implementation(libs.metrics)
 
-    api(project(":core"))
-
-    compileOnly("com.olziedev", "playerwarps-api", "6.30.0") {}
+    compileOnly("com.olziedev", "playerwarps-api", "7.8.0")
     compileOnly("net.essentialsx", "EssentialsX", "2.21.0-SNAPSHOT") {
         exclude("org.bstats", "*")
         exclude("org.spigotmc", "*")
@@ -39,6 +37,8 @@ dependencies {
     implementation(platform("com.intellectualsites.bom:bom-1.18.x:1.28"))
     compileOnly("com.plotsquared:PlotSquared-Core")
     compileOnly("com.plotsquared:PlotSquared-Bukkit")
+
+    api(project(":core"))
 }
 
 tasks {
@@ -52,22 +52,6 @@ tasks {
         ).forEach {
             relocate(it, "libs.$it")
         }
-    }
-
-    processResources {
-        inputs.properties(
-            "name" to rootProject.name,
-            "version" to rootProject.version,
-            "description" to rootProject.description,
-            "minecraft" to libs.versions.minecraft.get(),
-            "group" to rootProject.group
-        )
-
-        with(copySpec {
-            from("src/main/resources/paper-plugin.yml") {
-                expand(inputs.properties)
-            }
-        })
     }
 
     runPaper.folia.registerTask()
