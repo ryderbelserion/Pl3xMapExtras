@@ -4,8 +4,6 @@ plugins {
     `java-library`
 }
 
-project.version = rootProject.version
-
 val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
 
 repositories {
@@ -21,6 +19,7 @@ repositories {
     maven("https://jitpack.io/")
 
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -29,17 +28,43 @@ dependencies {
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+
+    withSourcesJar()
+    withJavadocJar()
 }
 
 tasks {
     shadowJar {
         archiveClassifier.set("")
-        archiveVersion.set("")
+
+        exclude("META-INF/**")
+    }
+
+    compileJava {
+        options.encoding = Charsets.UTF_8.name()
+        options.release.set(21)
     }
 
     processResources {
         filteringCharset = Charsets.UTF_8.name()
 
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        inputs.properties(
+            "name" to rootProject.name,
+            "version" to rootProject.version,
+            "description" to rootProject.description.toString(),
+            "minecraft" to libs.findVersion("minecraft").get(),
+            "website" to "https://github.com/ryderbelserion/${rootProject.name}",
+            "id" to rootProject.name.lowercase(),
+            "group" to rootProject.group
+        )
+
+        with(copySpec {
+            include("*paper-plugin.yml", "fabric.mod.json")
+            from("src/main/resources") {
+                expand(inputs.properties)
+            }
+        })
     }
 }

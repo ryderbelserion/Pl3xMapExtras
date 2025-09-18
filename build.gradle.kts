@@ -1,33 +1,22 @@
 plugins {
     alias(libs.plugins.minotaur)
     alias(libs.plugins.feather)
-    //alias(libs.plugins.hangar)
 
     `config-java`
 }
 
 val git = feather.getGit()
 
-val commitHash: String? = git.getCurrentCommitHash().subSequence(0, 7).toString()
+val commitHash: String = git.getCurrentCommitHash().subSequence(0, 7).toString()
 val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
 val content: String = if (isSnapshot) "[$commitHash](https://github.com/ryderbelserion/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
 val minecraft = libs.versions.minecraft.get()
 
-val versions = listOf(
-    minecraft
-)
+val versions = listOf(minecraft)
 
 rootProject.group = "com.ryderbelserion.map"
-rootProject.version = version()
+rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else "1.3.0."
 rootProject.description = "Adds extra features to Pl3xMap"
-
-fun version(): String {
-    if (isSnapshot) {
-        return "$minecraft-$commitHash"
-    }
-
-    return "1.3.0"
-}
 
 feather {
     rootDirectory = rootProject.rootDir.toPath()
@@ -117,7 +106,7 @@ feather {
     }
 }
 
-allprojects { //todo() why? the gradle shit in buildSrc already applies this...
+allprojects {
     apply(plugin = "java-library")
 }
 
