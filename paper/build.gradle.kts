@@ -3,19 +3,19 @@ plugins {
 }
 
 repositories {
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
+    maven("https://repo.olziedev.com/")
 
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 
-    maven("https://repo.glaremasters.me/repository/bloodshot")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
 
-    maven("https://repo.essentialsx.net/snapshots")
+    maven("https://repo.glaremasters.me/repository/bloodshot/")
 
-    maven("https://repo.essentialsx.net/releases")
+    maven("https://repo.essentialsx.net/snapshots/")
 
-    maven("https://maven.enginehub.org/repo")
+    maven("https://repo.essentialsx.net/releases/")
 
-    maven("https://repo.olziedev.com")
+    maven("https://maven.enginehub.org/repo/")
 }
 
 dependencies {
@@ -25,7 +25,7 @@ dependencies {
 
     api(project(":core"))
 
-    compileOnly("com.olziedev", "playerwarps-api", "6.30.0") {}
+    compileOnly("com.olziedev", "playerwarps-api", "7.8.0")
     compileOnly("net.essentialsx", "EssentialsX", "2.21.0-SNAPSHOT") {
         exclude("org.bstats", "*")
         exclude("org.spigotmc", "*")

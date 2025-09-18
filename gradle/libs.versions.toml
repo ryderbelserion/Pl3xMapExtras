@@ -7,10 +7,10 @@ run-paper = "2.3.1" # https://github.com/jpenilla/run-task
 annotations = "24.1.0" # https://github.com/JetBrains/java-annotations
 
 ## Kyori
-adventure = "4.21.0" # https://github.com/KyoriPowered/adventure
+adventure = "4.24.0" # https://github.com/KyoriPowered/adventure
 
 ## GradleUp
-shadow = "9.0.0-beta15" # https://github.com/GradleUp/shadow
+shadow = "9.1.0" # https://github.com/GradleUp/shadow
 
 ## Minecraft
 minecraft = "1.21.5" # https://minecraft.net
@@ -31,9 +31,9 @@ triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
 
 bStats = "3.1.0" # https://github.com/Bastian/bStats
 
-fusion = "1.20.6" # https://github.com/ryderbelserion/Fusion
+fusion = "1.22.12" # https://github.com/ryderbelserion/Fusion
 
-pl3xmap = "1.21.5-527" # https://modrinth.com/project/Pl3xMap
+pl3xmap = "1.21.8-534" # https://modrinth.com/project/Pl3xMap
 
 [plugins]
 # https://github.com/ryderbelserion/Feather
