@@ -15,7 +15,7 @@ val minecraft = libs.versions.minecraft.get()
 val versions = listOf(minecraft)
 
 rootProject.group = "com.ryderbelserion.map"
-rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else "1.3.0."
+rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else "1.4.0"
 rootProject.description = "Adds extra features to Pl3xMap"
 
 feather {
