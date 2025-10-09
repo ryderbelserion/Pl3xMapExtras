@@ -7,7 +7,5 @@ dependencies {
 
     compileOnly(libs.fusion.core)
 
-    compileOnly(libs.annotations)
-
     compileOnlyApi(libs.pl3xmap)
 }
