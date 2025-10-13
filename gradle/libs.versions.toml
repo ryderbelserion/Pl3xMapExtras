@@ -31,19 +31,16 @@ bStats = "3.1.0" # https://github.com/Bastian/bStats
 [plugins]
 # https://github.com/mfnalex/gradle-fix-javadoc-plugin
 fix-javadoc = { id = "com.jeff-media.fix-javadoc-plugin", version.ref = "fix-javadoc" }
+# https://github.com/ryderbelserion/Feather
+feather = { id = "com.ryderbelserion.feather.core", version.ref = "feather" }
+# https://github.com/HangarMC/hangar-publish-plugin
+hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
+# https://github.com/modrinth/minotaur
+minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 
 [libraries]
 # https://github.com/PaperMC/paperweight
 paperweight = { module = "io.papermc.paperweight.userdev:io.papermc.paperweight.userdev.gradle.plugin", version.ref = "paperweight" }
-
-# https://github.com/ryderbelserion/Feather
-feather = { module = "com.ryderbelserion.feather.core:com.ryderbelserion.feather.core.gradle.plugin", version.ref = "feather" }
-
-# https://github.com/HangarMC/hangar-publish-plugin
-hangar = { module = "io.papermc.hangar-publish-plugin:io.papermc.hangar-publish-plugin.gradle.plugin", version.ref = "hangar" }
-
-# https://github.com/modrinth/minotaur
-minotaur = { module = "com.modrinth.minotaur:com.modrinth.minotaur.gradle.plugin", version.ref = "minotaur" }
 
 # https://github.com/GradleUp/shadow
 shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
@@ -86,9 +83,6 @@ shared = [
 ]
 
 build = [
-    "minotaur",
-    "feather",
-    "hangar",
     "shadow"
 ]
 

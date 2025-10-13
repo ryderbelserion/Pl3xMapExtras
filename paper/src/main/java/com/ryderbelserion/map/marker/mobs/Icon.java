@@ -1,5 +1,6 @@
 package com.ryderbelserion.map.marker.mobs;
 
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.pl3x.map.core.Pl3xMap;
@@ -37,8 +38,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.logging.Level;
 
 public enum Icon {
 
@@ -390,6 +391,8 @@ public enum Icon {
 
     private static @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
 
+    private static @NotNull final FusionPaper fusion = plugin.getFusion();
+
     private static @NotNull final Path path = plugin.getDataPath();
 
     private static @NotNull final ComponentLogger logger = plugin.getComponentLogger();
@@ -440,16 +443,26 @@ public enum Icon {
         return this.type;
     }
 
-    public static @NotNull Icon get(@NotNull final Mob mob) {
+    public static @NotNull Optional<Icon> get(@NotNull final Mob mob) {
+        final EntityType type = mob.getType();
+
+        Optional<Icon> safeIcon = Optional.empty();
+
         for (final Icon icon : values()) {
-            if (icon.getType() == mob.getType()) {
-                if (icon.predicate == null || icon.predicate.apply(mob)) {
-                    return icon;
-                }
+            if (icon.getType() != type) continue;
+
+            if (icon.predicate == null || icon.predicate.apply(mob)) {
+                safeIcon = Optional.of(icon);
+
+                break;
             }
         }
 
-        throw new IllegalStateException();
+        if (safeIcon.isEmpty()) {
+            fusion.log("warn", "{} is a mob that I can recognize.", type.getKey().asString());
+        }
+
+        return safeIcon;
     }
 
     private static <T extends Mob> @NotNull Function<T, Boolean> predicate(@NotNull final Function<T, Boolean> predicate) {
