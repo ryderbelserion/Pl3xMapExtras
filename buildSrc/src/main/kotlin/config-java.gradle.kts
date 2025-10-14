@@ -40,7 +40,7 @@ tasks {
             "description" to rootProject.description.toString(),
             "minecraft" to libs.findVersion("minecraft").get(),
             "website" to "https://github.com/Crazy-Crew/${rootProject.name}",
-            "group" to project.group
+            "group" to rootProject.group
         )
 
         with(copySpec {
