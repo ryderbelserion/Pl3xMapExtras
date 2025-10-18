@@ -22,7 +22,7 @@ public abstract class Pl3xMapCommon {
     private BannerRegistry bannerRegistry;
 
     public void init() {
-        this.fileManager.addFile(this.path.resolve("banners.json"), FileType.JSON);
+        this.fileManager.addFile(this.path.resolve("storage/banners.json"), FileType.JSON);
 
         this.bannerRegistry = new BannerRegistry(this);
         this.bannerRegistry.init();
