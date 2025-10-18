@@ -8,17 +8,21 @@ public class Banner {
     private final BannerTexture texture;
     private final Position position;
     private final String worldName;
-    private final String name;
+    private final String bannerName;
 
-    public Banner(@NotNull final BannerTexture texture, @NotNull final Position position, @NotNull final String worldName, @NotNull final String name) {
-        this.texture = texture;
-        this.position = position;
+    public Banner(@NotNull final BannerTexture texture, @NotNull final String bannerName, @NotNull final String worldName, @NotNull final Position position) {
+        this.bannerName = bannerName;
         this.worldName = worldName;
-        this.name = name;
+        this.position = position;
+        this.texture = texture;
     }
 
     public @NotNull final BannerTexture getTexture() {
         return texture;
+    }
+
+    public @NotNull final String getBannerName() {
+        return this.bannerName;
     }
 
     public @NotNull final Position getPosition() {
@@ -27,9 +31,5 @@ public class Banner {
 
     public @NotNull final String getWorldName() {
         return this.worldName;
-    }
-
-    public @NotNull final String getName() {
-        return this.name;
     }
 }

@@ -8,8 +8,6 @@ import com.ryderbelserion.map.banners.objects.BannerTexture;
 import com.ryderbelserion.map.constants.Namespaces;
 import com.ryderbelserion.map.objects.Position;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -57,9 +55,16 @@ public class BannerRegistry {
         return this.textures.get(value);
     }
 
-    public void addBanner(@NotNull final Position position, @NotNull final String worldName, @NotNull final Key itemKey, @NotNull final Component itemName) {
+    public void addBanner(@NotNull final Position position, @NotNull final String displayName, @NotNull final String worldName, @NotNull final Key displayItem) {
         getLayer(worldName).ifPresentOrElse(layer -> {
-            layer.displayBanner(new Banner(getTexture(itemKey), position, worldName, PlainTextComponentSerializer.plainText().serialize(itemName)), true);
+            final Banner banner = new Banner(
+                    getTexture(displayItem),
+                    displayName,
+                    worldName,
+                    position
+            );
+
+            layer.displayBanner(banner, true);
 
             //todo() play particle
         }, () -> {
@@ -67,9 +72,16 @@ public class BannerRegistry {
         });
     }
 
-    public void removeBanner(@NotNull final Position position, @NotNull final String bannerName, @NotNull final String worldName, @NotNull final String bannerType) {
+    public void removeBanner(@NotNull final Position position, @NotNull final String displayName, @NotNull final String displayItem, @NotNull final String worldName) {
         getLayer(worldName).ifPresentOrElse(layer -> {
-            layer.removeBanner(position, bannerName, worldName, bannerType);
+            final Banner banner = new Banner(
+                    getTexture(displayItem),
+                    displayName,
+                    worldName,
+                    position
+            );
+
+            layer.removeBanner(banner, true);
         }, () -> {
             this.fusion.log("warn", "Could not remove banner from %s, because layer for the world does not exist.".formatted(worldName));
         });

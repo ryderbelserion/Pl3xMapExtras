@@ -2,6 +2,7 @@ package com.ryderbelserion.map.banners;
 
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.map.banners.interfaces.IBannerLayer;
 import com.ryderbelserion.map.banners.objects.Banner;
 import com.ryderbelserion.map.banners.objects.BannerTexture;
 import com.ryderbelserion.map.constants.Namespaces;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BannerLayer extends WorldLayer {
+public class BannerLayer extends WorldLayer implements IBannerLayer {
 
     private final FusionCore fusion = FusionProvider.getInstance();
 
@@ -59,16 +60,16 @@ public class BannerLayer extends WorldLayer {
             for (final String location : locations) {
                 final String[] splitter = location.split(",");
 
-                final Position position = new Position(Integer.parseInt(splitter[0]), Integer.parseInt(splitter[1]), Integer.parseInt(splitter[2]));
-
-                final Banner banner = new Banner(
+                displayBanner(new Banner(
                         registry.getTexture(name),
-                        position,
+                        splitter[3],
                         worldName,
-                        splitter[3]
-                );
-
-                displayBanner(banner, false);
+                        new Position(
+                                Integer.parseInt(splitter[0]),
+                                Integer.parseInt(splitter[1]),
+                                Integer.parseInt(splitter[2])
+                        )
+                ), false);
             }
         }
     }
@@ -78,8 +79,9 @@ public class BannerLayer extends WorldLayer {
         return this.markers.values();
     }
 
-    public void displayBanner(@NotNull final Banner banner, final boolean performConfigLookUp) {
-        final String name = banner.getName();
+    @Override
+    public void displayBanner(@NotNull final Banner banner, final boolean cacheLookUp) {
+        final String name = banner.getBannerName();
 
         final Position position = banner.getPosition();
 
@@ -137,7 +139,7 @@ public class BannerLayer extends WorldLayer {
 
         final String point = "%s,%s,%s,%s".formatted(x, y, z, name);
 
-        if (performConfigLookUp) {
+        if (cacheLookUp) {
             final String worldName = banner.getWorldName();
 
             try {
@@ -162,12 +164,17 @@ public class BannerLayer extends WorldLayer {
         this.fusion.log("warn", "Banner Layer Debug: Banner Name: %s, (%s), [%s,%s,%s]".formatted(name, point, type, key, path));
     }
 
-    public void removeBanner(@NotNull final Position position, @NotNull final String bannerName, @NotNull final String worldName, @NotNull final String bannerType) {
+    @Override
+    public void removeBanner(@NotNull final Banner banner, final boolean cacheLookUp) {
+        final Position position = banner.getPosition();
+
         final int x = position.x();
         final int y = position.y();
         final int z = position.z();
 
-        final String point = "%s,%s,%s,%s".formatted(x, y, z, bannerName);
+        final String displayName = banner.getBannerName();
+
+        final String point = "%s,%s,%s,%s".formatted(x, y, z, displayName);
 
         if (!this.markers.containsKey(position)) {
             this.fusion.log("warn", "The cache does not contain (%s)".formatted(point));
@@ -176,6 +183,12 @@ public class BannerLayer extends WorldLayer {
         }
 
         this.markers.remove(position);
+
+        final String worldName = banner.getWorldName();
+
+        final BannerTexture texture = banner.getTexture();
+
+        final String bannerType = texture.getType();
 
         try {
             final BasicConfigurationNode root = node(worldName, bannerType);

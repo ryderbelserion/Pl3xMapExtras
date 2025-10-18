@@ -20,6 +20,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PaperBannerListener implements Listener {
 
@@ -98,12 +99,10 @@ public class PaperBannerListener implements Listener {
         final int y = banner.getY();
         final int z = banner.getZ();
 
-        final Component component = banner.customName();
-
         final Material material = banner.getType();
         final Key key = material.key();
 
-        this.registry.addBanner(new Position(x, y, z), world.getName(), key, component == null ? Component.translatable(material.translationKey()) : component);
+        this.registry.addBanner(new Position(x, y, z), asComponent(material, banner.customName()), world.getName(), key);
     }
 
     public void removeBanner(@NotNull final Banner banner) {
@@ -118,8 +117,12 @@ public class PaperBannerListener implements Listener {
         final Key key = material.key();
 
         final String minimal = key.asMinimalString();
-        final String value = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
+        final String displayItem = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
 
-        this.registry.removeBanner(new Position(x, y, z), PlainTextComponentSerializer.plainText().serialize(component == null ? Component.translatable(material.translationKey()) : component), world.getName(), value);
+        this.registry.removeBanner(new Position(x, y, z), asComponent(material, component), displayItem, world.getName());
+    }
+
+    private @NotNull String asComponent(@NotNull final Material material, @Nullable final Component component) {
+        return PlainTextComponentSerializer.plainText().serialize(component == null ? Component.translatable(material.translationKey()) : component);
     }
 }
