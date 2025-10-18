@@ -42,6 +42,8 @@ public class BannerLayer extends WorldLayer {
         setCss("");
 
         init(registry, world);
+
+        this.fusion.log("warn", "The banner layer for {} is ready!", world.getName());
     }
 
     public void init(@NotNull final BannerRegistry registry, @NotNull final World world) {
