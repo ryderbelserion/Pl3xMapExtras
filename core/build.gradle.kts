@@ -1,5 +1,5 @@
 plugins {
-    `config-java`
+    `config-paper`
 }
 
 dependencies {

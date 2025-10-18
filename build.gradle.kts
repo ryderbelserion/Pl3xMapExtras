@@ -1,7 +1,4 @@
 plugins {
-    alias(libs.plugins.minotaur)
-    alias(libs.plugins.feather)
-
     `config-java`
 }
 
