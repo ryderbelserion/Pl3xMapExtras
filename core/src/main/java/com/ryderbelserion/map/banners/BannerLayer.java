@@ -5,7 +5,9 @@ import com.ryderbelserion.fusion.core.FusionProvider;
 import com.ryderbelserion.map.banners.objects.Banner;
 import com.ryderbelserion.map.banners.objects.BannerTexture;
 import com.ryderbelserion.map.constants.Namespaces;
+import com.ryderbelserion.map.enums.Files;
 import com.ryderbelserion.map.objects.Position;
+import com.ryderbelserion.map.utils.ConfigUtils;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.Vector;
 import net.pl3x.map.core.markers.layer.WorldLayer;
@@ -15,8 +17,11 @@ import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.markers.option.Tooltip;
 import net.pl3x.map.core.world.World;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.BasicConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,7 +31,7 @@ public class BannerLayer extends WorldLayer {
 
     private final Map<Position, Marker<?>> markers = new ConcurrentHashMap<>();
 
-    public BannerLayer(@NotNull final World world) {
+    public BannerLayer(@NotNull final BannerRegistry registry, @NotNull final World world) {
         super(Namespaces.banner_key, world, () -> "Banners");
 
         setShowControls(true);
@@ -35,6 +40,35 @@ public class BannerLayer extends WorldLayer {
         setPriority(99);
         setZIndex(99);
         setCss("");
+
+        init(registry, world);
+    }
+
+    public void init(@NotNull final BannerRegistry registry, @NotNull final World world) {
+        final String worldName = world.getName();
+
+        final BasicConfigurationNode root = node(worldName, "");
+
+        for (final Map.Entry<Object, BasicConfigurationNode> child : root.childrenMap().entrySet()) {
+            final List<String> locations = ConfigUtils.getStringList(child.getValue());
+
+            final String name = child.getKey().toString();
+
+            for (final String location : locations) {
+                final String[] splitter = location.split(",");
+
+                final Position position = new Position(Integer.parseInt(splitter[0]), Integer.parseInt(splitter[1]), Integer.parseInt(splitter[2]));
+
+                final Banner banner = new Banner(
+                        registry.getTexture(name),
+                        position,
+                        worldName,
+                        name
+                );
+
+                displayBanner(banner, false);
+            }
+        }
     }
 
     @Override
@@ -42,7 +76,7 @@ public class BannerLayer extends WorldLayer {
         return this.markers.values();
     }
 
-    public void displayBanner(@NotNull final Banner banner) {
+    public void displayBanner(@NotNull final Banner banner, final boolean performConfigLookUp) {
         final String name = banner.getName();
 
         final Position position = banner.getPosition();
@@ -99,16 +133,72 @@ public class BannerLayer extends WorldLayer {
 
         this.markers.put(position, icon);
 
-        this.fusion.log("warn", "Banner Layer Debug: Banner Name: %s, (%s,%s,%s), [%s,%s,%s]".formatted(name, x, y, z, type, key, path));
+        final String point = "%s,%s,%s".formatted(x, y, z);
+
+        if (performConfigLookUp) {
+            final String worldName = banner.getWorldName();
+
+            try {
+                final BasicConfigurationNode root = node(worldName, type);
+
+                final List<String> locations = ConfigUtils.getStringList(root);
+
+                if (locations.contains(point)) {
+                    this.fusion.log("warn", "Cannot add %s as it already exists in `banners.json`".formatted(point));
+
+                    return;
+                }
+
+                root.appendListNode().set(point);
+
+                Files.banners.save();
+            } catch (SerializationException exception) {
+                this.fusion.log("warn", "Failed to serialize and save %s for %s".formatted(point, worldName));
+            }
+        }
+
+        this.fusion.log("warn", "Banner Layer Debug: Banner Name: %s, (%s), [%s,%s,%s]".formatted(name, point, type, key, path));
     }
 
-    public void removeBanner(@NotNull final Position position) {
+    public void removeBanner(@NotNull final Position position, @NotNull final String worldName, @NotNull final String bannerType) {
+        final int x = position.x();
+        final int y = position.y();
+        final int z = position.z();
+
+        final String point = "%s,%s,%s".formatted(x, y, z);
+
         if (!this.markers.containsKey(position)) {
-            this.fusion.log("warn", "The cache does not contain (%s,%s,%s)".formatted(position.x(), position.y(), position.z()));
+            this.fusion.log("warn", "The cache does not contain (%s)".formatted(point));
 
             return;
         }
 
         this.markers.remove(position);
+
+        try {
+            final BasicConfigurationNode root = node(worldName, bannerType);
+
+            final List<String> locations = ConfigUtils.getStringList(root);
+
+            if (locations.remove(point)) {
+                this.fusion.log("warn", "Successfully removed %s from banners.json".formatted(point));
+
+                root.setList(String.class, locations);
+
+                Files.banners.save();
+            }
+        } catch (final Exception exception) {
+            this.fusion.log("warn", "Failed to remove %s for %s".formatted(point, worldName), exception);
+        }
+    }
+
+    public BasicConfigurationNode node(@NotNull final String worldName, @NotNull final String bannerType) {
+        final BasicConfigurationNode root = Files.banners.getJsonConfiguration().node("banners", worldName);
+
+        if (bannerType.isEmpty()) {
+            return root;
+        }
+
+        return root.node(bannerType);
     }
 }

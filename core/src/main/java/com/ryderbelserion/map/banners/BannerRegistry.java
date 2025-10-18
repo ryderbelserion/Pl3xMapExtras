@@ -59,7 +59,7 @@ public class BannerRegistry {
 
     public void addBanner(@NotNull final Position position, @NotNull final String worldName, @NotNull final Key itemKey, @NotNull final Component itemName) {
         getLayer(worldName).ifPresentOrElse(layer -> {
-            layer.displayBanner(new Banner(getTexture(itemKey), position, worldName, PlainTextComponentSerializer.plainText().serialize(itemName)));
+            layer.displayBanner(new Banner(getTexture(itemKey), position, worldName, PlainTextComponentSerializer.plainText().serialize(itemName)), true);
 
             //todo() play particle
         }, () -> {
@@ -67,9 +67,9 @@ public class BannerRegistry {
         });
     }
 
-    public void removeBanner(@NotNull final Position position, @NotNull final String worldName) {
+    public void removeBanner(@NotNull final Position position, @NotNull final String worldName, @NotNull final String bannerType) {
         getLayer(worldName).ifPresentOrElse(layer -> {
-            layer.removeBanner(position);
+            layer.removeBanner(position, worldName, bannerType);
         }, () -> {
             this.fusion.log("warn", "Could not remove banner from %s, because layer for the world does not exist.".formatted(worldName));
         });

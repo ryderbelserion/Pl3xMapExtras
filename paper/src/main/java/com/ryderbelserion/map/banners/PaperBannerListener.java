@@ -112,6 +112,9 @@ public class PaperBannerListener implements Listener {
         final int y = banner.getY();
         final int z = banner.getZ();
 
-        this.registry.removeBanner(new Position(x, y, z), world.getName());
+        final String minimal = banner.getType().key().asMinimalString();
+        final String value = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
+
+        this.registry.removeBanner(new Position(x, y, z), world.getName(), value);
     }
 }
