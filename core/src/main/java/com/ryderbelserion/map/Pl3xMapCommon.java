@@ -2,6 +2,7 @@ package com.ryderbelserion.map;
 
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.files.FileManager;
+import com.ryderbelserion.map.banners.BannerListener;
 import com.ryderbelserion.map.banners.BannerRegistry;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
@@ -21,8 +22,6 @@ public abstract class Pl3xMapCommon {
     private BannerRegistry bannerRegistry;
 
     public void init() {
-        this.fusion.init();
-
         this.bannerRegistry = new BannerRegistry(this);
         this.bannerRegistry.init();
     }

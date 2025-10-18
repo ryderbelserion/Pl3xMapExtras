@@ -13,8 +13,9 @@ public class Pl3xMapExtras extends JavaPlugin {
     @Override
     public void onEnable() {
         this.fusion = new FusionPaper(this);
-        this.plugin = new Pl3xMapPlugin(this.fusion);
+        this.fusion.init();
 
+        this.plugin = new Pl3xMapPlugin(this.fusion);
         this.plugin.init();
     }
 
