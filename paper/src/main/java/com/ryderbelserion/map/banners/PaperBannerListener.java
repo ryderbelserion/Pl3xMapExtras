@@ -5,6 +5,7 @@ import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.objects.Position;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Banner;
@@ -112,9 +113,13 @@ public class PaperBannerListener implements Listener {
         final int y = banner.getY();
         final int z = banner.getZ();
 
-        final String minimal = banner.getType().key().asMinimalString();
+        final Component component = banner.customName();
+        final Material material = banner.getType();
+        final Key key = material.key();
+
+        final String minimal = key.asMinimalString();
         final String value = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
 
-        this.registry.removeBanner(new Position(x, y, z), world.getName(), value);
+        this.registry.removeBanner(new Position(x, y, z), PlainTextComponentSerializer.plainText().serialize(component == null ? Component.translatable(material.translationKey()) : component), world.getName(), value);
     }
 }

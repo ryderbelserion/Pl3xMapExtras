@@ -67,9 +67,9 @@ public class BannerRegistry {
         });
     }
 
-    public void removeBanner(@NotNull final Position position, @NotNull final String worldName, @NotNull final String bannerType) {
+    public void removeBanner(@NotNull final Position position, @NotNull final String bannerName, @NotNull final String worldName, @NotNull final String bannerType) {
         getLayer(worldName).ifPresentOrElse(layer -> {
-            layer.removeBanner(position, worldName, bannerType);
+            layer.removeBanner(position, bannerName, worldName, bannerType);
         }, () -> {
             this.fusion.log("warn", "Could not remove banner from %s, because layer for the world does not exist.".formatted(worldName));
         });

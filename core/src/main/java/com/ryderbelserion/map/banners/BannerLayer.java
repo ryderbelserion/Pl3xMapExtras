@@ -63,7 +63,7 @@ public class BannerLayer extends WorldLayer {
                         registry.getTexture(name),
                         position,
                         worldName,
-                        name
+                        splitter[3]
                 );
 
                 displayBanner(banner, false);
@@ -133,7 +133,7 @@ public class BannerLayer extends WorldLayer {
 
         this.markers.put(position, icon);
 
-        final String point = "%s,%s,%s".formatted(x, y, z);
+        final String point = "%s,%s,%s,%s".formatted(x, y, z, name);
 
         if (performConfigLookUp) {
             final String worldName = banner.getWorldName();
@@ -160,12 +160,12 @@ public class BannerLayer extends WorldLayer {
         this.fusion.log("warn", "Banner Layer Debug: Banner Name: %s, (%s), [%s,%s,%s]".formatted(name, point, type, key, path));
     }
 
-    public void removeBanner(@NotNull final Position position, @NotNull final String worldName, @NotNull final String bannerType) {
+    public void removeBanner(@NotNull final Position position, @NotNull final String bannerName, @NotNull final String worldName, @NotNull final String bannerType) {
         final int x = position.x();
         final int y = position.y();
         final int z = position.z();
 
-        final String point = "%s,%s,%s".formatted(x, y, z);
+        final String point = "%s,%s,%s,%s".formatted(x, y, z, bannerName);
 
         if (!this.markers.containsKey(position)) {
             this.fusion.log("warn", "The cache does not contain (%s)".formatted(point));
