@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.banners;
+package com.ryderbelserion.map.listeners.banners;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.Pl3xMapCommon;
