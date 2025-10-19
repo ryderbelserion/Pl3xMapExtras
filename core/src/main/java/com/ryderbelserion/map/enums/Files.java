@@ -15,7 +15,11 @@ import java.util.Optional;
 public enum Files {
 
     banner_config("banners/banners.yml"),
-    banner_data("storage/banners.json");
+    banner_data("storage/banners.json"),
+
+    config("config.yml")
+
+    ;
 
     private final FusionCore fusion = FusionProvider.getInstance();
 

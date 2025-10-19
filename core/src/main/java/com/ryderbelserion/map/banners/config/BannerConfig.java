@@ -41,7 +41,7 @@ public class BannerConfig {
         Optional.of(configuration.node("layer")).ifPresentOrElse(section -> {
             this.layerConfig = new LayerConfig(section);
 
-            this.fusion.log("warn", "The layer section was founded in banners.yml!");
+            this.fusion.log("warn", "The layer section was found in banners.yml!");
         }, () -> {
             this.layerConfig = new LayerConfig();
 
@@ -51,7 +51,7 @@ public class BannerConfig {
         Optional.of(configuration.node("icon")).ifPresentOrElse(section -> {
             this.iconConfig = new IconConfig(section);
 
-            this.fusion.log("warn", "The icon section was founded in banners.yml!");
+            this.fusion.log("warn", "The icon section was found in banners.yml!");
         }, () -> {
             this.iconConfig = new IconConfig();
 

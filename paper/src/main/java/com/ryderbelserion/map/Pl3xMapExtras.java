@@ -2,6 +2,9 @@ package com.ryderbelserion.map;
 
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.api.Pl3xMapPlugin;
+import com.ryderbelserion.map.listeners.CacheListener;
+import org.bukkit.Server;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +18,14 @@ public class Pl3xMapExtras extends JavaPlugin {
         this.fusion = new FusionPaper(this);
         this.fusion.init();
 
+        final Server server = getServer();
+
         this.plugin = new Pl3xMapPlugin(this.fusion);
-        this.plugin.init();
+        this.plugin.init(server.getConsoleSender());
+
+        final PluginManager pluginManager = server.getPluginManager();
+
+        pluginManager.registerEvents(new CacheListener(), this);
     }
 
     @Override
@@ -24,6 +33,10 @@ public class Pl3xMapExtras extends JavaPlugin {
         if (this.plugin == null) return;
 
         this.plugin.stop();
+    }
+
+    public @NotNull final Pl3xMapPlugin getPlugin() {
+        return this.plugin;
     }
 
     public @NotNull final FusionPaper getFusion() {

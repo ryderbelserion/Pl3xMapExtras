@@ -1,0 +1,13 @@
+# Support: https://discord.gg/ktxCyUd7Ny
+# Github: https://github.com/ryderbelserion/Pl3xMapExtras
+#
+# Issues: https://github.com/ryderbelserion/Pl3xMapExtras/issues
+# Features: https://github.com/ryderbelserion/Pl3xMapExtras/issues
+root:
+  # The prefix that appears in front of commands!
+  prefix: "<dark_gray>[<green>Pl3xMapExtras</green>]</dark_gray> <reset>"
+  # This option will tell the plugin to send all messages as action bars or messages in chat.
+  #
+  # send_actionbar -> sends messages in actionbar.
+  # send_message -> sends messages in chat.
+  message-type: "send_message"
