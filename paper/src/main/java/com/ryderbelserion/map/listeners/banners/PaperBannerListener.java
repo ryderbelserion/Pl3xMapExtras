@@ -2,12 +2,16 @@ package com.ryderbelserion.map.listeners.banners;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.Pl3xMapCommon;
+import com.ryderbelserion.map.banners.BannerLayer;
 import com.ryderbelserion.map.banners.BannerRegistry;
+import com.ryderbelserion.map.constants.Namespaces;
 import com.ryderbelserion.map.objects.MapPosition;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.pl3x.map.core.Pl3xMap;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Banner;
@@ -20,6 +24,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -93,6 +99,8 @@ public class PaperBannerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockDestroy(BlockDestroyEvent event) {
+        if (!this.plugin.getBannerConfig().isBlockPlace()) return;
+
         final Block block = event.getBlock();
 
         final BlockState state = block.getState(false);
@@ -100,6 +108,28 @@ public class PaperBannerListener implements Listener {
         if (!(state instanceof Banner banner)) return;
 
         removeBanner(Audience.empty(), banner);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        if (!this.plugin.getBannerConfig().isBlockPlace()) return;
+
+        final Chunk chunk = event.getChunk();
+
+        inspectChunk(chunk);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onChunkLoad(ChunkLoadEvent event) {
+        if (!this.plugin.getBannerConfig().isBlockPlace()) return;
+
+        if (event.isNewChunk()) {
+            return;
+        }
+
+        final Chunk chunk = event.getChunk();
+
+        inspectChunk(chunk);
     }
 
     public void addBanner(@NotNull final Audience audience, @NotNull final Banner banner) {
@@ -130,6 +160,44 @@ public class PaperBannerListener implements Listener {
         final String displayItem = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
 
         this.registry.removeBanner(audience, new MapPosition(x, y, z), asComponent(material, component), displayItem, world.getName());
+    }
+
+    public void inspectChunk(@NotNull final Chunk chunk) {
+        final World bukkitWorld = chunk.getWorld();
+
+        final net.pl3x.map.core.world.World world = Pl3xMap.api().getWorldRegistry().get(bukkitWorld.getName());
+
+        if (world == null) {
+            return;
+        }
+
+        final BannerLayer layer = (BannerLayer) world.getLayerRegistry().get(Namespaces.banner_key);
+
+        if (layer == null) {
+            return;
+        }
+
+        int minX = chunk.getX();
+        int minZ = chunk.getZ();
+        int maxX = minX + 16;
+        int maxZ = minZ + 16;
+
+        layer.getBanners().stream()
+                // filter banners only inside chunk
+                .filter(banner -> banner.position().x() >= minX)
+                .filter(banner -> banner.position().z() >= minZ)
+                .filter(banner -> banner.position().x() <= maxX)
+                .filter(banner -> banner.position().z() <= maxZ)
+                .filter(banner -> {
+                    final MapPosition position = banner.position();
+
+                    final int x = position.x();
+                    final int y = position.y();
+                    final int z = position.z();
+
+                    return !(bukkitWorld.getBlockAt(x, y, z).getState(false) instanceof Banner);
+                })
+                .forEach(banner -> layer.removeBanner(banner, true));
     }
 
     private @NotNull String asComponent(@NotNull final Material material, @Nullable final Component component) {

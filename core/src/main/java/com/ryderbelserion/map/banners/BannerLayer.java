@@ -26,6 +26,7 @@ import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,6 +38,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
     private final Pl3xMapCommon plugin;
 
     private final Map<MapPosition, Marker<?>> markers = new ConcurrentHashMap<>();
+    private final Map<MapPosition, Banner> banners = new ConcurrentHashMap<>();
 
     public BannerLayer(@NotNull final Pl3xMapCommon plugin, @NotNull final BannerRegistry registry, @NotNull final World world) {
         super(Namespaces.banner_key, world, () -> plugin.getBannerConfig().getLayerConfig().getLayerLabel());
@@ -94,6 +96,10 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
     @Override
     public @NotNull Collection<Marker<?>> getMarkers() {
         return this.markers.values();
+    }
+
+    public @NotNull final Collection<Banner> getBanners() {
+        return Collections.unmodifiableCollection(this.banners.values());
     }
 
     @Override
@@ -169,6 +175,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         }
 
         this.markers.put(position, icon);
+        this.banners.put(position, banner);
 
         final String point = "%s,%s,%s,%s".formatted(x, y, z, name);
 
@@ -216,6 +223,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         }
 
         this.markers.remove(position);
+        this.banners.remove(position);
 
         final String worldName = banner.worldName();
 
