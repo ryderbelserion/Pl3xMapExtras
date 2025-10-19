@@ -2,7 +2,8 @@ package com.ryderbelserion.map.banners;
 
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.Pl3xMapCommon;
-import com.ryderbelserion.map.objects.Position;
+import com.ryderbelserion.map.objects.MapPosition;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -25,13 +26,17 @@ import org.jetbrains.annotations.Nullable;
 public class PaperBannerListener implements Listener {
 
     private final BannerRegistry registry;
+    private final Pl3xMapCommon plugin;
 
     public PaperBannerListener(@NotNull final Pl3xMapCommon plugin) {
         this.registry = plugin.getBannerRegistry();
+        this.plugin = plugin;
     }
 
     @EventHandler
     public void onBlockInteract(PlayerInteractEvent event) {
+        if (!this.plugin.getBannerConfig().isBlockInteract()) return;
+
         final Block block = event.getClickedBlock();
 
         if (block == null) return;
@@ -52,33 +57,37 @@ public class PaperBannerListener implements Listener {
             case LEFT_CLICK_BLOCK -> {
                 event.setCancelled(true);
 
-                removeBanner(banner);
+                removeBanner(player, banner);
             }
 
-            case RIGHT_CLICK_BLOCK -> addBanner(banner);
+            case RIGHT_CLICK_BLOCK -> addBanner(player, banner);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
+        if (!this.plugin.getBannerConfig().isBlockPlace()) return;
+
         final Block block = event.getBlock();
 
         final BlockState state = block.getState(false);
 
         if (!(state instanceof Banner banner)) return;
 
-        addBanner(banner);
+        addBanner(event.getPlayer(), banner);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent event) {
+        if (!this.plugin.getBannerConfig().isBlockPlace()) return;
+
         final Block block = event.getBlock();
 
         final BlockState state = block.getState(false);
 
         if (!(state instanceof Banner banner)) return;
 
-        removeBanner(banner);
+        removeBanner(event.getPlayer(), banner);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -89,10 +98,10 @@ public class PaperBannerListener implements Listener {
 
         if (!(state instanceof Banner banner)) return;
 
-        removeBanner(banner);
+        removeBanner(Audience.empty(), banner);
     }
 
-    public void addBanner(@NotNull final Banner banner) {
+    public void addBanner(@NotNull final Audience audience, @NotNull final Banner banner) {
         final World world = banner.getWorld();
 
         final int x = banner.getX();
@@ -102,10 +111,10 @@ public class PaperBannerListener implements Listener {
         final Material material = banner.getType();
         final Key key = material.key();
 
-        this.registry.addBanner(new Position(x, y, z), asComponent(material, banner.customName()), world.getName(), key);
+        this.registry.addBanner(audience, new MapPosition(x, y, z), asComponent(material, banner.customName()), world.getName(), key);
     }
 
-    public void removeBanner(@NotNull final Banner banner) {
+    public void removeBanner(@NotNull final Audience audience, @NotNull final Banner banner) {
         final World world = banner.getWorld();
 
         final int x = banner.getX();
@@ -119,7 +128,7 @@ public class PaperBannerListener implements Listener {
         final String minimal = key.asMinimalString();
         final String displayItem = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
 
-        this.registry.removeBanner(new Position(x, y, z), asComponent(material, component), displayItem, world.getName());
+        this.registry.removeBanner(audience, new MapPosition(x, y, z), asComponent(material, component), displayItem, world.getName());
     }
 
     private @NotNull String asComponent(@NotNull final Material material, @Nullable final Component component) {

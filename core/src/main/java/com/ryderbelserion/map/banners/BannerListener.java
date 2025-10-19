@@ -2,6 +2,7 @@ package com.ryderbelserion.map.banners;
 
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.banners.objects.BannerTexture;
 import com.ryderbelserion.map.constants.Namespaces;
 import net.pl3x.map.core.Pl3xMap;
@@ -19,16 +20,22 @@ import org.jetbrains.annotations.NotNull;
 public class BannerListener implements EventListener {
 
     private final FusionCore fusion = FusionProvider.getInstance();
+    private final Pl3xMapCommon plugin;
     private final BannerRegistry registry;
 
-    public BannerListener(@NotNull final BannerRegistry registry) {
+    public BannerListener(@NotNull final Pl3xMapCommon plugin, @NotNull final BannerRegistry registry) {
         this.registry = registry;
+        this.plugin = plugin;
 
         Pl3xMap.api().getEventRegistry().register(this);
     }
 
     @EventHandler
     public void onPl3xMapEnabled(@NotNull final Pl3xMapEnabledEvent event) {
+        if (!this.plugin.getBannerConfig().isEnabled()) {
+            return;
+        }
+
         for (final BannerTexture texture : this.registry.getTextures().values()) {
             texture.register();
         }
@@ -36,12 +43,16 @@ public class BannerListener implements EventListener {
 
     @EventHandler
     public void onServerLoad(@NotNull final ServerLoadedEvent event) {
+        if (!this.plugin.getBannerConfig().isEnabled()) {
+            return;
+        }
+
         for (final BannerTexture texture : this.registry.getTextures().values()) {
             texture.register();
         }
 
         Pl3xMap.api().getWorldRegistry().forEach(world -> {
-            world.getLayerRegistry().register(new BannerLayer(this.registry, world));
+            world.getLayerRegistry().register(new BannerLayer(this.plugin, this.registry, world));
 
             this.fusion.log("warn", "Registered {} on server load", world.getName());
         });
@@ -49,15 +60,19 @@ public class BannerListener implements EventListener {
 
     @EventHandler
     public void onWorldLoad(@NotNull final WorldLoadedEvent event) {
+        if (!this.plugin.getBannerConfig().isEnabled()) {
+            return;
+        }
+
         final World world = event.getWorld();
 
-        world.getLayerRegistry().register(new BannerLayer(this.registry, world));
+        world.getLayerRegistry().register(new BannerLayer(this.plugin, this.registry, world));
 
         this.fusion.log("warn", "Registered {} on world load", world.getName());
     }
 
     @EventHandler
-    public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
+    public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) { // always let this run regardless of config option
         final World world = event.getWorld();
         final Registry<@NotNull Layer> registry = world.getLayerRegistry();
 

@@ -1,0 +1,155 @@
+# Banner related settings
+banner:
+  # Should the banner module be enabled?
+  enabled: false
+
+  # Should banners be displayed on block place?
+  block-place: true
+  # Should banners be displayed on block interact?
+  block-interact: false
+
+  # Layer Settings
+  layer:
+    # The label for the map player
+    label: "Banners"
+    # Show controls for map layer
+    show-controls: true
+    # Should the map layer be hidden?
+    default-hidden: false
+    # The update interval, Set -1 for live update.
+    update-interval: 5
+    # The priority for the map layer
+    priority: 99
+    # The z-index for the map layer
+    z-index: 99
+    # The custom css for the banner's layer
+    css: ""
+
+  # Icon Settings
+  icon:
+    # The size (in pixels) the icon should be.
+    size:
+      x: 32
+      z: 32
+    # The coordinates of the "tip" of the icon (relative to its top left corner).
+    # The icon will be aligned so that this point is at the marker's geographical location.
+    # Centered by default if size is specified, also can be set in CSS with negative margins.
+    anchor:
+      x: -1
+      z: -1
+    # Rotation settings
+    rotation:
+      # The angle (in degrees) the icon should be rotated at. Rotation is in a clockwise direction with 0 being at the top.
+      angle: 0.0
+      # The origin point on the icon for the center of rotation
+      origin: 0.0
+    # Shadow Settings
+    shadow:
+      # The registered icon to use for a shadow image.
+      image: ""
+      # The size (in pixels) the icon's shadow image should be.
+      vector:
+        x: 20
+        z: 20
+      # The coordinates of the "tip" of the shadow (relative to its top left corner) (the same as icon anchor if not specified).
+      anchor-vector:
+        x: -1
+        z: -1
+    # Tooltip settings
+    tooltip:
+      # Contents of the icon's popup.
+      content: ""
+      # Map pane where the tooltip will be added.
+      pane: ""
+      # Optional offset of the tooltip position.
+      point:
+        x: 0
+        z: -6
+      # Direction where to open the tooltip. Possible values are: right, left, top, bottom, center, auto. auto will dynamically switch
+      # between right and left according to the tooltip position on the map.
+      direction: top
+      # Whether to open the tooltip permanently or only on mouseover.
+      permanent: false
+      # If true, the tooltip will follow the mouse instead of being fixed at the feature center.
+      sticky: false
+      # Tooltip container opacity.
+      opacity: 0.0
+    # Pop up settings
+    popup:
+      # Contents of the icon's popup.
+      content: ""
+      # Map pane where the popup will be added.
+      pane: ""
+      # The offset of the popup position.
+      offset:
+        x: -1
+        z: -1
+      # Max width of the popup, in pixels.
+      width:
+        max: -1
+        min: -1
+      # Min width of the popup, in pixels.
+      height:
+        max: -1
+      # If set, creates a scrollable container of the given height inside a popup if its content exceeds it. The scrollable container can be styled using the leaflet-popup-scrolled CSS class selector.
+      auto-pan:
+        # Set it to false if you don't want the map to do panning animation to fit the opened popup.
+        enabled: false
+        # Padding settings
+        padding:
+          # Equivalent of setting both top left and bottom right auto-pan padding to the same value.
+          bottom-left:
+            x: -1
+            z: -1
+          # The margin between the popup and the top left corner of the map view after auto-panning was performed.
+          bottom-right:
+            x: -1
+            z: -1
+      # Set it to true if you want to prevent users from panning the popup off of the screen while it is open.
+      keep-in-view: false
+      # Controls the presence of a close button in the popup.
+      close-button: false
+      # Set it to false if you want to override the default behavior of the popup closing when another popup is opened.
+      auto-close: false
+      # Set it to false if you want to override the default behavior of the ESC key for closing of the popup.
+      close-on-escape-key: false
+      # Set it if you want to override the default behavior of the popup closing when user clicks on the map. Defaults to true.
+      close-on-click: false
+
+  # The particle settings
+  particle:
+    # Should particles play?
+    enabled: true
+    # The type of particle to play when a banner is placed.
+    spawned: "happy_villager"
+    # The type of particle to play when a banner is removed.
+    remove: "wax_on"
+
+  # The sound settings
+  sound:
+    # Should sounds play?
+    enabled: true
+
+    # Sound settings related to when a banner is placed.
+    spawned:
+      # The type of sound to play.
+      # https://minecraft.wiki/w/Sounds.json#Java_Edition_values
+      sound: "entity.player.levelup"
+      # The volume of the sound.
+      volume: 1.0
+      # The pitch of the sound.
+      pitch: 1.0
+      # The sound source, related to client sound settings.
+      source: "master"
+
+    # Sound settings related to when a banner is removed.
+    removed:
+      # The type of sound to play.
+      # https://minecraft.wiki/w/Sounds.json#Java_Edition_values
+      sound: "entity.ghast.hurt"
+      # The volume of the sound.
+      volume: 1.0
+      # The pitch of the sound.
+      pitch: 1.0
+      # The sound source, related to client sound settings.
+      source: "master"

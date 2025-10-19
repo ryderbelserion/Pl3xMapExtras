@@ -2,12 +2,16 @@ package com.ryderbelserion.map.banners;
 
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.map.Pl3xMapCommon;
+import com.ryderbelserion.map.banners.config.BannerConfig;
+import com.ryderbelserion.map.banners.config.IconConfig;
+import com.ryderbelserion.map.banners.config.LayerConfig;
 import com.ryderbelserion.map.banners.interfaces.IBannerLayer;
 import com.ryderbelserion.map.banners.objects.Banner;
 import com.ryderbelserion.map.banners.objects.BannerTexture;
 import com.ryderbelserion.map.constants.Namespaces;
 import com.ryderbelserion.map.enums.Files;
-import com.ryderbelserion.map.objects.Position;
+import com.ryderbelserion.map.objects.MapPosition;
 import com.ryderbelserion.map.utils.ConfigUtils;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.Vector;
@@ -30,17 +34,30 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
     private final FusionCore fusion = FusionProvider.getInstance();
 
-    private final Map<Position, Marker<?>> markers = new ConcurrentHashMap<>();
+    private final Pl3xMapCommon plugin;
 
-    public BannerLayer(@NotNull final BannerRegistry registry, @NotNull final World world) {
-        super(Namespaces.banner_key, world, () -> "Banners");
+    private final Map<MapPosition, Marker<?>> markers = new ConcurrentHashMap<>();
 
-        setShowControls(true);
-        setDefaultHidden(false);
-        setUpdateInterval(5);
-        setPriority(99);
-        setZIndex(99);
-        setCss("");
+    public BannerLayer(@NotNull final Pl3xMapCommon plugin, @NotNull final BannerRegistry registry, @NotNull final World world) {
+        super(Namespaces.banner_key, world, () -> plugin.getBannerConfig().getLayerConfig().getLayerLabel());
+
+        this.plugin = plugin;
+
+        final LayerConfig config = this.plugin.getBannerConfig().getLayerConfig();
+
+        setShowControls(config.isShowControls());
+        setDefaultHidden(config.isHiddenByDefault());
+        setPriority(config.getPriority());
+        setZIndex(config.getIndex());
+        setCss(config.getCss());
+
+        final int interval = config.getUpdateInterval();
+
+        if (interval == -1) {
+            setLiveUpdate(true);
+        } else {
+            setUpdateInterval(interval);
+        }
 
         init(registry, world);
 
@@ -64,7 +81,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
                         registry.getTexture(name),
                         splitter[3],
                         worldName,
-                        new Position(
+                        new MapPosition(
                                 Integer.parseInt(splitter[0]),
                                 Integer.parseInt(splitter[1]),
                                 Integer.parseInt(splitter[2])
@@ -81,29 +98,45 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
     @Override
     public void displayBanner(@NotNull final Banner banner, final boolean cacheLookUp) {
-        final String name = banner.getBannerName();
+        final String name = banner.bannerName();
 
-        final Position position = banner.getPosition();
+        final MapPosition position = banner.position();
 
         final int x = position.x();
         final int y = position.y();
         final int z = position.z();
 
-        final BannerTexture texture = banner.getTexture();
+        final BannerTexture texture = banner.texture();
 
         final String type = texture.getType();
         final String key = texture.getKey();
         final Path path = texture.getPath();
 
-        final String format = "%s_%s_%d_%d".formatted(Namespaces.banner_key, banner.getWorldName(), x, z);
+        final String format = "%s_%s_%d_%d".formatted(Namespaces.banner_key, banner.worldName(), x, z);
 
-        Icon icon = Marker.icon(format, position.asPoint(), key, new Vector(32, 32))
-                .setAnchor(null)
-                .setRotationAngle(null)
-                .setRotationOrigin(null)
-                .setShadow(null)
-                .setShadowSize(new Vector(20, 20))
-                .setShadowAnchor(null);
+        final BannerConfig config = this.plugin.getBannerConfig();
+
+        final IconConfig iconConfig = config.getIconConfig();
+
+        Icon icon = Marker.icon(format, position.asPoint(), key, iconConfig.getIconSize());
+
+        final Vector anchorVector = iconConfig.getAnchorSize();
+
+        icon.setAnchor(anchorVector.x() > 0 && anchorVector.z() > 0 ? anchorVector : null);
+
+        icon.setRotationAngle(iconConfig.getRotationAngle() > 0.0 ? iconConfig.getRotationAngle() : null);
+
+        icon.setRotationOrigin(!iconConfig.getRotationOrigin().isEmpty() ? iconConfig.getRotationOrigin() : null);
+
+        icon.setShadow(!iconConfig.getShadowImage().isEmpty() ? iconConfig.getShadowImage() : null);
+
+        final Vector shadowSize = iconConfig.getShadowSize();
+
+        icon.setShadowSize(shadowSize.x() > 0 && shadowSize.z() > 0 ? shadowSize : null);
+
+        final Vector shadowAnchor = iconConfig.getShadowAnchorSize();
+
+        icon.setShadowAnchor(shadowAnchor.x() > 0 && shadowAnchor.z() > 0 ? shadowAnchor : null);
 
         if (!name.isEmpty()) {
             Options.Builder builder = new Options.Builder();
@@ -140,7 +173,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         final String point = "%s,%s,%s,%s".formatted(x, y, z, name);
 
         if (cacheLookUp) {
-            final String worldName = banner.getWorldName();
+            final String worldName = banner.worldName();
 
             try {
                 final BasicConfigurationNode root = node(worldName, type);
@@ -155,24 +188,24 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
                 root.appendListNode().set(point);
 
-                Files.banners.save();
+                Files.banner_data.save();
             } catch (SerializationException exception) {
                 this.fusion.log("warn", "Failed to serialize and save %s for %s".formatted(point, worldName));
             }
         }
 
-        this.fusion.log("warn", "Banner Layer Debug: Banner Name: %s, (%s), [%s,%s,%s]".formatted(name, point, type, key, path));
+        this.fusion.log("warn", "Successfully added %s to banners.json, and the live view!".formatted(point));
     }
 
     @Override
     public void removeBanner(@NotNull final Banner banner, final boolean cacheLookUp) {
-        final Position position = banner.getPosition();
+        final MapPosition position = banner.position();
 
         final int x = position.x();
         final int y = position.y();
         final int z = position.z();
 
-        final String displayName = banner.getBannerName();
+        final String displayName = banner.bannerName();
 
         final String point = "%s,%s,%s,%s".formatted(x, y, z, displayName);
 
@@ -184,9 +217,9 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
         this.markers.remove(position);
 
-        final String worldName = banner.getWorldName();
+        final String worldName = banner.worldName();
 
-        final BannerTexture texture = banner.getTexture();
+        final BannerTexture texture = banner.texture();
 
         final String bannerType = texture.getType();
 
@@ -200,7 +233,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
                 root.setList(String.class, locations);
 
-                Files.banners.save();
+                Files.banner_data.save();
             }
         } catch (final Exception exception) {
             this.fusion.log("warn", "Failed to remove %s for %s".formatted(point, worldName), exception);
@@ -208,7 +241,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
     }
 
     public BasicConfigurationNode node(@NotNull final String worldName, @NotNull final String bannerType) {
-        final BasicConfigurationNode root = Files.banners.getJsonConfiguration().node("banners", worldName);
+        final BasicConfigurationNode root = Files.banner_data.getJsonConfiguration().node("banners", worldName);
 
         if (bannerType.isEmpty()) {
             return root;
