@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.banners.config;
+package com.ryderbelserion.map.configs;
 
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -39,6 +39,10 @@ public class LayerConfig {
         return this.layerLabel;
     }
 
+    public @NotNull final String getCss() {
+        return this.css;
+    }
+
     public final boolean isShowControls() {
         return this.showControls;
     }
@@ -57,9 +61,5 @@ public class LayerConfig {
 
     public final int getIndex() {
         return this.zIndex;
-    }
-
-    public @NotNull final String getCss() {
-        return this.css;
     }
 }

@@ -5,7 +5,7 @@ import com.ryderbelserion.fusion.core.FusionProvider;
 import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.banners.config.BannerConfig;
 import com.ryderbelserion.map.banners.config.IconConfig;
-import com.ryderbelserion.map.banners.config.LayerConfig;
+import com.ryderbelserion.map.configs.LayerConfig;
 import com.ryderbelserion.map.banners.interfaces.IBannerLayer;
 import com.ryderbelserion.map.banners.objects.Banner;
 import com.ryderbelserion.map.banners.objects.BannerTexture;

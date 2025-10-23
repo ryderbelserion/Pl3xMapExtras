@@ -2,6 +2,7 @@ package com.ryderbelserion.map.banners.config;
 
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.FusionProvider;
+import com.ryderbelserion.map.configs.LayerConfig;
 import com.ryderbelserion.map.enums.Files;
 import com.ryderbelserion.map.objects.MapParticle;
 import com.ryderbelserion.map.objects.MapSound;
