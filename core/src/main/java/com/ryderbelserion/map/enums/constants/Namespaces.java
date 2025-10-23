@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.constants;
+package com.ryderbelserion.map.enums.constants;
 
 public class Namespaces {
 

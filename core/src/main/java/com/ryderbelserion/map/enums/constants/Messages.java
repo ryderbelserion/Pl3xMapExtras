@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.constants;
+package com.ryderbelserion.map.enums.constants;
 
 import net.kyori.adventure.key.Key;
 import static com.ryderbelserion.map.Pl3xMapCommon.namespace;

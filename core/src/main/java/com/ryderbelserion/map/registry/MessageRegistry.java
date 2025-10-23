@@ -4,7 +4,7 @@ import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.FusionProvider;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.map.Pl3xMapCommon;
-import com.ryderbelserion.map.constants.Messages;
+import com.ryderbelserion.map.enums.constants.Messages;
 import com.ryderbelserion.map.objects.messages.Message;
 import com.ryderbelserion.map.objects.messages.interfaces.IMessage;
 import com.ryderbelserion.map.objects.messages.interfaces.registry.IMessageRegistry;

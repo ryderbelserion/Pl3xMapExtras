@@ -3,7 +3,7 @@ package com.ryderbelserion.map.objects.users;
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.Pl3xMapProvider;
-import com.ryderbelserion.map.constants.Messages;
+import com.ryderbelserion.map.enums.constants.Messages;
 import com.ryderbelserion.map.objects.users.interfaces.IUser;
 import com.ryderbelserion.map.registry.MessageRegistry;
 import net.kyori.adventure.audience.Audience;

@@ -6,7 +6,7 @@ import com.ryderbelserion.fusion.core.files.enums.FileType;
 import com.ryderbelserion.map.banners.config.BannerConfig;
 import com.ryderbelserion.map.banners.BannerRegistry;
 import com.ryderbelserion.map.banners.objects.BannerLocation;
-import com.ryderbelserion.map.constants.Namespaces;
+import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.enums.Mode;
 import com.ryderbelserion.map.objects.MapParticle;
 import com.ryderbelserion.map.objects.MapSound;

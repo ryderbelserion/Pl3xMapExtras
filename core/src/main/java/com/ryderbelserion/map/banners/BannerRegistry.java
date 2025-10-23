@@ -6,7 +6,7 @@ import com.ryderbelserion.map.banners.config.BannerConfig;
 import com.ryderbelserion.map.banners.objects.Banner;
 import com.ryderbelserion.map.banners.objects.BannerLocation;
 import com.ryderbelserion.map.banners.objects.BannerTexture;
-import com.ryderbelserion.map.constants.Namespaces;
+import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.objects.MapPosition;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;

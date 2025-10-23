@@ -9,7 +9,7 @@ import com.ryderbelserion.map.configs.LayerConfig;
 import com.ryderbelserion.map.banners.interfaces.IBannerLayer;
 import com.ryderbelserion.map.banners.objects.Banner;
 import com.ryderbelserion.map.banners.objects.BannerTexture;
-import com.ryderbelserion.map.constants.Namespaces;
+import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.enums.Files;
 import com.ryderbelserion.map.objects.MapPosition;
 import com.ryderbelserion.map.utils.ConfigUtils;

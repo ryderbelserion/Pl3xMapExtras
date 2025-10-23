@@ -4,7 +4,7 @@ import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.banners.BannerLayer;
 import com.ryderbelserion.map.banners.BannerRegistry;
-import com.ryderbelserion.map.constants.Namespaces;
+import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.objects.MapPosition;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
