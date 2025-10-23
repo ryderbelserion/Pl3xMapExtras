@@ -1,7 +1,4 @@
 plugins {
-    alias(libs.plugins.minotaur)
-    alias(libs.plugins.feather)
-
     `config-java`
 }
 
@@ -11,12 +8,76 @@ val commitHash: String = git.getCurrentCommitHash().subSequence(0, 7).toString()
 val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
 val content: String = if (isSnapshot) "[$commitHash](https://github.com/ryderbelserion/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
 val minecraft = libs.versions.minecraft.get()
-
 val versions = listOf(minecraft)
 
-rootProject.group = "com.ryderbelserion.map"
-rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else "1.4.0"
-rootProject.description = "Adds extra features to Pl3xMap"
+rootProject.description = rootProject.property("project_description").toString()
+rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else rootProject.property("plugin_version").toString()
+rootProject.group = rootProject.property("project_group").toString()
+
+allprojects {
+    apply(plugin = "java-library")
+}
+
+tasks {
+    withType<Jar> {
+        subprojects {
+            dependsOn(project.tasks.build)
+        }
+
+        // get subproject's built jars
+        val jars = subprojects.map { zipTree(it.tasks.jar.get().archiveFile.get().asFile) }
+
+        // merge them into main jar (except their manifests)
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        from(jars) {
+            exclude("META-INF/MANIFEST.MF")
+        }
+
+        // put behind an action because files don't exist at configuration time
+        doFirst {
+            // merge all subproject's manifests into main manifest
+            jars.forEach { jar ->
+                jar.matching { include("META-INF/MANIFEST.MF") }
+                    .files.forEach { file ->
+                        manifest.from(file)
+                    }
+            }
+        }
+    }
+}
+
+modrinth {
+    token = System.getenv("MODRINTH_TOKEN")
+
+    projectId = rootProject.name
+
+    versionName = "${rootProject.name} ${rootProject.version}"
+    versionNumber = "${rootProject.version}"
+    versionType = if (isSnapshot) "beta" else "release"
+
+    changelog = content
+
+    gameVersions.addAll(versions)
+
+    uploadFile = tasks.jar.get().archiveFile.get()
+
+    loaders.addAll(listOf("paper", "folia", "purpur"))
+
+    syncBodyFrom = rootProject.file("README.md").readText(Charsets.UTF_8)
+
+    autoAddDependsOn = false
+    detectLoaders = false
+
+    dependencies {
+        required.project("Pl3xMap")
+
+        optional.project("ClaimChunk")
+        optional.project("WorldGuard")
+        optional.project("EssentialsX")
+        optional.project("GriefPrevention")
+    }
+}
 
 feather {
     rootDirectory = rootProject.rootDir.toPath()
@@ -34,9 +95,9 @@ feather {
                 post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            username(user.getName())
+            username("Ryder Belserion")
 
-            avatar(user.avatar)
+            avatar("https://github.com/ryderbelserion.png")
 
             embeds {
                 embed {
@@ -103,70 +164,5 @@ feather {
                 }
             }
         }
-    }
-}
-
-allprojects {
-    apply(plugin = "java-library")
-}
-
-tasks {
-    withType<Jar> {
-        subprojects {
-            dependsOn(project.tasks.build)
-        }
-
-        // get subproject's built jars
-        val jars = subprojects.map { zipTree(it.tasks.jar.get().archiveFile.get().asFile) }
-
-        // merge them into main jar (except their manifests)
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-        from(jars) {
-            exclude("META-INF/MANIFEST.MF")
-        }
-
-        // put behind an action because files don't exist at configuration time
-        doFirst {
-            // merge all subproject's manifests into main manifest
-            jars.forEach { jar ->
-                jar.matching { include("META-INF/MANIFEST.MF") }
-                    .files.forEach { file ->
-                        manifest.from(file)
-                    }
-            }
-        }
-    }
-}
-
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-
-    projectId = rootProject.name
-
-    versionName = "${rootProject.name} ${rootProject.version}"
-    versionNumber = "${rootProject.version}"
-    versionType = if (isSnapshot) "beta" else "release"
-
-    changelog = content
-
-    gameVersions.addAll(versions)
-
-    uploadFile = tasks.jar.get().archiveFile.get()
-
-    loaders.addAll(listOf("paper", "folia", "purpur"))
-
-    syncBodyFrom = rootProject.file("README.md").readText(Charsets.UTF_8)
-
-    autoAddDependsOn = false
-    detectLoaders = false
-
-    dependencies {
-        required.project("Pl3xMap")
-
-        optional.project("ClaimChunk")
-        optional.project("WorldGuard")
-        optional.project("EssentialsX")
-        optional.project("GriefPrevention")
     }
 }
