@@ -6,12 +6,13 @@ val git = feather.getGit()
 
 val commitHash: String = git.getCurrentCommitHash().subSequence(0, 7).toString()
 val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
+val isAlpha: Boolean = git.getCurrentBranch() == "ver/2.0.0"
 val content: String = if (isSnapshot) "[$commitHash](https://github.com/ryderbelserion/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
 val minecraft = libs.versions.minecraft.get()
 val versions = listOf(minecraft)
 
 rootProject.description = rootProject.property("project_description").toString()
-rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else rootProject.property("plugin_version").toString()
+rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else if (isAlpha) "${rootProject.property("plugin_version")}-SNAPSHOT" else rootProject.property("plugin_version").toString()
 rootProject.group = rootProject.property("project_group").toString()
 
 allprojects {

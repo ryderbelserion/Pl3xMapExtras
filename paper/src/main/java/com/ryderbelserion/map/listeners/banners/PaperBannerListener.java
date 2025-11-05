@@ -81,7 +81,11 @@ public class PaperBannerListener implements Listener {
 
         if (!(state instanceof Banner banner)) return;
 
-        addBanner(event.getPlayer(), banner);
+        final Player player = event.getPlayer();
+
+        if (!player.hasPermission("pl3xmapextras.banners.place")) return;
+
+        addBanner(player, banner);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -94,7 +98,11 @@ public class PaperBannerListener implements Listener {
 
         if (!(state instanceof Banner banner)) return;
 
-        removeBanner(event.getPlayer(), banner);
+        final Player player = event.getPlayer();
+
+        if (!player.hasPermission("pl3xmapextras.banners.remove")) return;
+
+        removeBanner(player, banner);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
