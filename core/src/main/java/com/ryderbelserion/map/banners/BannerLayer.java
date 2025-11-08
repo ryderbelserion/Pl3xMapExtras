@@ -147,13 +147,19 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         if (!name.isEmpty()) {
             Options.Builder builder = new Options.Builder();
 
-            builder.tooltipContent("<center>%s</center>".formatted(name))
-                    .tooltipPane(null)
-                    .tooltipOffset(new Point(0, -6))
-                    .tooltipDirection(Tooltip.Direction.TOP)
-                    .tooltipPermanent(null)
-                    .tooltipSticky(null)
-                    .tooltipOpacity(null);
+            final String content = iconConfig.getToolTipContent();
+
+            if (!content.isEmpty()) {
+                builder.tooltipContent(content.replace("<name>", name))
+                        .tooltipPane(iconConfig.getToolTipPane())
+                        .tooltipOffset(iconConfig.getToolTipPoint())
+                        .tooltipDirection(iconConfig.getToolTipDirection())
+                        .tooltipPermanent(iconConfig.isToolTipPermanent())
+                        .tooltipSticky(iconConfig.isToolTipSticky())
+                        .tooltipOpacity(iconConfig.getToolTipOpacity());
+            } else {
+                //todo() debug to inform the owner
+            }
 
             /*builder.popupContent(this.config.ICON_POPUP_CONTENT.replace("<name>", banner.name()))
                     .popupPane(this.config.ICON_POPUP_PANE)

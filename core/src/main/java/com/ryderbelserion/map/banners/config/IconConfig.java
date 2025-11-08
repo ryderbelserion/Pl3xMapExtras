@@ -1,8 +1,11 @@
 package com.ryderbelserion.map.banners.config;
 
+import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.Vector;
+import net.pl3x.map.core.markers.option.Tooltip;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 public class IconConfig {
 
@@ -16,6 +19,19 @@ public class IconConfig {
 
     private final Vector shadowSize;
     private final Vector shadowAnchorSize;
+
+    private final Tooltip.Direction toolTipDirection;
+
+    private final String toolTipContent;
+    private final String toolTipPane;
+
+    private final Point toolTipPoint;
+
+    private final boolean toolTipPermanent;
+
+    private final boolean toolTipSticky;
+
+    private final double toolTipOpacity;
 
     public IconConfig(@NotNull final CommentedConfigurationNode configuration) {
         this.anchorSize = new Vector(configuration.node("anchor", "x").getInt(-1),
@@ -31,6 +47,27 @@ public class IconConfig {
         this.shadowSize = new Vector(configuration.node("shadow", "vector", "x").getInt(20),
                 configuration.node("shadow", "vector", "z").getInt(20));
         this.shadowImage = configuration.node("shadow", "image").getString("");
+
+        final CommentedConfigurationNode tooltip = configuration.node("tooltip");
+
+        this.toolTipContent = tooltip.node("content").getString("");
+        this.toolTipPane = tooltip.node("pane").getString("");
+
+        try {
+            this.toolTipDirection = tooltip.node("direction").get(Tooltip.Direction.class, Tooltip.Direction.TOP);
+        } catch (final SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        try {
+            this.toolTipPoint = tooltip.node("point").get(Point.class, new Point(0, -6));
+        } catch (final SerializationException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        this.toolTipPermanent = tooltip.node("permanent").getBoolean(false);
+        this.toolTipSticky = tooltip.node("sticky").getBoolean(false);
+        this.toolTipOpacity = tooltip.node("opacity").getDouble(0.0);
     }
 
     public IconConfig() {
@@ -43,6 +80,46 @@ public class IconConfig {
         this.shadowAnchorSize = new Vector(-1, -1);
         this.shadowSize = new Vector(20, 20);
         this.shadowImage = "";
+
+        this.toolTipContent = "";
+        this.toolTipPane = "";
+
+        this.toolTipPoint = new Point(0, -6);
+
+        this.toolTipDirection = Tooltip.Direction.TOP;
+
+        this.toolTipPermanent = false;
+        this.toolTipSticky = false;
+
+        this.toolTipOpacity = 0.0;
+    }
+
+    public @NotNull final Tooltip.Direction getToolTipDirection() {
+        return this.toolTipDirection;
+    }
+
+    public @NotNull final String getToolTipContent() {
+        return this.toolTipContent;
+    }
+
+    public @NotNull final Point getToolTipPoint() {
+        return this.toolTipPoint;
+    }
+
+    public @NotNull final String getToolTipPane() {
+        return this.toolTipPane;
+    }
+
+    public final boolean isToolTipPermanent() {
+        return this.toolTipPermanent;
+    }
+
+    public final double getToolTipOpacity() {
+        return this.toolTipOpacity;
+    }
+
+    public final boolean isToolTipSticky() {
+        return this.toolTipSticky;
     }
 
     public @NotNull final Vector getShadowAnchorSize() {
