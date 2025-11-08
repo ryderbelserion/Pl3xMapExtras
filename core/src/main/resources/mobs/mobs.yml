@@ -9,7 +9,7 @@ mob:
   # Layer Settings
   layer:
     # The label for the map player
-    label: "Banners"
+    label: "Mobs"
     # Show controls for map layer
     show-controls: true
     # Should the map layer be hidden?
