@@ -110,11 +110,11 @@ banner:
       # Controls the presence of a close button in the popup.
       close-button: false
       # Set it to false if you want to override the default behavior of the popup closing when another popup is opened.
-      auto-close: false
+      auto-close: true
       # Set it to false if you want to override the default behavior of the ESC key for closing of the popup.
-      close-on-escape-key: false
+      close-on-escape-key: true
       # Set it if you want to override the default behavior of the popup closing when user clicks on the map. Defaults to true.
-      close-on-click: false
+      close-on-click: true
 
   # The particle settings
   particle:

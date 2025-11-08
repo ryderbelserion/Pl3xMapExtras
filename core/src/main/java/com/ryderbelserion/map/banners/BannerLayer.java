@@ -4,7 +4,9 @@ import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.FusionProvider;
 import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.banners.config.BannerConfig;
-import com.ryderbelserion.map.banners.config.IconConfig;
+import com.ryderbelserion.map.banners.config.icons.IconConfig;
+import com.ryderbelserion.map.banners.config.icons.types.PopupConfig;
+import com.ryderbelserion.map.banners.config.icons.types.TooltipConfig;
 import com.ryderbelserion.map.configs.LayerConfig;
 import com.ryderbelserion.map.banners.interfaces.IBannerLayer;
 import com.ryderbelserion.map.banners.objects.Banner;
@@ -13,18 +15,14 @@ import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.enums.Files;
 import com.ryderbelserion.map.objects.MapPosition;
 import com.ryderbelserion.map.utils.ConfigUtils;
-import net.pl3x.map.core.markers.Point;
-import net.pl3x.map.core.markers.Vector;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
-import net.pl3x.map.core.markers.option.Tooltip;
 import net.pl3x.map.core.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -116,7 +114,6 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
         final String type = texture.getType();
         final String key = texture.getKey();
-        final Path path = texture.getPath();
 
         final String format = "%s_%s_%d_%d".formatted(Namespaces.banner_key, banner.worldName(), x, z);
 
@@ -124,58 +121,51 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
         final IconConfig iconConfig = config.getIconConfig();
 
-        Icon icon = Marker.icon(format, position.asPoint(), key, iconConfig.getIconSize());
+        final Icon icon = Marker.icon(format, position.asPoint(), key, iconConfig.asIconVector());
 
-        final Vector anchorVector = iconConfig.getAnchorSize();
-
-        icon.setAnchor(anchorVector.x() > 0 && anchorVector.z() > 0 ? anchorVector : null);
-
-        icon.setRotationAngle(iconConfig.getRotationAngle() > 0.0 ? iconConfig.getRotationAngle() : null);
-
-        icon.setRotationOrigin(!iconConfig.getRotationOrigin().isEmpty() ? iconConfig.getRotationOrigin() : null);
-
-        icon.setShadow(!iconConfig.getShadowImage().isEmpty() ? iconConfig.getShadowImage() : null);
-
-        final Vector shadowSize = iconConfig.getShadowSize();
-
-        icon.setShadowSize(shadowSize.x() > 0 && shadowSize.z() > 0 ? shadowSize : null);
-
-        final Vector shadowAnchor = iconConfig.getShadowAnchorSize();
-
-        icon.setShadowAnchor(shadowAnchor.x() > 0 && shadowAnchor.z() > 0 ? shadowAnchor : null);
+        icon.setAnchor(iconConfig.asAnchorVector())
+                .setRotationAngle(iconConfig.getRotationAngle())
+                .setRotationOrigin(iconConfig.getRotationOrigin())
+                .setShadow(iconConfig.asShadowVectorImage())
+                .setShadowSize(iconConfig.asShadowVectorSize())
+                .setShadowAnchor(iconConfig.asShadowAnchorVector());
 
         if (!name.isEmpty()) {
             Options.Builder builder = new Options.Builder();
 
-            final String content = iconConfig.getToolTipContent();
+            final TooltipConfig tooltipConfig = iconConfig.asToolTip();
 
-            if (!content.isEmpty()) {
+            final String content = tooltipConfig.asContent();
+
+            if (content != null) {
                 builder.tooltipContent(content.replace("<name>", name))
-                        .tooltipPane(iconConfig.getToolTipPane())
-                        .tooltipOffset(iconConfig.getToolTipPoint())
-                        .tooltipDirection(iconConfig.getToolTipDirection())
-                        .tooltipPermanent(iconConfig.isToolTipPermanent())
-                        .tooltipSticky(iconConfig.isToolTipSticky())
-                        .tooltipOpacity(iconConfig.getToolTipOpacity());
-            } else {
-                //todo() debug to inform the owner
+                        .tooltipPane(tooltipConfig.asPane())
+                        .tooltipOffset(tooltipConfig.asPoint())
+                        .tooltipDirection(tooltipConfig.asDirection())
+                        .tooltipPermanent(tooltipConfig.isPermanent())
+                        .tooltipSticky(tooltipConfig.isSticky())
+                        .tooltipOpacity(tooltipConfig.getOpacity());
             }
+            
+            final PopupConfig popup = iconConfig.asPopup();
 
-            /*builder.popupContent(this.config.ICON_POPUP_CONTENT.replace("<name>", banner.name()))
-                    .popupPane(this.config.ICON_POPUP_PANE)
-                    .popupOffset(this.config.ICON_POPUP_OFFSET)
-                    .popupMaxWidth(this.config.ICON_POPUP_MAX_WIDTH)
-                    .popupMinWidth(this.config.ICON_POPUP_MIN_WIDTH)
-                    .popupMaxHeight(this.config.ICON_POPUP_MAX_HEIGHT)
-                    .popupShouldAutoPan(this.config.ICON_POPUP_SHOULD_AUTO_PAN)
-                    .popupAutoPanPaddingTopLeft(this.config.ICON_POPUP_AUTO_PAN_PADDING_TOP_LEFT)
-                    .popupAutoPanPaddingBottomRight(this.config.ICON_POPUP_AUTO_PAN_PADDING_BOTTOM_RIGHT)
-                    .popupAutoPanPadding(this.config.ICON_POPUP_AUTO_PAN_PADDING)
-                    .popupShouldKeepInView(this.config.ICON_POPUP_SHOULD_KEEP_IN_VIEW)
-                    .popupCloseButton(this.config.ICON_POPUP_CLOSE_BUTTON)
-                    .popupShouldAutoClose(this.config.ICON_POPUP_SHOULD_AUTO_CLOSE)
-                    .popupShouldCloseOnEscapeKey(this.config.ICON_POPUP_SHOULD_CLOSE_ON_ESCAPE_KEY)
-                    .popupShouldCloseOnClick(this.config.ICON_POPUP_SHOULD_CLOSE_ON_CLICK);*/
+            final String popupContent = popup.asContent();
+
+            if (popupContent != null) {
+                builder.popupContent(popupContent).popupPane(popup.asPane())
+                        .popupOffset(popup.asOffset())
+                        .popupMaxWidth(popup.getMaxWidth())
+                        .popupMinWidth(popup.getMinWidth())
+                        .popupMaxHeight(popup.getMaxHeight())
+                        .popupShouldAutoPan(popup.isAutoPan())
+                        .popupShouldAutoClose(popup.isAutoClose())
+                        .popupCloseButton(popup.hasCloseButton())
+                        .popupShouldCloseOnEscapeKey(popup.isCloseOnEscape())
+                        .popupShouldCloseOnClick(popup.isCloseOnClick())
+                        .popupShouldKeepInView(popup.isKeptInView())
+                        .popupAutoPanPaddingTopLeft(popup.asLeftPoint())
+                        .popupAutoPanPaddingBottomRight(popup.asRightPoint());
+            }
 
             icon.setOptions(builder.build());
         }
