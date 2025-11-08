@@ -1,11 +1,11 @@
-package com.ryderbelserion.map.banners;
+package com.ryderbelserion.map.modules.banners;
 
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.map.Pl3xMapCommon;
-import com.ryderbelserion.map.banners.config.BannerConfig;
-import com.ryderbelserion.map.banners.objects.Banner;
-import com.ryderbelserion.map.banners.objects.BannerLocation;
-import com.ryderbelserion.map.banners.objects.BannerTexture;
+import com.ryderbelserion.map.modules.banners.config.BannerConfig;
+import com.ryderbelserion.map.modules.banners.objects.Banner;
+import com.ryderbelserion.map.modules.banners.objects.BannerLocation;
+import com.ryderbelserion.map.modules.banners.objects.BannerTexture;
 import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.objects.MapPosition;
 import net.kyori.adventure.audience.Audience;

@@ -1,7 +1,7 @@
-package com.ryderbelserion.map.banners.config.icons;
+package com.ryderbelserion.map.modules.banners.config.icons;
 
-import com.ryderbelserion.map.banners.config.icons.types.PopupConfig;
-import com.ryderbelserion.map.banners.config.icons.types.TooltipConfig;
+import com.ryderbelserion.map.modules.banners.config.icons.types.PopupConfig;
+import com.ryderbelserion.map.modules.banners.config.icons.types.TooltipConfig;
 import net.pl3x.map.core.markers.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

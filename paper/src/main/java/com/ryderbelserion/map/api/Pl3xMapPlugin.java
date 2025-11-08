@@ -6,7 +6,7 @@ import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.commands.PaperSource;
 import com.ryderbelserion.map.listeners.banners.PaperBannerListener;
-import com.ryderbelserion.map.banners.objects.BannerLocation;
+import com.ryderbelserion.map.modules.banners.objects.BannerLocation;
 import com.ryderbelserion.map.commands.player.ISource;
 import com.ryderbelserion.map.commands.subs.CoreCommand;
 import com.ryderbelserion.map.enums.Mode;

@@ -1,9 +1,9 @@
-package com.ryderbelserion.map.banners;
+package com.ryderbelserion.map.modules.banners;
 
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.FusionProvider;
 import com.ryderbelserion.map.Pl3xMapCommon;
-import com.ryderbelserion.map.banners.objects.BannerTexture;
+import com.ryderbelserion.map.modules.banners.objects.BannerTexture;
 import com.ryderbelserion.map.enums.constants.Namespaces;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;

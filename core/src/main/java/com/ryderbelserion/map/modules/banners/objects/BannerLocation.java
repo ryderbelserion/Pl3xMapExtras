@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.banners.objects;
+package com.ryderbelserion.map.modules.banners.objects;
 
 import org.jetbrains.annotations.NotNull;
 

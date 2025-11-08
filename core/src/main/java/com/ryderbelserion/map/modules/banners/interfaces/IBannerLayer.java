@@ -1,6 +1,6 @@
-package com.ryderbelserion.map.banners.interfaces;
+package com.ryderbelserion.map.modules.banners.interfaces;
 
-import com.ryderbelserion.map.banners.objects.Banner;
+import com.ryderbelserion.map.modules.banners.objects.Banner;
 import org.jetbrains.annotations.NotNull;
 
 public interface IBannerLayer {

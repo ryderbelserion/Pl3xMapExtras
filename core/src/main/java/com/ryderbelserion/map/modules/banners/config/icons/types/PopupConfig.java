@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.banners.config.icons.types;
+package com.ryderbelserion.map.modules.banners.config.icons.types;
 
 import net.pl3x.map.core.markers.Point;
 import org.jetbrains.annotations.NotNull;
