@@ -14,6 +14,8 @@ import java.util.Optional;
 
 public enum Files {
 
+    mob_config("mobs/mobs.yml"),
+
     banner_config("banners/banners.yml"),
     banner_data("storage/banners.json"),
 

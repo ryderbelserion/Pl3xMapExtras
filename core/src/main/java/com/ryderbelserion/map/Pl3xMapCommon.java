@@ -8,6 +8,7 @@ import com.ryderbelserion.map.modules.banners.BannerRegistry;
 import com.ryderbelserion.map.modules.banners.objects.BannerLocation;
 import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.enums.Mode;
+import com.ryderbelserion.map.modules.mobs.config.MobConfig;
 import com.ryderbelserion.map.objects.MapParticle;
 import com.ryderbelserion.map.objects.MapSound;
 import com.ryderbelserion.map.registry.MessageRegistry;
@@ -44,13 +45,16 @@ public abstract class Pl3xMapCommon {
     private BannerRegistry bannerRegistry;
     private BannerConfig bannerConfig;
 
+    private MobConfig mobConfig;
+
     public void init(@NotNull final Audience audience) {
         Pl3xMapProvider.register(this);
 
-        this.fileManager.extractFolder("banners", this.path).extractFolder("storage", this.path);
+        this.fileManager.extractFolder("banners", this.path).extractFolder("mobs", this.path).extractFolder("storage", this.path);
 
         this.fileManager.addFile(this.path.resolve("storage").resolve("banners.json"), FileType.JSON)
                 .addFile(this.path.resolve("banners").resolve("banners.yml"), FileType.YAML)
+                .addFile(this.path.resolve("mobs").resolve("mobs.yml"), FileType.YAML)
                 .addFile(this.path.resolve("config.yml"), FileType.YAML)
                 .addFile(this.path.resolve("messages.yml"), FileType.YAML)
                 .addFolder(this.path.resolve("locale"), FileType.YAML);
@@ -70,6 +74,9 @@ public abstract class Pl3xMapCommon {
         } else {
             this.fusion.log("warn", "The banner module is not enabled!");
         }
+
+        this.mobConfig = new MobConfig();
+        this.mobConfig.init();
 
         registerCommands();
     }
@@ -92,6 +99,22 @@ public abstract class Pl3xMapCommon {
 
                     if (layerRegistry.has(Namespaces.banner_key)) {
                         layerRegistry.unregister(Namespaces.banner_key);
+                    }
+                });
+            }
+        }
+
+        if (this.mobConfig != null) {
+            this.mobConfig.init();
+
+            if (!this.mobConfig.isEnabled()) {
+                final Pl3xMap api = Pl3xMap.api();
+
+                api.getWorldRegistry().forEach(world -> {
+                    final Registry<@NotNull Layer> layerRegistry = world.getLayerRegistry();
+
+                    if (layerRegistry.has(Namespaces.mob_key)) {
+                        layerRegistry.unregister(Namespaces.mob_key);
                     }
                 });
             }

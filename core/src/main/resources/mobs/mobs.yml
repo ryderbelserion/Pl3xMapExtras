@@ -1,0 +1,35 @@
+# Banner related settings
+mob:
+  # Should the banner module be enabled?
+  enabled: false
+
+  # Only show mobs that are exposed to the sky.
+  only-show-mobs-exposed-to-sky: true
+
+  # Layer Settings
+  layer:
+    # The label for the map player
+    label: "Banners"
+    # Show controls for map layer
+    show-controls: true
+    # Should the map layer be hidden?
+    default-hidden: false
+    # The update interval, Set -1 for live update.
+    update-interval: 5
+    # The priority for the map layer
+    priority: 99
+    # The z-index for the map layer
+    z-index: 99
+    # The custom css for the banner's layer
+    css: ""
+
+  # Icon Settings
+  icon:
+    # The size (in pixels) the icon should be.
+    size:
+      x: 32
+      z: 32
+    # Pop up settings
+    popup:
+      # Contents of the icon's popup.
+      content: "<mob-id>"
