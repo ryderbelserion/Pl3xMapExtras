@@ -9,4 +9,6 @@ public interface IBannerLayer {
 
     void removeBanner(@NotNull final Banner banner, final boolean cacheLookUp);
 
+    void refresh();
+
 }

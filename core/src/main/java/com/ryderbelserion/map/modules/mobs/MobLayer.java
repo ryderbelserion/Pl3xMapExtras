@@ -38,6 +38,7 @@ public class MobLayer extends WorldLayer implements IMobLayer {
         this.fusion.log("warn", "The mob layer for {} is ready!", world.getName());
     }
 
+    @Override
     public void refresh() {
         final LayerConfig config = this.plugin.getMobConfig().getLayerConfig();
 

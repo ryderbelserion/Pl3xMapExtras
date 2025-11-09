@@ -77,6 +77,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         }
     }
 
+    @Override
     public void refresh() {
         final LayerConfig config = this.plugin.getBannerConfig().getLayerConfig();
 
