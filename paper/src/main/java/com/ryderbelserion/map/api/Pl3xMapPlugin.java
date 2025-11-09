@@ -6,6 +6,7 @@ import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.commands.PaperSource;
 import com.ryderbelserion.map.listeners.banners.PaperBannerListener;
+import com.ryderbelserion.map.listeners.mobs.PaperMobListener;
 import com.ryderbelserion.map.modules.banners.objects.BannerLocation;
 import com.ryderbelserion.map.commands.player.ISource;
 import com.ryderbelserion.map.commands.subs.CoreCommand;
@@ -57,6 +58,12 @@ public class Pl3xMapPlugin extends Pl3xMapCommon {
             this.pluginManager.registerEvents(new PaperBannerListener(this), this.plugin);
         } else {
             this.fusion.log("warn", "The banner listener for Paper is not enabled.");
+        }
+
+        if (getMobConfig().isEnabled()) {
+            this.pluginManager.registerEvents(new PaperMobListener(this), this.plugin);
+        } else {
+            this.fusion.log("warn", "The mob listener for Paper is not enabled.");
         }
     }
 

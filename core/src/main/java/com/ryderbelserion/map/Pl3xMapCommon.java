@@ -8,6 +8,7 @@ import com.ryderbelserion.map.modules.banners.BannerRegistry;
 import com.ryderbelserion.map.modules.banners.objects.BannerLocation;
 import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.enums.Mode;
+import com.ryderbelserion.map.modules.mobs.MobRegistry;
 import com.ryderbelserion.map.modules.mobs.config.MobConfig;
 import com.ryderbelserion.map.objects.MapParticle;
 import com.ryderbelserion.map.objects.MapSound;
@@ -45,6 +46,7 @@ public abstract class Pl3xMapCommon {
     private BannerRegistry bannerRegistry;
     private BannerConfig bannerConfig;
 
+    private MobRegistry mobRegistry;
     private MobConfig mobConfig;
 
     public void init(@NotNull final Audience audience) {
@@ -77,6 +79,13 @@ public abstract class Pl3xMapCommon {
 
         this.mobConfig = new MobConfig();
         this.mobConfig.init();
+
+        if (this.mobConfig.isEnabled()) {
+            this.mobRegistry = new MobRegistry(this);
+            this.mobRegistry.init();
+        } else {
+            this.fusion.log("warn", "The mob module is not enabled!");
+        }
 
         registerCommands();
     }
@@ -163,6 +172,14 @@ public abstract class Pl3xMapCommon {
 
     public @NotNull final BannerConfig getBannerConfig() {
         return this.bannerConfig;
+    }
+
+    public @NotNull final MobRegistry getMobRegistry() {
+        return this.mobRegistry;
+    }
+
+    public @NotNull final MobConfig getMobConfig() {
+        return this.mobConfig;
     }
 
     public @NotNull final FileManager getFileManager() {
