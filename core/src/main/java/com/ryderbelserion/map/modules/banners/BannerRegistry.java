@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.modules.banners;
 
 import com.ryderbelserion.fusion.core.FusionCore;
+import com.ryderbelserion.fusion.core.FusionProvider;
 import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.modules.banners.config.BannerConfig;
 import com.ryderbelserion.map.modules.banners.objects.Banner;
@@ -23,12 +24,12 @@ public class BannerRegistry {
 
     private final Map<String, BannerTexture> textures = new HashMap<>();
 
+    private final FusionCore fusion = FusionProvider.getInstance();
+
     private final Pl3xMapCommon plugin;
-    private final FusionCore fusion;
     private final Path path;
 
     public BannerRegistry(@NotNull final Pl3xMapCommon plugin) {
-        this.fusion = plugin.getFusion();
         this.path = plugin.getPath();
 
         this.plugin = plugin;
@@ -44,13 +45,6 @@ public class BannerRegistry {
         new BannerListener(this.plugin, this);
 
         this.fusion.log("info", "The banner module has been initialized!");
-    }
-
-    public @NotNull BannerTexture getTexture(@NotNull final Key key) {
-        final String minimal = key.asMinimalString();
-        final String value = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
-
-        return this.textures.get(value);
     }
 
     public void addBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final String worldName, @NotNull final Key displayItem) {
@@ -119,6 +113,13 @@ public class BannerRegistry {
 
     public @NotNull final BannerTexture getTexture(@NotNull final String fileName) {
         return this.textures.get(fileName);
+    }
+
+    public @NotNull BannerTexture getTexture(@NotNull final Key key) {
+        final String minimal = key.asMinimalString();
+        final String value = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
+
+        return getTexture(value);
     }
 
     public @NotNull final Map<String, BannerTexture> getTextures() {

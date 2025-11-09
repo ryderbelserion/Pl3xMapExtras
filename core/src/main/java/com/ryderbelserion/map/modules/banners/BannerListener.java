@@ -54,7 +54,7 @@ public class BannerListener implements EventListener {
         Pl3xMap.api().getWorldRegistry().forEach(world -> {
             world.getLayerRegistry().register(new BannerLayer(this.plugin, this.registry, world));
 
-            this.fusion.log("warn", "Registered {} on server load", world.getName());
+            this.fusion.log("warn", "Registered layer {} for {} on server load", Namespaces.banner_key, world.getName());
         });
     }
 
@@ -68,7 +68,7 @@ public class BannerListener implements EventListener {
 
         world.getLayerRegistry().register(new BannerLayer(this.plugin, this.registry, world));
 
-        this.fusion.log("warn", "Registered {} on world load", world.getName());
+        this.fusion.log("warn", "Registered {} on {} load", Namespaces.banner_key, world.getName());
     }
 
     @EventHandler

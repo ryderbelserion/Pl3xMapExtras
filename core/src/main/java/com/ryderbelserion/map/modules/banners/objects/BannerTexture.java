@@ -18,7 +18,7 @@ public class BannerTexture {
     private final Path path;
 
     public BannerTexture(@NotNull final Path path, @NotNull final String fileName) {
-        this.key = "pl3xmap_%s_banner".formatted(this.type = fileName);
+        this.key = "pl3xmapextras_%s_banner".formatted(this.type = fileName);
         this.path = path;
     }
 
