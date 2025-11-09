@@ -6,13 +6,13 @@ import com.ryderbelserion.fusion.core.files.enums.FileType;
 import com.ryderbelserion.map.modules.banners.BannerLayer;
 import com.ryderbelserion.map.modules.banners.config.BannerConfig;
 import com.ryderbelserion.map.modules.banners.BannerRegistry;
-import com.ryderbelserion.map.modules.banners.objects.BannerLocation;
 import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.enums.Mode;
 import com.ryderbelserion.map.modules.mobs.MobLayer;
 import com.ryderbelserion.map.modules.mobs.MobRegistry;
 import com.ryderbelserion.map.modules.mobs.config.MobConfig;
 import com.ryderbelserion.map.objects.MapParticle;
+import com.ryderbelserion.map.objects.MapPosition;
 import com.ryderbelserion.map.objects.MapSound;
 import com.ryderbelserion.map.registry.MessageRegistry;
 import com.ryderbelserion.map.registry.UserRegistry;
@@ -161,12 +161,12 @@ public abstract class Pl3xMapCommon {
 
     public abstract boolean isConsoleSender(@NotNull final Audience audience);
 
-    public abstract void playParticle(@NotNull final BannerLocation location, @NotNull final MapParticle mapParticle);
+    public abstract void playParticle(@NotNull final MapPosition position, @NotNull final MapParticle mapParticle);
 
     public abstract void registerCommands();
 
-    public void playSound(@NotNull final Audience audience, @NotNull final BannerLocation location, @NotNull final MapSound mapSound) {
-        audience.playSound(mapSound.asSound(), location.x(), location.y(), location.z());
+    public void playSound(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final MapSound mapSound) {
+        audience.playSound(mapSound.asSound(), position.x(), position.y(), position.z());
     }
 
     public abstract void populateMobs(@NotNull final String worldName);

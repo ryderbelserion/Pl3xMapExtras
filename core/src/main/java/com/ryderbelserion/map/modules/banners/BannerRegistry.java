@@ -5,7 +5,6 @@ import com.ryderbelserion.fusion.core.FusionProvider;
 import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.modules.banners.config.BannerConfig;
 import com.ryderbelserion.map.modules.banners.objects.Banner;
-import com.ryderbelserion.map.modules.banners.objects.BannerLocation;
 import com.ryderbelserion.map.modules.banners.objects.BannerTexture;
 import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.objects.MapPosition;
@@ -39,7 +38,7 @@ public class BannerRegistry {
         for (final Path path : this.fusion.getFiles(this.path.resolve("banners").resolve("icons"), ".png", 1)) {
             final String fileName = path.getFileName().toString().replace(".png", "");
 
-            this.textures.putIfAbsent(fileName, new BannerTexture(path, fileName));
+            this.textures.putIfAbsent(fileName, BannerTexture.of(path, fileName));
         }
 
         new BannerListener(this.plugin, this);
@@ -51,22 +50,13 @@ public class BannerRegistry {
         final String worldName = position.worldName();
 
         getLayer(worldName).ifPresentOrElse(layer -> {
-            final Banner banner = new Banner(
-                    getTexture(displayItem),
-                    displayName,
-                    position
-            );
+            final Banner banner = Banner.of(getTexture(displayItem), displayName, position);
 
             layer.displayBanner(banner, true);
 
             final BannerConfig config = this.plugin.getBannerConfig();
 
-            final BannerLocation location = new BannerLocation(
-                    worldName,
-                    position.x(),
-                    position.y(),
-                    position.z()
-            );
+            final MapPosition location = MapPosition.of(worldName, position.x(), position.y(), position.z());
 
             config.getSpawnParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
             config.getSpawnSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
@@ -89,12 +79,7 @@ public class BannerRegistry {
 
             final BannerConfig config = this.plugin.getBannerConfig();
 
-            final BannerLocation location = new BannerLocation(
-                    worldName,
-                    position.x(),
-                    position.y(),
-                    position.z()
-            );
+            final MapPosition location = MapPosition.of(worldName, position.x(), position.y(), position.z());
 
             config.getRemoveParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
             config.getRemoveSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));

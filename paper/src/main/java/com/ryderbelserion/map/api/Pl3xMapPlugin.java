@@ -9,7 +9,6 @@ import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.commands.PaperSource;
 import com.ryderbelserion.map.listeners.banners.PaperBannerListener;
 import com.ryderbelserion.map.listeners.mobs.PaperMobListener;
-import com.ryderbelserion.map.modules.banners.objects.BannerLocation;
 import com.ryderbelserion.map.commands.player.ISource;
 import com.ryderbelserion.map.commands.subs.CoreCommand;
 import com.ryderbelserion.map.enums.Mode;
@@ -124,14 +123,14 @@ public class Pl3xMapPlugin extends Pl3xMapCommon {
     }
 
     @Override
-    public void playParticle(@NotNull final BannerLocation bannerLocation, @NotNull final MapParticle mapParticle) {
+    public void playParticle(@NotNull final MapPosition position, @NotNull final MapParticle mapParticle) {
         final Particle particle = ItemUtils.getParticleType(mapParticle.particle());
 
         if (particle == null) {
             return;
         }
 
-        final String worldName = bannerLocation.worldName();
+        final String worldName = position.worldName();
 
         final World world = this.server.getWorld(worldName);
 
@@ -141,9 +140,9 @@ public class Pl3xMapPlugin extends Pl3xMapCommon {
             return;
         }
 
-        final int x = bannerLocation.x();
-        final int y = bannerLocation.y();
-        final int z = bannerLocation.z();
+        final int x = position.x();
+        final int y = position.y();
+        final int z = position.z();
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();
 
@@ -197,7 +196,7 @@ public class Pl3xMapPlugin extends Pl3xMapCommon {
                             mob.name(),
                             name,
                             mob.getUniqueId(),
-                            new MapPosition(worldName, location.blockX(), location.blockY(), location.blockZ())
+                            MapPosition.of(worldName, location.blockX(), location.blockY(), location.blockZ())
                     );
                 }
             }

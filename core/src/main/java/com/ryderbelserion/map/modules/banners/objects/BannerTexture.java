@@ -22,6 +22,10 @@ public class BannerTexture {
         this.path = path;
     }
 
+    public static BannerTexture of(@NotNull final Path path, @NotNull final String fileName) {
+        return new BannerTexture(path, fileName);
+    }
+
     public void register() {
         try {
             Pl3xMap.api().getIconRegistry().register(new IconImage(

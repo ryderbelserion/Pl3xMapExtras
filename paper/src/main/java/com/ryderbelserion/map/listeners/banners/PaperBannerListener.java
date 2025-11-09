@@ -150,7 +150,7 @@ public class PaperBannerListener implements Listener {
         final Material material = banner.getType();
         final Key key = material.key();
 
-        this.registry.addBanner(audience, new MapPosition(world.getName(), x, y, z), asComponent(material, banner.customName()), key);
+        this.registry.addBanner(audience, MapPosition.of(world.getName(), x, y, z), asComponent(material, banner.customName()), key);
     }
 
     public void removeBanner(@NotNull final Audience audience, @NotNull final Banner banner) {
@@ -167,7 +167,7 @@ public class PaperBannerListener implements Listener {
         final String minimal = key.asMinimalString();
         final String displayItem = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
 
-        this.registry.removeBanner(audience, new MapPosition(world.getName(), x, y, z), asComponent(material, component), displayItem);
+        this.registry.removeBanner(audience, MapPosition.of(world.getName(), x, y, z), asComponent(material, component), displayItem);
     }
 
     public void inspectChunk(@NotNull final Chunk chunk) {
