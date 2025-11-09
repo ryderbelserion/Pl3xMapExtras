@@ -4,6 +4,7 @@ import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.FusionProvider;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,4 +27,12 @@ public abstract class IMobTexture {
     }
 
     public abstract void init();
+
+    public @NotNull final Map<String, Path> getStates() {
+        return Collections.unmodifiableMap(this.states);
+    }
+
+    public @NotNull final Map<String, Path> getColors() {
+        return Collections.unmodifiableMap(this.colors);
+    }
 }

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class MobRegistry {
@@ -52,25 +53,33 @@ public class MobRegistry {
         this.fusion.log("info", "The mobs module has been initialized!");
     }
 
-    public void displayMob(@NotNull final Component mobName, @NotNull final String mobType, @NotNull final UUID uuid, @NotNull final String worldName, final int x, final int y, final int z) {
-        if (!this.textures.containsKey(mobType)) { // no icon found obviously
-            this.fusion.log("warn", "Could not find %s in the cache!".formatted(mobType));
+    public void displayMob(@NotNull final Component displayName, @NotNull final String entityType, @NotNull final UUID uuid, @NotNull final MapPosition position, @NotNull final Consumer<Mob> consumer) {
+        if (!this.textures.containsKey(entityType)) { // no icon found obviously
+            this.fusion.log("warn", "Could not find %s in the cache!".formatted(entityType));
 
             return;
         }
+
+        final String worldName = position.worldName();
 
         removeMob(worldName, uuid); // remove just in case.
 
         getLayer(worldName).ifPresentOrElse(layer -> {
             final Mob mob = new Mob(
-                    this.textures.get(mobType),
-                    mobName,
+                    displayName,
                     uuid,
-                    new MapPosition(worldName, x, y, z)
+                    position,
+                    this.textures.get(entityType)
             );
 
+            consumer.accept(mob);
+
             layer.displayMob(mob);
-        }, () -> this.fusion.log("warn", "Could not add mob with uuid %s(%s) to %s".formatted(uuid, mobType, worldName)));
+        }, () -> this.fusion.log("warn", "Could not add mob with uuid %s(%s) to %s".formatted(uuid, entityType, worldName)));
+    }
+
+    public void displayMob(@NotNull final Component displayName, @NotNull final String entityType, @NotNull final UUID uuid, @NotNull final MapPosition position) {
+        displayMob(displayName, entityType, uuid, position, consumer -> {});
     }
 
     public void removeMob(@NotNull final String worldName, @NotNull final UUID uuid) {

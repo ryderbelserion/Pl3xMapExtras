@@ -3,6 +3,7 @@ package com.ryderbelserion.map.listeners.mobs;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.modules.mobs.MobRegistry;
+import com.ryderbelserion.map.objects.MapPosition;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -38,6 +39,10 @@ public class PaperMobListener implements Listener {
 
         final Location location = entity.getLocation();
 
-        this.registry.displayMob(entity.name(), mobName, entity.getUniqueId(), location.getWorld().getName(), location.blockX(), location.blockY(), location.blockZ());
+        final MapPosition position = new MapPosition(location.getWorld().getName(), location.blockX(), location.blockY(), location.blockZ());
+
+        this.registry.displayMob(entity.name(), mobName, entity.getUniqueId(), position, consumer -> {
+
+        });
     }
 }

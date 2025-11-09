@@ -16,6 +16,7 @@ import com.ryderbelserion.map.enums.Mode;
 import com.ryderbelserion.map.modules.mobs.MobRegistry;
 import com.ryderbelserion.map.modules.mobs.config.MobConfig;
 import com.ryderbelserion.map.objects.MapParticle;
+import com.ryderbelserion.map.objects.MapPosition;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
@@ -196,10 +197,7 @@ public class Pl3xMapPlugin extends Pl3xMapCommon {
                             mob.name(),
                             name,
                             mob.getUniqueId(),
-                            worldName,
-                            location.blockX(),
-                            location.blockY(),
-                            location.blockZ()
+                            new MapPosition(worldName, location.blockX(), location.blockY(), location.blockZ())
                     );
                 }
             }
