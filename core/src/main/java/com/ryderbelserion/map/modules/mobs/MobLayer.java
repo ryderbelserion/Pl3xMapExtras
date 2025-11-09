@@ -33,6 +33,12 @@ public class MobLayer extends WorldLayer implements IMobLayer {
 
         this.plugin = plugin;
 
+        refresh();
+
+        this.fusion.log("warn", "The mob layer for {} is ready!", world.getName());
+    }
+
+    public void refresh() {
         final LayerConfig config = this.plugin.getMobConfig().getLayerConfig();
 
         setShowControls(config.isShowControls());
@@ -48,8 +54,6 @@ public class MobLayer extends WorldLayer implements IMobLayer {
         } else {
             setUpdateInterval(interval);
         }
-
-        this.fusion.log("warn", "The mob layer for {} is ready!", world.getName());
     }
 
     @Override

@@ -3,11 +3,13 @@ package com.ryderbelserion.map;
 import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.files.FileManager;
 import com.ryderbelserion.fusion.core.files.enums.FileType;
+import com.ryderbelserion.map.modules.banners.BannerLayer;
 import com.ryderbelserion.map.modules.banners.config.BannerConfig;
 import com.ryderbelserion.map.modules.banners.BannerRegistry;
 import com.ryderbelserion.map.modules.banners.objects.BannerLocation;
 import com.ryderbelserion.map.enums.constants.Namespaces;
 import com.ryderbelserion.map.enums.Mode;
+import com.ryderbelserion.map.modules.mobs.MobLayer;
 import com.ryderbelserion.map.modules.mobs.MobRegistry;
 import com.ryderbelserion.map.modules.mobs.config.MobConfig;
 import com.ryderbelserion.map.objects.MapParticle;
@@ -19,6 +21,7 @@ import net.kyori.adventure.text.Component;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.layer.Layer;
 import net.pl3x.map.core.registry.Registry;
+import net.pl3x.map.core.registry.WorldRegistry;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -100,32 +103,40 @@ public abstract class Pl3xMapCommon {
         if (this.bannerConfig != null) {
             this.bannerConfig.init();
 
-            if (!this.bannerConfig.isEnabled()) {
-                final Pl3xMap api = Pl3xMap.api();
+            final Pl3xMap api = Pl3xMap.api();
 
-                api.getWorldRegistry().forEach(world -> {
+            final WorldRegistry registry = api.getWorldRegistry();
+
+            if (!this.bannerConfig.isEnabled()) {
+                registry.forEach(world -> {
                     final Registry<@NotNull Layer> layerRegistry = world.getLayerRegistry();
 
                     if (layerRegistry.has(Namespaces.banner_key)) {
                         layerRegistry.unregister(Namespaces.banner_key);
                     }
                 });
+            } else {
+                registry.forEach(world -> this.bannerRegistry.getLayer(world.getName()).ifPresent(BannerLayer::refresh));
             }
         }
 
         if (this.mobConfig != null) {
             this.mobConfig.init();
 
-            if (!this.mobConfig.isEnabled()) {
-                final Pl3xMap api = Pl3xMap.api();
+            final Pl3xMap api = Pl3xMap.api();
 
-                api.getWorldRegistry().forEach(world -> {
+            final WorldRegistry registry = api.getWorldRegistry();
+
+            if (!this.mobConfig.isEnabled()) {
+                registry.forEach(world -> {
                     final Registry<@NotNull Layer> layerRegistry = world.getLayerRegistry();
 
                     if (layerRegistry.has(Namespaces.mob_key)) {
                         layerRegistry.unregister(Namespaces.mob_key);
                     }
                 });
+            } else {
+                registry.forEach(world -> this.mobRegistry.getLayer(world.getName()).ifPresent(MobLayer::refresh));
             }
         }
     }

@@ -43,21 +43,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
         this.plugin = plugin;
 
-        final LayerConfig config = this.plugin.getBannerConfig().getLayerConfig();
-
-        setShowControls(config.isShowControls());
-        setDefaultHidden(config.isHiddenByDefault());
-        setPriority(config.getPriority());
-        setZIndex(config.getIndex());
-        setCss(config.getCss());
-
-        final int interval = config.getUpdateInterval();
-
-        if (interval == -1) {
-            setLiveUpdate(true);
-        } else {
-            setUpdateInterval(interval);
-        }
+        refresh();
 
         init(registry, world);
 
@@ -88,6 +74,24 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
                         )
                 ), false);
             }
+        }
+    }
+
+    public void refresh() {
+        final LayerConfig config = this.plugin.getBannerConfig().getLayerConfig();
+
+        setShowControls(config.isShowControls());
+        setDefaultHidden(config.isHiddenByDefault());
+        setPriority(config.getPriority());
+        setZIndex(config.getIndex());
+        setCss(config.getCss());
+
+        final int interval = config.getUpdateInterval();
+
+        if (interval == -1) {
+            setLiveUpdate(true);
+        } else {
+            setUpdateInterval(interval);
         }
     }
 
