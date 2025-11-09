@@ -47,12 +47,13 @@ public class BannerRegistry {
         this.fusion.log("info", "The banner module has been initialized!");
     }
 
-    public void addBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final String worldName, @NotNull final Key displayItem) {
+    public void addBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final Key displayItem) {
+        final String worldName = position.worldName();
+
         getLayer(worldName).ifPresentOrElse(layer -> {
             final Banner banner = new Banner(
                     getTexture(displayItem),
                     displayName,
-                    worldName,
                     position
             );
 
@@ -74,12 +75,13 @@ public class BannerRegistry {
         });
     }
 
-    public void removeBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final String displayItem, @NotNull final String worldName) {
+    public void removeBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final String displayItem) {
+        final String worldName = position.worldName();
+
         getLayer(worldName).ifPresentOrElse(layer -> {
             final Banner banner = new Banner(
                     getTexture(displayItem),
                     displayName,
-                    worldName,
                     position
             );
 

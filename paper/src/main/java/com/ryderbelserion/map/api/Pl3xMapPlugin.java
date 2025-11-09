@@ -1,6 +1,8 @@
 package com.ryderbelserion.map.api;
 
 import com.ryderbelserion.fusion.paper.FusionPaper;
+import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
 import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.Pl3xMapExtras;
@@ -11,6 +13,8 @@ import com.ryderbelserion.map.modules.banners.objects.BannerLocation;
 import com.ryderbelserion.map.commands.player.ISource;
 import com.ryderbelserion.map.commands.subs.CoreCommand;
 import com.ryderbelserion.map.enums.Mode;
+import com.ryderbelserion.map.modules.mobs.MobRegistry;
+import com.ryderbelserion.map.modules.mobs.config.MobConfig;
 import com.ryderbelserion.map.objects.MapParticle;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -18,11 +22,14 @@ import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Mob;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
@@ -155,6 +162,48 @@ public class Pl3xMapPlugin extends Pl3xMapCommon {
                     "The base command for Pl3xMapExtras!",
                     Collections.singletonList("pme"));
         });
+    }
+
+    @Override
+    public void populateMobs(@NotNull final String worldName) {
+        final World world = this.server.getWorld(worldName);
+
+        if (world == null) {
+            return;
+        }
+
+        final MobRegistry registry = getMobRegistry();
+        final MobConfig config = getMobConfig();
+
+        final boolean isRequiredExposedToSky = config.isRequiredExposedToSky();
+
+        new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
+            @Override
+            public void run() {
+                for (final Mob mob : world.getEntitiesByClass(Mob.class)) {
+                    final EntityType entityType = mob.getType();
+                    final String name = entityType.key().asMinimalString();
+
+                    if (!registry.hasTexture(name)) continue;
+
+                    final Location location = mob.getLocation();
+
+                    if (isRequiredExposedToSky && world.getHighestBlockYAt(location) > location.getY()) {
+                        continue;
+                    }
+
+                    registry.displayMob(
+                            mob.name(),
+                            name,
+                            mob.getUniqueId(),
+                            worldName,
+                            location.blockX(),
+                            location.blockY(),
+                            location.blockZ()
+                    );
+                }
+            }
+        }.runNow();
     }
 
     public Function<CommandSourceStack, ISource> function() {

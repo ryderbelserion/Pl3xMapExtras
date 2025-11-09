@@ -31,12 +31,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class BannerLayer extends WorldLayer implements IBannerLayer {
 
+    private final Map<MapPosition, Marker<?>> markers = new ConcurrentHashMap<>();
+    private final Map<MapPosition, Banner> banners = new ConcurrentHashMap<>();
+
     private final FusionCore fusion = FusionProvider.getInstance();
 
     private final Pl3xMapCommon plugin;
-
-    private final Map<MapPosition, Marker<?>> markers = new ConcurrentHashMap<>();
-    private final Map<MapPosition, Banner> banners = new ConcurrentHashMap<>();
 
     public BannerLayer(@NotNull final Pl3xMapCommon plugin, @NotNull final BannerRegistry registry, @NotNull final World world) {
         super(Namespaces.banner_key, world, () -> plugin.getBannerConfig().getLayerConfig().getLayerLabel());
@@ -80,8 +80,8 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
                 displayBanner(new Banner(
                         registry.getTexture(name),
                         splitter[3],
-                        worldName,
                         new MapPosition(
+                                worldName,
                                 Integer.parseInt(splitter[0]),
                                 Integer.parseInt(splitter[1]),
                                 Integer.parseInt(splitter[2])
@@ -115,7 +115,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         final String type = texture.getType();
         final String key = texture.getKey();
 
-        final String format = "%s_%s_%d_%d".formatted(Namespaces.banner_key, banner.worldName(), x, z);
+        final String format = "%s_%s_%d_%d".formatted(Namespaces.banner_key, position.worldName(), x, z);
 
         final BannerConfig config = this.plugin.getBannerConfig();
 
@@ -176,7 +176,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         final String point = "%s,%s,%s,%s".formatted(x, y, z, name);
 
         if (cacheLookUp) {
-            final String worldName = banner.worldName();
+            final String worldName = position.worldName();
 
             try {
                 final BasicConfigurationNode root = node(worldName, type);
@@ -221,7 +221,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         this.markers.remove(position);
         this.banners.remove(position);
 
-        final String worldName = banner.worldName();
+        final String worldName = position.worldName();
 
         final BannerTexture texture = banner.texture();
 

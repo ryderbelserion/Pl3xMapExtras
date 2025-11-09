@@ -11,6 +11,9 @@ import java.nio.file.Path;
 
 public class MobTexture extends IMobTexture {
 
+    private String type;
+    private String key;
+
     public MobTexture(@NotNull final Path path) {
         super(path);
 
@@ -75,6 +78,9 @@ public class MobTexture extends IMobTexture {
         // pl3xmapextras_cow_default_mob
         final String key = "pl3xmapextras_%s_default_mob".formatted(mobName);
 
+        this.type = mobName;
+        this.key = key;
+
         try {
             final IconImage iconImage = new IconImage(
                     key,
@@ -86,5 +92,13 @@ public class MobTexture extends IMobTexture {
         } catch (final IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public @NotNull final String getKey() {
+        return this.key;
+    }
+
+    public @NotNull final String getType() {
+        return this.type;
     }
 }

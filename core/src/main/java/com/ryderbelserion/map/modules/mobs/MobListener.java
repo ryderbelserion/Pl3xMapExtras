@@ -35,9 +35,11 @@ public class MobListener implements EventListener {
         }
 
         Pl3xMap.api().getWorldRegistry().forEach(world -> {
-            world.getLayerRegistry().register(new MobLayer(this.plugin, this.registry, world));
+            final String worldName = world.getName();
 
-            this.fusion.log("warn", "Registered layer {} for {} on server load", Namespaces.mob_key, world.getName());
+            world.getLayerRegistry().register(new MobLayer(this.plugin, world));
+
+            this.fusion.log("warn", "Registered layer {} for {} on server load", Namespaces.mob_key, worldName);
         });
     }
 
@@ -49,7 +51,7 @@ public class MobListener implements EventListener {
 
         final World world = event.getWorld();
 
-        world.getLayerRegistry().register(new MobLayer(this.plugin, this.registry, world));
+        world.getLayerRegistry().register(new MobLayer(this.plugin, world));
 
         this.fusion.log("warn", "Registered {} on {} load", Namespaces.mob_key, world.getName());
     }
@@ -59,10 +61,14 @@ public class MobListener implements EventListener {
         final World world = event.getWorld();
         final Registry<@NotNull Layer> registry = world.getLayerRegistry();
 
+        final String worldName = world.getName();
+
         if (registry.has(Namespaces.mob_key)) {
+            this.registry.removeWorld(worldName);
+
             registry.unregister(Namespaces.mob_key);
 
-            this.fusion.log("warn", "Unregistered {} while unloading the world {}", Namespaces.mob_key, world.getName());
+            this.fusion.log("warn", "Unregistered {} while unloading the world {}", Namespaces.mob_key, worldName);
         }
     }
 }

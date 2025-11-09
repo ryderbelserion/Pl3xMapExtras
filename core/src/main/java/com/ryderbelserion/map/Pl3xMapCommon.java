@@ -158,6 +158,8 @@ public abstract class Pl3xMapCommon {
         audience.playSound(mapSound.asSound(), location.x(), location.y(), location.z());
     }
 
+    public abstract void populateMobs(@NotNull final String worldName);
+
     public @NotNull final MessageRegistry getMessageRegistry() {
         return this.messageRegistry;
     }

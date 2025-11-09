@@ -1,11 +1,12 @@
 package com.ryderbelserion.map.listeners.mobs;
 
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
-import com.ryderbelserion.fusion.core.FusionCore;
-import com.ryderbelserion.fusion.core.FusionProvider;
 import com.ryderbelserion.map.Pl3xMapCommon;
 import com.ryderbelserion.map.modules.mobs.MobRegistry;
+import net.kyori.adventure.key.Key;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,27 +15,29 @@ import org.jetbrains.annotations.NotNull;
 
 public class PaperMobListener implements Listener {
 
-    private final FusionCore fusion = FusionProvider.getInstance();
-
     private final MobRegistry registry;
-    private final Pl3xMapCommon plugin;
 
     public PaperMobListener(@NotNull final Pl3xMapCommon plugin) {
         this.registry = plugin.getMobRegistry();
-        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityRemove(final EntityRemoveFromWorldEvent event) {
         final Entity entity = event.getEntity();
 
-        this.fusion.log("warn", "Entity Type Despawn: {}", entity.getType().getKey().asMinimalString());
+        this.registry.removeMob(entity.getWorld().getName(), entity.getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntitySpawn(final EntitySpawnEvent event) {
         final Entity entity = event.getEntity();
+        final EntityType entityType = entity.getType();
+        final Key key = entityType.getKey();
 
-        this.fusion.log("warn", "Entity Type Spawn: {}", entity.getType().getKey().asMinimalString());
+        final String mobName = key.asMinimalString();
+
+        final Location location = entity.getLocation();
+
+        this.registry.displayMob(entity.name(), mobName, entity.getUniqueId(), location.getWorld().getName(), location.blockX(), location.blockY(), location.blockZ());
     }
 }
