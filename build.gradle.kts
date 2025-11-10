@@ -1,3 +1,6 @@
+import utils.convertList
+import utils.updateMarkdown
+
 plugins {
     id("modrinth-plugin")
     id("hangar-plugin")
@@ -9,14 +12,6 @@ val git = feather.getGit()
 
 allprojects {
     apply(plugin = "java-library")
-}
-
-tasks.register("debug") {
-    group = "pl3xmapextras"
-
-    doFirst {
-        println(rootProject.version)
-    }
 }
 
 tasks {
@@ -48,52 +43,19 @@ tasks {
     }
 }
 
+val releaseType = rootProject.ext.get("release_type").toString()
+val color = rootProject.property("${releaseType.lowercase()}_color").toString()
+val isRelease = releaseType.equals("release", true)
+val isAlpha = releaseType.equals("alpha", true)
+
 feather {
     rootDirectory = rootProject.rootDir.toPath()
 
-    val data = git.getGithubCommit("ryderbelserion/${rootProject.name}")
+    val data = git.getGithubCommit("${rootProject.property("repository_owner")}/${rootProject.name}")
 
     val user = data.user
 
     discord {
-        webhook {
-            group(rootProject.name.lowercase())
-            task("dev-build")
-
-            if (System.getenv("BUILD_WEBHOOK") != null) {
-                post(System.getenv("BUILD_WEBHOOK"))
-            }
-
-            username("Ryder Belserion")
-
-            avatar("https://github.com/ryderbelserion.png")
-
-            embeds {
-                embed {
-                    color(rootProject.property("dev_color").toString())
-
-                    title("A new dev version of ${rootProject.name} is ready!")
-
-                    fields {
-                        field(
-                            "Version ${rootProject.version}",
-                            "Click [here](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version}) to download!"
-                        )
-
-                        field(
-                            ":bug: Report Bugs",
-                            "https://github.com/ryderbelserion/${rootProject.name}/issues"
-                        )
-
-                        field(
-                            ":hammer: Changelog",
-                            rootProject.ext.get("mc_changelog").toString()
-                        )
-                    }
-                }
-            }
-        }
-
         webhook {
             group(rootProject.name.lowercase())
             task("release-build")
@@ -102,17 +64,25 @@ feather {
                 post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            username(user.getName())
+            if (isRelease) {
+                username(user.getName())
 
-            avatar(user.avatar)
+                avatar(user.avatar)
+            } else {
+                username(rootProject.property("author_name").toString())
 
-            content("<@&${rootProject.property("discord_role_id").toString()}>")
+                avatar(rootProject.property("author_avatar").toString())
+            }
 
             embeds {
                 embed {
-                    color(rootProject.property("release_color").toString())
+                    color(color)
 
-                    title("A new release version of ${rootProject.name} is ready!")
+                    title("A new $releaseType version of ${rootProject.name} is ready!")
+
+                    if (isRelease) {
+                        content("<@&${rootProject.property("discord_role_id").toString()}>")
+                    }
 
                     fields {
                         field(
@@ -120,20 +90,18 @@ feather {
                             listOf(
                                 "*Click below to download!*",
                                 "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
-                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/ryderbelserion/${rootProject.name.lowercase()}/versions/${rootProject.version})"
-                            ).convertList())
+                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/${rootProject.property("repository_owner")}/${rootProject.name.lowercase()}/versions/${rootProject.version})"
+                            ).convertList()
+                        )
 
                         field(
                             ":bug: Report Bugs",
-                            "https://github.com/ryderbelserion/${rootProject.name}/issues"
+                            "https://github.com/${rootProject.property("repository_owner")}/${rootProject.name}/issues"
                         )
 
                         field(
                             ":hammer: Changelog",
-                            listOf(
-                                "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
-                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/ryderbelserion/${rootProject.name.lowercase()}/versions/${rootProject.version})"
-                            ).convertList()
+                            rootProject.ext.get("mc_changelog").toString().updateMarkdown()
                         )
                     }
                 }
@@ -148,9 +116,9 @@ feather {
                 post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            username("Ryder Belserion")
+            username(rootProject.property("mascot_name").toString())
 
-            avatar("https://github.com/ryderbelserion.png")
+            avatar(rootProject.property("mascot_avatar").toString())
 
             embeds {
                 embed {
@@ -171,14 +139,4 @@ feather {
             }
         }
     }
-}
-
-fun List<String>.convertList(): String {
-    val builder = StringBuilder(size)
-
-    forEach {
-        builder.append(it).append("\n")
-    }
-
-    return builder.toString()
 }
