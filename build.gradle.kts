@@ -1,22 +1,22 @@
 plugins {
+    id("modrinth-plugin")
+    id("hangar-plugin")
+
     `java-plugin`
 }
 
 val git = feather.getGit()
 
-val commitHash: String = git.getCurrentCommitHash().subSequence(0, 7).toString()
-val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
-val isAlpha: Boolean = git.getCurrentBranch() == "ver/2.0.0"
-val content: String = if (isSnapshot) "[$commitHash](https://github.com/ryderbelserion/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
-val minecraft = libs.versions.minecraft.get()
-val versions = listOf(minecraft)
-
-rootProject.description = rootProject.property("project_description").toString()
-rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else if (isAlpha) "${rootProject.property("plugin_version")}-SNAPSHOT" else rootProject.property("plugin_version").toString()
-rootProject.group = rootProject.property("project_group").toString()
-
 allprojects {
     apply(plugin = "java-library")
+}
+
+tasks.register("debug") {
+    group = "pl3xmapextras"
+
+    doFirst {
+        println(rootProject.version)
+    }
 }
 
 tasks {
@@ -48,38 +48,6 @@ tasks {
     }
 }
 
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-
-    projectId = rootProject.name
-
-    versionName = "${rootProject.name} ${rootProject.version}"
-    versionNumber = "${rootProject.version}"
-    versionType = if (isSnapshot) "beta" else "release"
-
-    changelog = content
-
-    gameVersions.addAll(versions)
-
-    uploadFile = tasks.jar.get().archiveFile.get()
-
-    loaders.addAll(listOf("paper", "folia", "purpur"))
-
-    syncBodyFrom = rootProject.file("README.md").readText(Charsets.UTF_8)
-
-    autoAddDependsOn = false
-    detectLoaders = false
-
-    dependencies {
-        required.project("Pl3xMap")
-
-        optional.project("ClaimChunk")
-        optional.project("WorldGuard")
-        optional.project("EssentialsX")
-        optional.project("GriefPrevention")
-    }
-}
-
 feather {
     rootDirectory = rootProject.rootDir.toPath()
 
@@ -102,7 +70,7 @@ feather {
 
             embeds {
                 embed {
-                    color("#ffa347")
+                    color(rootProject.property("dev_color").toString())
 
                     title("A new dev version of ${rootProject.name} is ready!")
 
@@ -119,7 +87,7 @@ feather {
 
                         field(
                             ":hammer: Changelog",
-                            content
+                            rootProject.ext.get("mc_changelog").toString()
                         )
                     }
                 }
@@ -138,11 +106,11 @@ feather {
 
             avatar(user.avatar)
 
-            content("<@&1375580815492382820>")
+            content("<@&${rootProject.property("discord_role_id").toString()}>")
 
             embeds {
                 embed {
-                    color("#1bd96a")
+                    color(rootProject.property("release_color").toString())
 
                     title("A new release version of ${rootProject.name} is ready!")
 
@@ -159,7 +127,38 @@ feather {
 
                         field(
                             ":hammer: Changelog",
-                            content
+                            rootProject.ext.get("mc_changelog").toString()
+                        )
+                    }
+                }
+            }
+        }
+
+        webhook {
+            group(rootProject.name.lowercase())
+            task("failed-build")
+
+            if (System.getenv("BUILD_WEBHOOK") != null) {
+                post(System.getenv("BUILD_WEBHOOK"))
+            }
+
+            username("Ryder Belserion")
+
+            avatar("https://github.com/ryderbelserion.png")
+
+            embeds {
+                embed {
+                    color(rootProject.property("failed_color").toString())
+
+                    title("Oh no! It failed!")
+
+                    thumbnail("https://raw.githubusercontent.com/ryderbelserion/Branding/refs/heads/main/booze.jpg")
+
+                    fields {
+                        field(
+                            "The build versioned ${rootProject.version} for project ${rootProject.name} failed.",
+                            "The developer is likely already aware, he is just getting drunk.",
+                            inline = true
                         )
                     }
                 }

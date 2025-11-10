@@ -1,6 +1,5 @@
 plugins {
     id("com.ryderbelserion.feather.core")
-    id("com.modrinth.minotaur")
 
     `java-library`
 }
