@@ -1,5 +1,5 @@
 plugins {
-    `config-java`
+    `java-plugin`
 }
 
 val git = feather.getGit()

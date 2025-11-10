@@ -1,5 +1,5 @@
 plugins {
-    `config-paper`
+    `paper-plugin`
 }
 
 repositories {
@@ -47,7 +47,6 @@ tasks {
 
         downloadPlugins {
             modrinth("pl3xmap", libs.versions.pl3xmap.get())
-            //modrinth("luckperms", "v5.5.0-bukkit")
         }
 
         defaultCharacterEncoding = Charsets.UTF_8.name()
