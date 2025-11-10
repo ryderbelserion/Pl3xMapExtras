@@ -117,8 +117,11 @@ feather {
                     fields {
                         field(
                             "Version ${rootProject.version}",
-                            "Click [here](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version}) to download!"
-                        )
+                            listOf(
+                                "*Click below to download!*",
+                                "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
+                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/ryderbelserion/${rootProject.name.lowercase()}/versions/${rootProject.version})"
+                            ).convertList())
 
                         field(
                             ":bug: Report Bugs",
@@ -127,7 +130,10 @@ feather {
 
                         field(
                             ":hammer: Changelog",
-                            rootProject.ext.get("mc_changelog").toString()
+                            listOf(
+                                "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
+                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/ryderbelserion/${rootProject.name.lowercase()}/versions/${rootProject.version})"
+                            ).convertList()
                         )
                     }
                 }
@@ -165,4 +171,14 @@ feather {
             }
         }
     }
+}
+
+fun List<String>.convertList(): String {
+    val builder = StringBuilder(size)
+
+    forEach {
+        builder.append(it).append("\n")
+    }
+
+    return builder.toString()
 }
