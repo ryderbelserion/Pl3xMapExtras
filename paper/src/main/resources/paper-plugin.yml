@@ -5,6 +5,8 @@ version: '${version}'
 api-version: '${minecraft}'
 description: '${description}'
 
+folia-supported: true
+
 dependencies:
   server:
     Pl3xMap:
