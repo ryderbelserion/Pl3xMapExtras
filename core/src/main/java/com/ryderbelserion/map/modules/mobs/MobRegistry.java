@@ -60,6 +60,10 @@ public class MobRegistry {
             return;
         }
 
+        this.fusion.log("warn", "Mob Name %s, %s".formatted(entityType, uuid));
+
+        this.fusion.log("warn", "Texture %s".formatted(this.textures.get(entityType).getType()));
+
         final String worldName = position.worldName();
 
         removeMob(worldName, uuid); // remove just in case.

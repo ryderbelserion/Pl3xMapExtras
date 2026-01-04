@@ -31,6 +31,10 @@ hangarPublish {
                         required = true
                     }
 
+                    hangar("PlaceholderAPI") {
+                        required = false
+                    }
+
                     hangar("Essentials") {
                         required = false
                     }
