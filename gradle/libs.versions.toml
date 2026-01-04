@@ -1,46 +1,50 @@
 [versions]
 ## Paper
 paperweight = "2.0.0-beta.19" # https://github.com/PaperMC/paperweight
-paper = "1.21.8-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
-
-pl3xmap = "1.21.8-534" # https://modrinth.com/project/Pl3xMap
-
-## Kyori
-adventure = "4.25.0" # https://github.com/KyoriPowered/adventure
+paper = "1.21.11-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
 
 ## Minecraft
-minecraft = "1.21.8" # https://minecraft.net
+minecraft = "1.21.11" # https://minecraft.net
+
+## Pl3xMap
+pl3xmap = "1.21.11-539" # https://modrinth.com/project/Pl3xMap
+
+## Kyori
+adventure = "4.26.1" # https://github.com/KyoriPowered/adventure
 
 ## Plugin API
 headdatabaseapi = "1.3.1" # https://github.com/Arcaniax-Development/HeadDatabase-API
 placeholderapi = "2.11.6" # https://github.com/placeholderapi
-
-## Gradle Plugins
-fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
-run-paper = "3.0.0" # https://github.com/jpenilla/run-task
-minotaur = "2.8.10" # https://github.com/modrinth/minotaur
-feather = "0.4.0" # https://github.com/ryderbelserion/Feather
-hangar = "0.1.3" # https://github.com/HangarMC/hangar-publish-plugin
-shadow = "9.2.2" # https://github.com/GradleUp/shadow
 
 ## Other
 triumph-cmds = "2.0.0-BETA-4" # https://github.com/TriumphTeam/triumph-cmds
 fusion = "1.22.12" # https://github.com/ryderbelserion/Fusion
 bStats = "3.1.0" # https://github.com/Bastian/bStats
 
+## Gradle Plugins
+fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
+run-paper = "3.0.2" # https://github.com/jpenilla/run-task
+minotaur = "2.8.10" # https://github.com/modrinth/minotaur
+feather = "0.4.0" # https://github.com/ryderbelserion/Feather
+hangar = "0.1.4" # https://github.com/HangarMC/hangar-publish-plugin
+shadow = "9.3.0" # https://github.com/GradleUp/shadow
+
 [plugins]
 # https://github.com/mfnalex/gradle-fix-javadoc-plugin
 fix-javadoc = { id = "com.jeff-media.fix-javadoc-plugin", version.ref = "fix-javadoc" }
-# https://github.com/ryderbelserion/Feather
-feather = { id = "com.ryderbelserion.feather.core", version.ref = "feather" }
-# https://github.com/HangarMC/hangar-publish-plugin
-hangar = { id = "io.papermc.hangar-publish-plugin", version.ref = "hangar" }
-# https://github.com/modrinth/minotaur
-minotaur = { id = "com.modrinth.minotaur", version.ref = "minotaur" }
 
 [libraries]
 # https://github.com/PaperMC/paperweight
 paperweight = { module = "io.papermc.paperweight.userdev:io.papermc.paperweight.userdev.gradle.plugin", version.ref = "paperweight" }
+
+# https://github.com/ryderbelserion/Feather
+feather = { module = "com.ryderbelserion.feather.core:com.ryderbelserion.feather.core.gradle.plugin", version.ref = "feather" }
+
+# https://github.com/HangarMC/hangar-publish-plugin
+hangar = { module = "io.papermc.hangar-publish-plugin:io.papermc.hangar-publish-plugin.gradle.plugin", version.ref = "hangar" }
+
+# https://github.com/modrinth/minotaur
+minotaur = { module = "com.modrinth.minotaur:com.modrinth.minotaur.gradle.plugin", version.ref = "minotaur" }
 
 # https://github.com/GradleUp/shadow
 shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
@@ -83,6 +87,9 @@ shared = [
 ]
 
 build = [
+    "minotaur",
+    "feather",
+    "hangar",
     "shadow"
 ]
 

@@ -1,5 +1,5 @@
 plugins {
-    `config-java`
+    `java-plugin`
 }
 
 dependencies {

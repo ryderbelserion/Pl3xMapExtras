@@ -1,21 +1,14 @@
-plugins {
-    alias(libs.plugins.minotaur)
-    alias(libs.plugins.feather)
+import utils.convertList
+import utils.updateMarkdown
 
-    `config-java`
+plugins {
+    id("modrinth-plugin")
+    id("hangar-plugin")
+
+    `java-plugin`
 }
 
 val git = feather.getGit()
-
-val commitHash: String = git.getCurrentCommitHash().subSequence(0, 7).toString()
-val isSnapshot: Boolean = git.getCurrentBranch() == "dev"
-val content: String = if (isSnapshot) "[$commitHash](https://github.com/ryderbelserion/${rootProject.name}/commit/$commitHash) ${git.getCurrentCommit()}" else rootProject.file("changelog.md").readText(Charsets.UTF_8)
-val minecraft = libs.versions.minecraft.get()
-val versions = listOf(minecraft)
-
-rootProject.description = rootProject.property("project_description").toString()
-rootProject.version = if (isSnapshot) "$minecraft-$commitHash" else rootProject.property("plugin_version").toString()
-rootProject.group = rootProject.property("project_group").toString()
 
 allprojects {
     apply(plugin = "java-library")
@@ -50,84 +43,19 @@ tasks {
     }
 }
 
-modrinth {
-    token = System.getenv("MODRINTH_TOKEN")
-
-    projectId = rootProject.name
-
-    versionName = "${rootProject.name} ${rootProject.version}"
-    versionNumber = "${rootProject.version}"
-    versionType = if (isSnapshot) "beta" else "release"
-
-    changelog = content
-
-    gameVersions.addAll(versions)
-
-    uploadFile = tasks.jar.get().archiveFile.get()
-
-    loaders.addAll(listOf("paper", "folia", "purpur"))
-
-    syncBodyFrom = rootProject.file("README.md").readText(Charsets.UTF_8)
-
-    autoAddDependsOn = false
-    detectLoaders = false
-
-    dependencies {
-        required.project("Pl3xMap")
-
-        optional.project("ClaimChunk")
-        optional.project("WorldGuard")
-        optional.project("EssentialsX")
-        optional.project("GriefPrevention")
-    }
-}
+val releaseType = rootProject.ext.get("release_type").toString()
+val color = rootProject.property("${releaseType.lowercase()}_color").toString()
+val isRelease = releaseType.equals("release", true)
+val isAlpha = releaseType.equals("alpha", true)
 
 feather {
     rootDirectory = rootProject.rootDir.toPath()
 
-    val data = git.getGithubCommit("ryderbelserion/${rootProject.name}")
+    val data = git.getGithubCommit("${rootProject.property("repository_owner")}/${rootProject.name}")
 
     val user = data.user
 
     discord {
-        webhook {
-            group(rootProject.name.lowercase())
-            task("dev-build")
-
-            if (System.getenv("BUILD_WEBHOOK") != null) {
-                post(System.getenv("BUILD_WEBHOOK"))
-            }
-
-            username("Ryder Belserion")
-
-            avatar("https://github.com/ryderbelserion.png")
-
-            embeds {
-                embed {
-                    color("#ffa347")
-
-                    title("A new dev version of ${rootProject.name} is ready!")
-
-                    fields {
-                        field(
-                            "Version ${rootProject.version}",
-                            "Click [here](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version}) to download!"
-                        )
-
-                        field(
-                            ":bug: Report Bugs",
-                            "https://github.com/ryderbelserion/${rootProject.name}/issues"
-                        )
-
-                        field(
-                            ":hammer: Changelog",
-                            content
-                        )
-                    }
-                }
-            }
-        }
-
         webhook {
             group(rootProject.name.lowercase())
             task("release-build")
@@ -136,32 +64,75 @@ feather {
                 post(System.getenv("BUILD_WEBHOOK"))
             }
 
-            username(user.getName())
+            if (isRelease) {
+                username(user.getName())
 
-            avatar(user.avatar)
+                avatar(user.avatar)
+            } else {
+                username(rootProject.property("author_name").toString())
 
-            content("<@&1375580815492382820>")
+                avatar(rootProject.property("author_avatar").toString())
+            }
 
             embeds {
                 embed {
-                    color("#1bd96a")
+                    color(color)
 
-                    title("A new release version of ${rootProject.name} is ready!")
+                    title("A new $releaseType version of ${rootProject.name} is ready!")
+
+                    if (isRelease) {
+                        content("<@&${rootProject.property("discord_role_id").toString()}>")
+                    }
 
                     fields {
                         field(
                             "Version ${rootProject.version}",
-                            "Click [here](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version}) to download!"
+                            listOf(
+                                "*Click below to download!*",
+                                "<:modrinth:1115307870473420800> [Modrinth](https://modrinth.com/plugin/${rootProject.name.lowercase()}/version/${rootProject.version})",
+                                "<:hangar:1139326635313733652> [Hangar](https://hangar.papermc.io/${rootProject.property("repository_owner").toString().replace("-", "")}/${rootProject.name.lowercase()}/versions/${rootProject.version})"
+                            ).convertList()
                         )
 
                         field(
                             ":bug: Report Bugs",
-                            "https://github.com/ryderbelserion/${rootProject.name}/issues"
+                            "https://github.com/${rootProject.property("repository_owner")}/${rootProject.name}/issues"
                         )
 
                         field(
                             ":hammer: Changelog",
-                            content
+                            rootProject.ext.get("mc_changelog").toString().updateMarkdown()
+                        )
+                    }
+                }
+            }
+        }
+
+        webhook {
+            group(rootProject.name.lowercase())
+            task("failed-build")
+
+            if (System.getenv("BUILD_WEBHOOK") != null) {
+                post(System.getenv("BUILD_WEBHOOK"))
+            }
+
+            username(rootProject.property("mascot_name").toString())
+
+            avatar(rootProject.property("mascot_avatar").toString())
+
+            embeds {
+                embed {
+                    color(rootProject.property("failed_color").toString())
+
+                    title("Oh no! It failed!")
+
+                    thumbnail("https://raw.githubusercontent.com/ryderbelserion/Branding/refs/heads/main/booze.jpg")
+
+                    fields {
+                        field(
+                            "The build versioned ${rootProject.version} for project ${rootProject.name} failed.",
+                            "The developer is likely already aware, he is just getting drunk.",
+                            inline = true
                         )
                     }
                 }

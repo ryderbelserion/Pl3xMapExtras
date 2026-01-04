@@ -1,11 +1,14 @@
-buildSrc/.gradle
-buildSrc/build
+### Intellij
+.kotlin/
+.idea/
+!.idea/icon.png
 
-core/build
-paper/build
-paper/run
+### Gradle
 .gradle
-build
+build/
 
-.idea
-jars
+### Servers
+run/
+
+### Output
+jars/
