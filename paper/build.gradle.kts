@@ -2,6 +2,8 @@ plugins {
     `paper-plugin`
 }
 
+project.group = "${rootProject.group}"
+
 repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 
