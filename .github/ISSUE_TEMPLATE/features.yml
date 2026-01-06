@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         It is recommended that you search all open discussions to avoid duplicate feature requests. If one exists, Please reply to that one if you have anything to add.
-        Before requesting a feature, You must make sure you are using 1.20.6 or whatever is the latest version Mojang released and that the feature doesn't already exist.
+        Before requesting a feature, You must make sure you are using the latest version Mojang released and that the feature doesn't already exist.
 
   - type: textarea
     id: feature
