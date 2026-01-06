@@ -136,6 +136,11 @@ public abstract class Pl3xMapCommon {
                     }
                 });
             } else {
+                if (this.mobRegistry == null) {
+                    this.mobRegistry = new MobRegistry(this);
+                    this.mobRegistry.init();
+                }
+
                 registry.forEach(world -> this.mobRegistry.getLayer(world.getName()).ifPresent(MobLayer::refresh));
             }
         }
