@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradleup.shadow")
+    id("com.ryderbelserion.feather.core")
 
     `java-library`
 }
@@ -22,24 +22,11 @@ repositories {
     mavenLocal()
 }
 
-dependencies {
-    compileOnly(libs.findLibrary("annotations").get())
-}
-
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
-
-    withSourcesJar()
-    withJavadocJar()
 }
 
 tasks {
-    shadowJar {
-        archiveClassifier.set("")
-
-        exclude("META-INF/**")
-    }
-
     compileJava {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(21)
@@ -55,13 +42,13 @@ tasks {
             "version" to rootProject.version,
             "description" to rootProject.description.toString(),
             "minecraft" to libs.findVersion("minecraft").get(),
-            "website" to "https://github.com/ryderbelserion/${rootProject.name}",
-            "id" to rootProject.name.lowercase(),
-            "group" to rootProject.group
+            "website" to "https://github.com/${rootProject.property("repository_owner")}/${rootProject.name}",
+            "group" to project.group
         )
 
         with(copySpec {
-            include("*paper-plugin.yml", "fabric.mod.json")
+            include("*paper-plugin.yml", "*plugin.yml")
+
             from("src/main/resources") {
                 expand(inputs.properties)
             }

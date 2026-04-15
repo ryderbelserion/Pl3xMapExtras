@@ -67,7 +67,7 @@ public class MobsLayer extends WorldLayer {
             return;
         }
 
-        new FoliaScheduler(this.plugin, Scheduler.global_scheduler) {
+        new FoliaScheduler(this.plugin, Scheduler.region_scheduler) {
             @Override
             public void run() {
                 bukkitWorld.getEntitiesByClass(Mob.class).forEach(mob -> {

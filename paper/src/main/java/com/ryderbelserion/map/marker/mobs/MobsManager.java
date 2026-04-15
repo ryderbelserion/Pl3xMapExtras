@@ -12,10 +12,7 @@ import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MobsManager {
@@ -51,6 +48,10 @@ public class MobsManager {
     public void addMarker(@NotNull final String key, @NotNull final Mob mob, @NotNull final MobConfig config) {
         final net.pl3x.map.core.markers.marker.Icon icon = getIcon(key, mob, config);
 
+        if (icon == null) { // return if null.
+            return;
+        }
+
         // Remove it if it exists.
         removeMarker(mob);
 
@@ -78,11 +79,11 @@ public class MobsManager {
         return Point.of(loc.getBlockX(), loc.getBlockZ());
     }
 
-    public net.pl3x.map.core.markers.marker.Icon getIcon(@NotNull final String key, @NotNull final Mob mob, @NotNull final MobConfig config) {
-        return Marker.icon(key, point(mob.getLocation()), Icon.get(mob).getKey(), config.ICON_SIZE)
+    public @Nullable net.pl3x.map.core.markers.marker.Icon getIcon(@NotNull final String key, @NotNull final Mob mob, @NotNull final MobConfig config) {
+        return Icon.get(mob).map(value -> Marker.icon(key, point(mob.getLocation()), value.getKey(), config.ICON_SIZE)
                 .setOptions(Options.builder()
                         .tooltipDirection(Tooltip.Direction.TOP)
                         .tooltipContent(config.ICON_TOOLTIP_CONTENT.replace("<mob-id>", mob(mob)))
-                        .build());
+                        .build())).orElse(null);
     }
 }
