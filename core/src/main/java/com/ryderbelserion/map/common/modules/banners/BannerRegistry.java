@@ -27,6 +27,7 @@ public class BannerRegistry {
     private final Map<String, BannerTexture> textures = new HashMap<>();
 
     private final Pl3xMapPlugin plugin = (Pl3xMapPlugin) Pl3xMapExtras.Provider.getInstance();
+    private final BannerRegistry registry = this.plugin.getBannerRegistry();
     private final FusionKyori fusion = this.plugin.getFusion();
     private final Path path = this.plugin.getDataPath();
 
@@ -43,13 +44,13 @@ public class BannerRegistry {
     }
 
     public void reload() {
-        if (this.plugin.getBannerConfig().isEnabled()) {
-            return;
-        }
+        final BannerConfig config = this.plugin.getBannerConfig();
 
         final Pl3xMap api = Pl3xMap.api();
 
         final WorldRegistry registry = api.getWorldRegistry();
+
+        final boolean isEnabled = config.isEnabled();
 
         for (final World world : registry.values()) {
             if (!world.isEnabled()) {
@@ -59,7 +60,15 @@ public class BannerRegistry {
             final Registry<Layer> layer = world.getLayerRegistry();
 
             if (layer.has(Namespaces.banner_key)) {
-                this.fusion.log("warn", "Unregistering the banner layer for %s".formatted(world.getName()));
+                final String name = world.getName();
+
+                if (isEnabled) {
+                    this.registry.getLayer(name).ifPresent(BannerLayer::refresh);
+
+                    continue;
+                }
+
+                this.fusion.log("warn", "Unregistering the banner layer, as the banner view is disabled for %s".formatted(name));
 
                 layer.unregister(Namespaces.banner_key);
             }
