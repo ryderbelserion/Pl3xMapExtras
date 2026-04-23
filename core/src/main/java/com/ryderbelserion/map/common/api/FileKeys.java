@@ -85,7 +85,7 @@ public enum FileKeys {
     }
 
     public void save() {
-        this.fileManager.saveFile(this.path);
+        this.fileManager.saveFile(this.location);
     }
 
     public @NotNull final Path getPath() {
