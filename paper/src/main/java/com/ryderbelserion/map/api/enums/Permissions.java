@@ -11,7 +11,7 @@ public enum Permissions {
 
     banners_admin("banners.admin", "allows the user to add banners to the web map via block interaction.", PermissionDefault.OP),
     banners_place("banners.place", "allows the user to add banners to the web map via block placement.", PermissionDefault.OP),
-    banners_remove("banners.remove", "allows the user to remove banners from the web map", PermissionDefault.OP);
+    banners_remove("banners.remove", "allows the user to remove banners from the web map.", PermissionDefault.OP);
 
     private final PermissionDefault isDefault;
     private final String description;
