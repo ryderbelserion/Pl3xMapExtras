@@ -1,0 +1,20 @@
+# Support: https://discord.gg/ktxCyUd7Ny
+# Github: https://github.com/ryderbelserion/Pl3xMapExtras
+#
+# Issues: https://github.com/ryderbelserion/Pl3xMapExtras/issues
+# Features: https://github.com/ryderbelserion/Pl3xMapExtras/issues
+root:
+  # The prefix that appears in front of commands!
+  prefix: "<dark_gray>[<green>Pl3xMapExtras</green>]</dark_gray> <reset>"
+
+marker:
+  # Should we display banner markers on pl3xmap?
+  banners: true
+  # Should we display sign markers on pl3xmap?
+  signs: true
+  # Should we display mob markers on pl3xmap?
+  mobs: true
+  # Should we display warp markers on pl3xmap?
+  warps: false
+  # Should we display claim markers on pl3xmap?
+  claims: false

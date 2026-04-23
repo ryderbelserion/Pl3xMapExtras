@@ -1,8 +1,10 @@
 package com.ryderbelserion.map.util;
 
-import com.ryderbelserion.fusion.core.api.enums.FileAction;
-import com.ryderbelserion.fusion.core.api.utils.FileUtils;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.Pl3xMapExtras;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.common.configs.ConfigManager;
+import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkConfig;
 import com.ryderbelserion.map.hook.claims.griefdefender.GriefDefenderConfig;
@@ -10,15 +12,12 @@ import com.ryderbelserion.map.hook.claims.griefprevention.GriefPreventionConfig;
 import com.ryderbelserion.map.hook.claims.plotsquared.P2Config;
 import com.ryderbelserion.map.hook.claims.worldguard.WorldGuardConfig;
 import com.ryderbelserion.map.hook.warps.playerwarps.PlayerWarpsLayer;
-import com.ryderbelserion.map.listener.banners.BannerListener;
-import com.ryderbelserion.map.listener.banners.BannerWorldListener;
 import com.ryderbelserion.map.listener.claims.ClaimListener;
 import com.ryderbelserion.map.listener.mobs.MobEntityListener;
 import com.ryderbelserion.map.listener.mobs.MobWorldListener;
 import com.ryderbelserion.map.listener.signs.SignListener;
 import com.ryderbelserion.map.listener.signs.SignWorldListener;
 import com.ryderbelserion.map.listener.warps.WarpListener;
-import com.ryderbelserion.map.marker.banners.BannersLayer;
 import com.ryderbelserion.map.marker.mobs.MobsLayer;
 import com.ryderbelserion.map.marker.mobs.MobsManager;
 import com.ryderbelserion.map.marker.signs.SignsLayer;
@@ -26,15 +25,18 @@ import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ModuleUtil {
 
-    private static final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
+    private static final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+
+    private static final Pl3xMapPaper platform = plugin.getPlatform();
+
+    private static final FusionPaper fusion = platform.getFusion();
+
+    private static final ConfigManager configManager = platform.getConfigManager();
 
     private static final Server server = plugin.getServer();
 
@@ -43,14 +45,15 @@ public class ModuleUtil {
     public static void toggleAll(final boolean isShutdown) {
         toggleSigns(isShutdown);
         toggleWarps(isShutdown);
-        toggleBanners(isShutdown);
 
         toggleMobs(isShutdown);
         toggleClaims(isShutdown);
     }
 
     public static void toggleClaims(final boolean isShutdown) {
-        if (ConfigUtil.isClaimsEnabled() && !isShutdown) {
+        final BasicConfig config = configManager.getConfig();
+
+        if (config.isClaimsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new ClaimListener(), plugin);
 
             Pl3xMap.api().getWorldRegistry().forEach(ModuleUtil::registerWorld);
@@ -86,7 +89,9 @@ public class ModuleUtil {
     }
 
     public static void toggleWarps(final boolean isShutdown) {
-        if (ConfigUtil.isWarpsEnabled() && !isShutdown) {
+        final BasicConfig config = configManager.getConfig();
+
+        if (config.isWarpsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new WarpListener(), plugin);
 
             return;
@@ -100,7 +105,9 @@ public class ModuleUtil {
     }
 
     public static void toggleSigns(final boolean isShutdown) {
-        if (ConfigUtil.isSignsEnabled() && !isShutdown) {
+        final BasicConfig config = configManager.getConfig();
+
+        if (config.isSignsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new SignWorldListener(), plugin);
             pluginManager.registerEvents(new SignListener(), plugin);
 
@@ -114,23 +121,10 @@ public class ModuleUtil {
         });
     }
 
-    public static void toggleBanners(final boolean isShutdown) {
-        if (ConfigUtil.isBannersEnabled() && !isShutdown) {
-            pluginManager.registerEvents(new BannerWorldListener(), plugin);
-            pluginManager.registerEvents(new BannerListener(), plugin);
-
-            return;
-        }
-
-        Pl3xMap.api().getWorldRegistry().forEach(world -> {
-            try {
-                world.getLayerRegistry().unregister(BannersLayer.KEY);
-            } catch (Throwable ignore) {}
-        });
-    }
-
     public static void toggleMobs(final boolean isShutdown) {
-        if (ConfigUtil.isMobsEnabled() && !isShutdown) {
+        final BasicConfig config = configManager.getConfig();
+
+        if (config.isMobsEnabled() && !isShutdown) {
             pluginManager.registerEvents(new MobWorldListener(), plugin);
             pluginManager.registerEvents(new MobEntityListener(), plugin);
 
@@ -143,11 +137,8 @@ public class ModuleUtil {
             } catch (Throwable ignore) {}
         });
 
-        MobsManager manager = plugin.getMobsManager();
 
-        if (manager != null) {
-            manager.clearAll();
-        }
+        platform.getMobsManager().ifPresent(MobsManager::clearAll);
 
         if (!isShutdown) {
             server.getGlobalRegionScheduler().cancelTasks(plugin);
@@ -165,7 +156,8 @@ public class ModuleUtil {
     public static void findHooks() {
         Arrays.stream(Hook.Impl.values()).forEach(impl -> {
             if (pluginManager.isPluginEnabled(impl.getPluginName())) {
-                plugin.getLogger().info("Hooking into " + impl.getPluginName());
+                fusion.log("info", "<red>Hooking into <yellow>%s".formatted(impl.getPluginName()));
+
                 Hook.add(impl);
             }
         });
@@ -179,10 +171,6 @@ public class ModuleUtil {
             } catch (Throwable ignore) {}
 
             try {
-                world.getLayerRegistry().unregister(BannersLayer.KEY);
-            } catch (Throwable ignore) {}
-
-            try {
                 world.getLayerRegistry().unregister(SignsLayer.KEY);
             } catch (Throwable ignore) {}
 
@@ -193,29 +181,5 @@ public class ModuleUtil {
     public static void reload() {
         Hook.clear();
         findHooks();
-    }
-
-    public static void extract() {
-        final Path path = plugin.getDataPath();
-
-        final ArrayList<FileAction> actions = new ArrayList<>() {{
-            add(FileAction.EXTRACT_FOLDER);
-        }};
-
-        if (ConfigUtil.isBannersEnabled()) {
-            FileUtils.extract("banners/icons", path, actions);
-        }
-
-        if (ConfigUtil.isWarpsEnabled()) {
-            FileUtils.extract("warps/icons", path, actions);
-        }
-
-        if (ConfigUtil.isSignsEnabled()) {
-            FileUtils.extract("signs/icons", path, actions);
-        }
-
-        if (ConfigUtil.isMobsEnabled()) {
-            FileUtils.extract("mobs/icons", path, actions);
-        }
     }
 }

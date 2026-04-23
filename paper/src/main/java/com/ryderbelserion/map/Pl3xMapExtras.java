@@ -1,46 +1,27 @@
 package com.ryderbelserion.map;
 
-import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.api.MetricsWrapper;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
 import com.ryderbelserion.map.api.enums.Permissions;
-import com.ryderbelserion.map.config.PluginConfig;
-import com.ryderbelserion.map.hook.Hook;
-import com.ryderbelserion.map.marker.mobs.MobsManager;
-import com.ryderbelserion.map.util.ConfigUtil;
-import com.ryderbelserion.map.util.ModuleUtil;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 public class Pl3xMapExtras extends JavaPlugin {
 
-    private MobsManager mobsManager;
+    public static Pl3xMapExtras getPlugin() {
+        return JavaPlugin.getPlugin(Pl3xMapExtras.class);
+    }
 
-    private FusionPaper api;
+    private Pl3xMapPaper platform;
 
     @Override
     public void onEnable() {
-        this.api = new FusionPaper(getComponentLogger(), getDataPath());
-        this.api.enable(this);
-
-        // Load the config.
-        PluginConfig.reload();
-
-        // Extract the files needed for the plugin.
-        ModuleUtil.extract();
-
-        // Find all plugin hooks and load them.
-        ModuleUtil.findHooks();
-
-        // Create mob manager class.
-        this.mobsManager = new MobsManager();
-
-        // Toggle all our shit on startup.
-        ModuleUtil.toggleAll(false);
+        this.platform = new Pl3xMapPaper(getFile(), this);
+        this.platform.init();
 
         // Register the permissions.
         Arrays.stream(Permissions.values()).toList().forEach(permission -> {
@@ -65,35 +46,12 @@ public class Pl3xMapExtras extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Cancel the tasks regardless
-        getServer().getGlobalRegionScheduler().cancelTasks(this);
-        getServer().getAsyncScheduler().cancelTasks(this);
-
-        // Unregister data.
-        ModuleUtil.unload();
-
-        // Clean up all our shit on shutdown.
-        ModuleUtil.toggleAll(true);
-
-        // Clear plugin hooks.
-        Hook.clear();
-
-        if (this.api != null) {
-            this.api.disable();
+        if (this.platform != null) {
+            this.platform.shutdown();
         }
     }
 
-    public @Nullable final MobsManager getMobsManager() {
-        if (!ConfigUtil.isMobsEnabled()) {
-            getLogger().warning("The toggle for displaying a mob layer is turned off.");
-
-            return null;
-        }
-
-        return this.mobsManager;
-    }
-
-    public final FusionPaper getFusion() {
-        return this.api;
+    public @NotNull final Pl3xMapPaper getPlatform() {
+        return this.platform;
     }
 }

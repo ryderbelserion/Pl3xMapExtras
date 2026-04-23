@@ -191,7 +191,7 @@ public final class PlayerWarpsConfig extends WarpsConfig {
     private static final PlayerWarpsConfig CONFIG = new PlayerWarpsConfig();
 
     public static void reload() {
-        final Path mainDir = JavaPlugin.getPlugin(Pl3xMapExtras.class).getDataPath();
+        final Path mainDir = Pl3xMapExtras.getPlugin().getDataPath();
 
         CONFIG.reload(mainDir.resolve("playerwarps.yml"), PlayerWarpsConfig.class);
 

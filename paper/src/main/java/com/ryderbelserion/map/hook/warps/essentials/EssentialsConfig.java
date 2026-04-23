@@ -182,7 +182,7 @@ public final class EssentialsConfig extends WarpsConfig {
     private static final EssentialsConfig CONFIG = new EssentialsConfig();
 
     public static void reload() {
-        final Path mainDir = JavaPlugin.getPlugin(Pl3xMapExtras.class).getDataPath();
+        final Path mainDir = Pl3xMapExtras.getPlugin().getDataPath();
 
         CONFIG.reload(mainDir.resolve("essentials.yml"), EssentialsConfig.class);
 

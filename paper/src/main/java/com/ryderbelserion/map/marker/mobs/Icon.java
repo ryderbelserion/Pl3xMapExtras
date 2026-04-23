@@ -2,7 +2,7 @@ package com.ryderbelserion.map.marker.mobs;
 
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.Pl3xMapExtras;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.image.IconImage;
 import net.pl3x.map.core.registry.IconRegistry;
@@ -389,13 +389,13 @@ public enum Icon {
 
     WITCH(EntityType.WITCH, "uncategorized");
 
-    private static @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
+    private static @NotNull final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
 
-    private static @NotNull final FusionPaper fusion = plugin.getFusion();
+    private static @NotNull final Pl3xMapPaper platform = plugin.getPlatform();
+
+    private static @NotNull final FusionPaper fusion = platform.getFusion();
 
     private static @NotNull final Path path = plugin.getDataPath();
-
-    private static @NotNull final ComponentLogger logger = plugin.getComponentLogger();
 
     private final String name;
     private final String key;
@@ -503,7 +503,7 @@ public enum Icon {
                     registry.register(new IconImage(icon.key, ImageIO.read(file), "png"));
                 }
             } catch (final IOException exception) {
-                logger.warn("Failed to register icon ({}) {}", icon.type, fileName, exception);
+                fusion.log("warn", "Failed to register icon (%s) %s".formatted(icon.type, fileName), exception);
             }
         }
     }

@@ -5,8 +5,6 @@ plugins {
 project.group = "${rootProject.group}"
 
 repositories {
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
 
     maven("https://repo.glaremasters.me/repository/bloodshot/")
@@ -40,7 +38,7 @@ dependencies {
     compileOnly("com.plotsquared:PlotSquared-Core")
     compileOnly("com.plotsquared:PlotSquared-Bukkit")
 
-    api(project(":core"))
+    compileOnlyApi(project(":core"))
 }
 
 tasks {

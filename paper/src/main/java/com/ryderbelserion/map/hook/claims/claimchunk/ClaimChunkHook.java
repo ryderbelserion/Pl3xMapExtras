@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
 import com.cjburkey.claimchunk.ClaimChunk;
 import com.cjburkey.claimchunk.chunk.DataChunk;
 import com.cjburkey.claimchunk.data.newdata.IClaimChunkDataHandler;
+import com.ryderbelserion.map.Pl3xMapExtras;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.util.ChunkUtil;
-import com.ryderbelserion.map.util.ConfigUtil;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Rectangle;
@@ -28,6 +30,12 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 public class ClaimChunkHook implements Listener, Hook {
+
+    private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+
+    private final Pl3xMapPaper platform = this.plugin.getPlatform();
+
+    private final BasicConfig config = this.platform.getBasicConfig();
 
     public ClaimChunkHook() {
         ClaimChunkConfig.reload();
@@ -45,7 +53,7 @@ public class ClaimChunkHook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
-        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
+        if (!this.config.isClaimsEnabled()) return EMPTY_LIST;
 
         final ClaimChunk cc = ClaimChunk.getInstance();
 
@@ -58,6 +66,7 @@ public class ClaimChunkHook implements Listener, Hook {
             dataHandler = (IClaimChunkDataHandler) field.get(cc);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
+
             return EMPTY_LIST;
         }
 

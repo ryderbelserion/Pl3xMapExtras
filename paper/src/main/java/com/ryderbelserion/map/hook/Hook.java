@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
-
 import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkHook;
 import com.ryderbelserion.map.hook.claims.griefdefender.GriefDefenderHook;
 import com.ryderbelserion.map.hook.claims.griefprevention.GriefPreventionHook;

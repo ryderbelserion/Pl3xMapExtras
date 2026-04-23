@@ -36,7 +36,7 @@ public enum Icon {
         return this.key;
     }
 
-    private static @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
+    private static @NotNull final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
 
     private static @NotNull final Path path = plugin.getDataPath();
 

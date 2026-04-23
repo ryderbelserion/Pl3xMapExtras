@@ -1,12 +1,11 @@
 package com.ryderbelserion.map.listener.mobs;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.config.MobConfig;
 import com.ryderbelserion.map.marker.mobs.Icon;
 import com.ryderbelserion.map.marker.mobs.MobsLayer;
-import com.ryderbelserion.map.marker.mobs.MobsManager;
-import com.ryderbelserion.map.util.ConfigUtil;
-import com.ryderbelserion.map.util.ModuleUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
 import net.pl3x.map.core.event.EventListener;
@@ -16,32 +15,32 @@ import net.pl3x.map.core.event.world.WorldLoadedEvent;
 import net.pl3x.map.core.event.world.WorldUnloadedEvent;
 import net.pl3x.map.core.world.World;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class MobWorldListener implements EventListener, Listener {
 
-    private @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
+    private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
 
-    private @Nullable final MobsManager mobsManager = this.plugin.getMobsManager();
+    private final Pl3xMapPaper platform = this.plugin.getPlatform();
+
+    private final BasicConfig config = this.platform.getBasicConfig();
 
     public MobWorldListener() {
-        if (!ConfigUtil.isMobsEnabled()) return;
+        if (!this.config.isMobsEnabled()) return;
         
         Pl3xMap.api().getEventRegistry().register(this);
     }
 
     @EventHandler
     public void onPl3xMapEnabled(@NotNull Pl3xMapEnabledEvent event) {
-        if (!ConfigUtil.isMobsEnabled()) return;
+        if (!this.config.isMobsEnabled()) return;
         
         Icon.register();
     }
 
     @EventHandler
     public void onServerLoaded(@NotNull ServerLoadedEvent event) {
-        if (!ConfigUtil.isMobsEnabled()) return;
+        if (!this.config.isMobsEnabled()) return;
         
         Icon.register();
 
@@ -50,31 +49,29 @@ public class MobWorldListener implements EventListener, Listener {
 
     @EventHandler
     public void onWorldLoaded(@NotNull WorldLoadedEvent event) {
-        if (!ConfigUtil.isMobsEnabled()) return;
+        if (!this.config.isMobsEnabled()) return;
         
         registerWorld(event.getWorld());
     }
 
     @EventHandler
     public void onWorldUnloaded(@NotNull WorldUnloadedEvent event) {
-        if (!ConfigUtil.isMobsEnabled() || this.mobsManager == null) return;
-        
-        try {
-            // Clear when world is unloaded.
-            this.mobsManager.clearMarkers(event.getWorld().getName());
+        if (!this.config.isMobsEnabled()) return;
 
-            // Unregister layer.
+        this.platform.getMobsManager().ifPresent(mobs -> {
+            mobs.clearMarkers(event.getWorld().getName());
+
             event.getWorld().getLayerRegistry().unregister(MobsLayer.KEY);
-        } catch (Throwable ignore) {}
+        });
     }
 
     private void registerWorld(@NotNull final World world) {
-        if (this.mobsManager == null) return;
+        this.platform.getMobsManager().ifPresent(mobs -> {
+            // Add new world.
+            mobs.addWorld(world.getName());
 
-        // Add new world.
-        this.mobsManager.addWorld(world.getName());
-
-        // Add new layer.
-        world.getLayerRegistry().register(new MobsLayer(new MobConfig(world)));
+            // Add new layer.
+            world.getLayerRegistry().register(new MobsLayer(new MobConfig(world)));
+        });
     }
 }

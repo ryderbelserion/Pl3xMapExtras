@@ -2,10 +2,11 @@ package com.ryderbelserion.map.hook.claims.griefdefender;
 
 import com.griefdefender.api.GriefDefender;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.stream.Collectors;
+import com.ryderbelserion.map.Pl3xMapExtras;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.hook.Hook;
-import com.ryderbelserion.map.util.ConfigUtil;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.util.Colors;
@@ -14,6 +15,12 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 public class GriefDefenderHook implements Listener, Hook {
+
+    private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+
+    private final Pl3xMapPaper platform = this.plugin.getPlatform();
+
+    private final BasicConfig config = this.platform.getBasicConfig();
 
     public GriefDefenderHook() {
         GriefDefenderConfig.reload();
@@ -31,7 +38,7 @@ public class GriefDefenderHook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
-        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
+        if (!this.config.isClaimsEnabled()) return EMPTY_LIST;
 
         return GriefDefender.getCore().getAllClaims().stream()
                 .filter(claim -> claim.getWorldName().equals(world.getName()))

@@ -2,12 +2,13 @@ package com.ryderbelserion.map.hook.claims.griefprevention;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import com.ryderbelserion.map.Pl3xMapExtras;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.hook.Hook;
-import com.ryderbelserion.map.util.ConfigUtil;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
@@ -19,6 +20,12 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 public class GriefPreventionHook implements Listener, Hook {
+
+    private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+
+    private final Pl3xMapPaper platform = this.plugin.getPlatform();
+
+    private final BasicConfig config = this.platform.getBasicConfig();
 
     public GriefPreventionHook() {
         GriefPreventionConfig.reload();
@@ -42,7 +49,7 @@ public class GriefPreventionHook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
-        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
+        if (!this.config.isClaimsEnabled()) return EMPTY_LIST;
 
         if (!isWorldEnabled(world.getName())) {
             return EMPTY_LIST;

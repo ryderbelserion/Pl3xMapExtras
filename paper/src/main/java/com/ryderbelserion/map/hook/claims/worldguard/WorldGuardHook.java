@@ -3,8 +3,9 @@ package com.ryderbelserion.map.hook.claims.worldguard;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.ryderbelserion.map.Pl3xMapExtras;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.hook.Hook;
-import com.ryderbelserion.map.util.ConfigUtil;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.Flag;
@@ -22,15 +23,16 @@ import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.util.Colors;
 import net.pl3x.map.core.world.World;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WorldGuardHook implements Hook {
 
-    private final Pl3xMapExtras plugin = (Pl3xMapExtras) JavaPlugin.getProvidingPlugin(Pl3xMapExtras.class);
+    private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+
+    private final Pl3xMapPaper platform = this.plugin.getPlatform();
+
+    private final BasicConfig config = this.platform.getBasicConfig();
 
     private final Cache<UUID, String> userCache = CacheBuilder.newBuilder()
             .expireAfterAccess(30, TimeUnit.MINUTES)
@@ -41,7 +43,7 @@ public class WorldGuardHook implements Hook {
     }
 
     private @Nullable RegionManager getRegionManager(@NotNull final World world) {
-        final org.bukkit.World bukkit = Bukkit.getWorld(world.getName());
+        final org.bukkit.World bukkit = this.plugin.getServer().getWorld(world.getName());
 
         return bukkit == null ? null : WorldGuard.getInstance().getPlatform()
                 .getRegionContainer().get(BukkitAdapter.adapt(bukkit));
@@ -61,7 +63,7 @@ public class WorldGuardHook implements Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
-        if (!ConfigUtil.isClaimsEnabled()) return EMPTY_LIST;
+        if (!this.config.isClaimsEnabled()) return EMPTY_LIST;
 
         final RegionManager manager = getRegionManager(world);
 

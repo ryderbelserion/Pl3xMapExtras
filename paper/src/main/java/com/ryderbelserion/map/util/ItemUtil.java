@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemUtil {
 
-    private final static Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
+    private final static Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
 
     public static Particle getParticleType(@NotNull final String value) {
         try {

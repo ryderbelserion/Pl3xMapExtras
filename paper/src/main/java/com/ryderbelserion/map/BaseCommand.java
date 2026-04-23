@@ -1,19 +1,24 @@
 package com.ryderbelserion.map;
 
+import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.api.constants.Messages;
 import com.ryderbelserion.map.api.enums.Permissions;
-import com.ryderbelserion.map.config.PluginConfig;
-import com.ryderbelserion.map.util.ModuleUtil;
+import com.ryderbelserion.map.api.registry.adapters.PaperSenderAdapter;
 import io.papermc.paper.command.brigadier.BasicCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class BaseCommand implements BasicCommand {
+
+    private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+
+    private final Pl3xMapPaper platform = this.plugin.getPlatform();
+
+    private final PaperSenderAdapter adapter = this.platform.getSenderAdapter();
 
     @Override
     public void execute(@NotNull CommandSourceStack stack, @NotNull String @NotNull [] args) {
@@ -25,18 +30,14 @@ public class BaseCommand implements BasicCommand {
             case 1 -> {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (!Permissions.reload.hasPermission(sender) && !(sender instanceof ConsoleCommandSender)) {
-                        sender.sendRichMessage(PluginConfig.no_permission.replace("{prefix}", PluginConfig.msg_prefix));
+                        this.adapter.sendMessage(sender, Messages.no_permission);
 
                         return;
                     }
 
-                    PluginConfig.reload();
+                    this.platform.reload();
 
-                    ModuleUtil.toggleAll(false);
-
-                    ModuleUtil.extract();
-
-                    sender.sendRichMessage(PluginConfig.reload_plugin.replace("{prefix}", PluginConfig.msg_prefix));
+                    this.adapter.sendMessage(sender, Messages.reload_plugin);
 
                     return;
                 }
@@ -50,9 +51,11 @@ public class BaseCommand implements BasicCommand {
     public @NotNull Collection<String> suggest(@NotNull CommandSourceStack stack, @NotNull String @NotNull [] args) {
         final Collection<String> suggestions = new ArrayList<>();
 
+        final CommandSender sender = stack.getSender();
+
         if (args.length == 0) {
-            if (Permissions.reload.hasPermission(stack.getSender())) suggestions.add("reload");
-            if (Permissions.help.hasPermission(stack.getSender())) suggestions.add("help");
+            if (Permissions.reload.hasPermission(sender)) suggestions.add("reload");
+            if (Permissions.help.hasPermission(sender)) suggestions.add("help");
         }
 
         return suggestions;
@@ -60,23 +63,11 @@ public class BaseCommand implements BasicCommand {
 
     private void help(@NotNull final CommandSender sender) {
         if (!Permissions.help.hasPermission(sender)) {
-            sender.sendRichMessage(PluginConfig.no_permission.replace("{prefix}", PluginConfig.msg_prefix));
+            this.adapter.sendMessage(sender, Messages.no_permission);
 
             return;
         }
 
-        sender.sendRichMessage(convertList(PluginConfig.help_message).replace("{prefix}", PluginConfig.msg_prefix));
-    }
-
-    private String convertList(@NotNull final List<String> list) {
-        if (list.isEmpty()) return "";
-
-        StringBuilder message = new StringBuilder();
-
-        for (String line : list) {
-            message.append(line).append("\n");
-        }
-
-        return StringUtils.chomp(message.toString());
+        this.adapter.sendMessage(sender, Messages.help);
     }
 }

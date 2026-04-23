@@ -3,9 +3,10 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.bundles.adventure)
-
-    compileOnly(libs.fusion.core)
+    compileOnly(libs.bundles.kyori)
+    compileOnly(libs.fusion.kyori)
 
     compileOnlyApi(libs.pl3xmap)
+
+    compileOnlyApi(project(":api"))
 }

@@ -1,30 +1,26 @@
 package com.ryderbelserion.map.marker.mobs;
 
-import com.ryderbelserion.fusion.paper.api.enums.Scheduler;
-import com.ryderbelserion.fusion.paper.api.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
 import com.ryderbelserion.map.Pl3xMapExtras;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
 import com.ryderbelserion.map.config.MobConfig;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Marker;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Mob;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
 
 public class MobsLayer extends WorldLayer {
 
-    private @NotNull final Pl3xMapExtras plugin = JavaPlugin.getPlugin(Pl3xMapExtras.class);
+    private @NotNull final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+
+    private @NotNull final Pl3xMapPaper platform = this.plugin.getPlatform();
 
     private @NotNull final Server server = this.plugin.getServer();
-
-    private @NotNull final ComponentLogger logger = this.plugin.getComponentLogger();
-
-    private @Nullable final MobsManager mobsManager = this.plugin.getMobsManager();
 
     public static final String KEY = "pl3xmap_mobs";
 
@@ -46,40 +42,36 @@ public class MobsLayer extends WorldLayer {
     public @NotNull Collection<Marker<?>> getMarkers() {
         retrieveMarkers();
 
-        if (this.mobsManager == null) { // return immutable empty list
-            return Collections.emptyList();
-        }
+        Collection<Marker<?>> markers = new HashSet<>();
 
-        return this.mobsManager.getActiveMarkers(getWorld().getName());
+        this.platform.getMobsManager().ifPresent(mobs -> markers.addAll(mobs.getActiveMarkers(getWorld().getName())));
+
+        return markers;
     }
 
     private void retrieveMarkers() {
-        if (this.mobsManager == null) {
-            this.logger.warn("The mob manager instance is null.");
+        this.platform.getMobsManager().ifPresent(mobs -> {
+            final World bukkitWorld = this.server.getWorld(this.config.getWorld().getName());
 
-            return;
-        }
-
-        final World bukkitWorld = this.server.getWorld(this.config.getWorld().getName());
-
-        // If world is null, do fuck all.
-        if (bukkitWorld == null) {
-            return;
-        }
-
-        new FoliaScheduler(this.plugin, Scheduler.region_scheduler) {
-            @Override
-            public void run() {
-                bukkitWorld.getEntitiesByClass(Mob.class).forEach(mob -> {
-                    if (config.ONLY_SHOW_MOBS_EXPOSED_TO_SKY && bukkitWorld.getHighestBlockYAt(mob.getLocation()) > mob.getLocation().getY()) {
-                        return;
-                    }
-
-                    String key = String.format("%s_%s_%s", KEY, getWorld().getName(), mob.getUniqueId());
-
-                    mobsManager.addMarker(key, mob, config);
-                });
+            // If world is null, do fuck all.
+            if (bukkitWorld == null) {
+                return;
             }
-        }.runNow();
+
+            new FoliaScheduler(this.plugin, Scheduler.region_scheduler) {
+                @Override
+                public void run() {
+                    bukkitWorld.getEntitiesByClass(Mob.class).forEach(mob -> {
+                        if (config.ONLY_SHOW_MOBS_EXPOSED_TO_SKY && bukkitWorld.getHighestBlockYAt(mob.getLocation()) > mob.getLocation().getY()) {
+                            return;
+                        }
+
+                        String key = String.format("%s_%s_%s", KEY, getWorld().getName(), mob.getUniqueId());
+
+                        mobs.addMarker(key, mob, config);
+                    });
+                }
+            }.runNow();
+        });
     }
 }

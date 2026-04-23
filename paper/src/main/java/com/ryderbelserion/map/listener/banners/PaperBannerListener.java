@@ -1,0 +1,227 @@
+package com.ryderbelserion.map.listener.banners;
+
+import com.destroystokyo.paper.event.block.BlockDestroyEvent;
+import com.ryderbelserion.map.Pl3xMapExtras;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.api.constants.Namespaces;
+import com.ryderbelserion.map.common.configs.ConfigManager;
+import com.ryderbelserion.map.common.modules.banners.BannerLayer;
+import com.ryderbelserion.map.common.modules.banners.BannerRegistry;
+import com.ryderbelserion.map.common.modules.banners.config.BannerConfig;
+import com.ryderbelserion.map.common.objects.MapPosition;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.pl3x.map.core.Pl3xMap;
+import org.bukkit.Chunk;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Banner;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public class PaperBannerListener implements Listener {
+
+    private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+    private final Pl3xMapPaper platform = this.plugin.getPlatform();
+    private final BannerRegistry registry = this.platform.getBannerRegistry();
+
+    private final ConfigManager configManager = this.platform.getConfigManager();
+
+    @EventHandler
+    public void onBlockInteract(PlayerInteractEvent event) {
+        final BannerConfig config = this.configManager.getBannerConfig();
+
+        if (!config.isBlockInteract()) return;
+
+        final Block block = event.getClickedBlock();
+
+        if (block == null) return;
+
+        final BlockState state = block.getState(false);
+
+        if (!(state instanceof Banner banner)) return;
+
+        final Player player = event.getPlayer();
+
+        final PlayerInventory inventory = player.getInventory();
+
+        if (inventory.getItemInMainHand().getType() != Material.FILLED_MAP) return;
+
+        if (!player.hasPermission("pl3xmapextras.banners.admin")) return;
+
+        switch (event.getAction()) {
+            case LEFT_CLICK_BLOCK -> {
+                event.setCancelled(true);
+
+                removeBanner(player, banner);
+            }
+
+            case RIGHT_CLICK_BLOCK -> addBanner(player, banner);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        final BannerConfig config = this.configManager.getBannerConfig();
+
+        if (!config.isBlockPlace()) return;
+
+        final Block block = event.getBlock();
+
+        final BlockState state = block.getState(false);
+
+        if (!(state instanceof Banner banner)) return;
+
+        final Player player = event.getPlayer();
+
+        if (!player.hasPermission("pl3xmapextras.banners.place")) return;
+
+        addBanner(player, banner);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockBreak(BlockBreakEvent event) {
+        final BannerConfig config = this.configManager.getBannerConfig();
+
+        if (!config.isBlockPlace()) return;
+
+        final Block block = event.getBlock();
+
+        final BlockState state = block.getState(false);
+
+        if (!(state instanceof Banner banner)) return;
+
+        final Player player = event.getPlayer();
+
+        if (!player.hasPermission("pl3xmapextras.banners.remove")) return;
+
+        removeBanner(player, banner);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBlockDestroy(BlockDestroyEvent event) {
+        final BannerConfig config = this.configManager.getBannerConfig();
+
+        if (!config.isBlockPlace()) return;
+
+        final Block block = event.getBlock();
+
+        final BlockState state = block.getState(false);
+
+        if (!(state instanceof Banner banner)) return;
+
+        removeBanner(Audience.empty(), banner);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        final BannerConfig config = this.configManager.getBannerConfig();
+
+        if (!config.isBlockPlace()) return;
+
+        final Chunk chunk = event.getChunk();
+
+        inspectChunk(chunk);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onChunkLoad(ChunkLoadEvent event) {
+        final BannerConfig config = this.configManager.getBannerConfig();
+
+        if (!config.isBlockPlace()) return;
+
+        if (event.isNewChunk()) {
+            return;
+        }
+
+        final Chunk chunk = event.getChunk();
+
+        inspectChunk(chunk);
+    }
+
+    public void addBanner(@NotNull final Audience audience, @NotNull final Banner banner) {
+        final World world = banner.getWorld();
+
+        final int x = banner.getX();
+        final int y = banner.getY();
+        final int z = banner.getZ();
+
+        final Material material = banner.getType();
+        final Key key = material.key();
+
+        this.registry.addBanner(audience, MapPosition.of(world.getName(), x, y, z), asComponent(material, banner.customName()), key);
+    }
+
+    public void removeBanner(@NotNull final Audience audience, @NotNull final Banner banner) {
+        final World world = banner.getWorld();
+
+        final int x = banner.getX();
+        final int y = banner.getY();
+        final int z = banner.getZ();
+
+        final Component component = banner.customName();
+        final Material material = banner.getType();
+        final Key key = material.key();
+
+        final String minimal = key.asMinimalString();
+        final String displayItem = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
+
+        this.registry.removeBanner(audience, MapPosition.of(world.getName(), x, y, z), asComponent(material, component), displayItem);
+    }
+
+    public void inspectChunk(@NotNull final Chunk chunk) {
+        final World bukkitWorld = chunk.getWorld();
+
+        final net.pl3x.map.core.world.World world = Pl3xMap.api().getWorldRegistry().get(bukkitWorld.getName());
+
+        if (world == null) {
+            return;
+        }
+
+        final BannerLayer layer = (BannerLayer) world.getLayerRegistry().get(Namespaces.banner_key);
+
+        if (layer == null) {
+            return;
+        }
+
+        int minX = chunk.getX();
+        int minZ = chunk.getZ();
+        int maxX = minX + 16;
+        int maxZ = minZ + 16;
+
+        layer.getBanners().stream()
+                // filter banners only inside chunk
+                .filter(banner -> banner.position().x() >= minX)
+                .filter(banner -> banner.position().z() >= minZ)
+                .filter(banner -> banner.position().x() <= maxX)
+                .filter(banner -> banner.position().z() <= maxZ)
+                .filter(banner -> {
+                    final MapPosition position = banner.position();
+
+                    final int x = position.x();
+                    final int y = position.y();
+                    final int z = position.z();
+
+                    return !(bukkitWorld.getBlockAt(x, y, z).getState(false) instanceof Banner);
+                })
+                .forEach(banner -> layer.removeBanner(banner, true));
+    }
+
+    private @NotNull String asComponent(@NotNull final Material material, @Nullable final Component component) {
+        return PlainTextComponentSerializer.plainText().serialize(component == null ? Component.translatable(material.translationKey()) : component);
+    }
+}

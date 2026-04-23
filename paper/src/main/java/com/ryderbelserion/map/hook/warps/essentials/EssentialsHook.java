@@ -2,12 +2,13 @@ package com.ryderbelserion.map.hook.warps.essentials;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.stream.Collectors;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.Warps;
-import com.ryderbelserion.map.util.ConfigUtil;
+import com.ryderbelserion.map.Pl3xMapExtras;
+import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -19,6 +20,12 @@ import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 public class EssentialsHook implements Listener, Hook {
+
+    private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+
+    private final Pl3xMapPaper platform = this.plugin.getPlatform();
+
+    private final BasicConfig config = this.platform.getBasicConfig();
 
     private final String imageKey;
     private final String shadowKey;
@@ -66,7 +73,7 @@ public class EssentialsHook implements Listener, Hook {
 
     @Override
     public @NotNull Collection<Marker<?>> getData(@NotNull final World world) {
-        if (!ConfigUtil.isWarpsEnabled()) return EMPTY_LIST;
+        if (!this.config.isWarpsEnabled()) return EMPTY_LIST;
 
         final Map<String, Location> map = new HashMap<>();
         final Warps warps = Essentials.getPlugin(Essentials.class).getWarps();
