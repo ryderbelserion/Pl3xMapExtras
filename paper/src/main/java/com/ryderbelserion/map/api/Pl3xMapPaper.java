@@ -16,6 +16,7 @@ import com.ryderbelserion.map.common.commands.subs.CoreCommand;
 import com.ryderbelserion.map.common.objects.MapParticle;
 import com.ryderbelserion.map.common.objects.MapPosition;
 import com.ryderbelserion.map.hook.Hook;
+import com.ryderbelserion.map.listener.CacheListener;
 import com.ryderbelserion.map.listener.banners.PaperBannerListener;
 import com.ryderbelserion.map.marker.mobs.MobsManager;
 import com.ryderbelserion.map.util.ModuleUtil;
@@ -88,6 +89,8 @@ public class Pl3xMapPaper extends Pl3xMapPlugin {
                 permission.getDescription(),
                 permission.isDefault()
         )));
+
+        this.pluginManager.registerEvents(new CacheListener(), this.plugin);
 
         if (getBannerConfig().isEnabled()) {
             this.pluginManager.registerEvents(new PaperBannerListener(), this.plugin);
