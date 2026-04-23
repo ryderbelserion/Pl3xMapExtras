@@ -99,6 +99,8 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
         this.fileManager.refresh(false).addFolder(this.dataPath.resolve("locale"), FileType.YAML);
 
+        this.configManager.init();
+
         final Path source = this.fileManager.getSource();
 
         this.fileManager.extractFolder(source, "banners/icons", this.dataPath);
