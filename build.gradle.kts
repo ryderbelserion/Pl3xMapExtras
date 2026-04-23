@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.from
 import utils.convertList
 import utils.updateMarkdown
 
@@ -11,24 +10,37 @@ plugins {
 
 val git = feather.getGit()
 
-val mergedJar by configurations.creating {
-    isCanBeResolved = true
-    isCanBeConsumed = false
+allprojects {
+    apply(plugin = "java-library")
 }
 
-dependencies {
-    mergedJar(project(":paper"))
-}
+tasks {
+    withType<Jar> {
+        subprojects {
+            dependsOn(project.tasks.build)
+        }
 
-tasks.withType<Jar> {
-    dependsOn(mergedJar)
+        // get subproject's built jars
+        val jars = subprojects.map { zipTree(it.tasks.jar.get().archiveFile.get().asFile) }
 
-    val jars = mergedJar.map { zipTree(it) }
+        // merge them into main jar (except their manifests)
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    // merge them into main jar (except their manifests)
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from(jars) {
+            exclude("META-INF/MANIFEST.MF")
+        }
 
-    from(jars)
+        // put behind an action because files don't exist at configuration time
+        doFirst {
+            // merge all subproject's manifests into main manifest
+            jars.forEach { jar ->
+                jar.matching { include("META-INF/MANIFEST.MF") }
+                    .files.forEach { file ->
+                        manifest.from(file)
+                    }
+            }
+        }
+    }
 }
 
 val releaseType = rootProject.ext.get("release_type").toString()
