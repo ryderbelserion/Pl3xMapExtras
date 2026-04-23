@@ -11,6 +11,9 @@ import com.ryderbelserion.map.common.objects.MapPosition;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.pl3x.map.core.Pl3xMap;
+import net.pl3x.map.core.markers.layer.Layer;
+import net.pl3x.map.core.registry.Registry;
+import net.pl3x.map.core.registry.WorldRegistry;
 import net.pl3x.map.core.world.World;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
@@ -37,6 +40,24 @@ public class BannerRegistry {
         new BannerListener();
 
         this.fusion.log("info", "The banner module has been initialized!");
+    }
+
+    public void reload() {
+        final Pl3xMap api = Pl3xMap.api();
+
+        final WorldRegistry registry = api.getWorldRegistry();
+
+        for (final World world : registry.values()) {
+            if (!world.isEnabled()) {
+                continue;
+            }
+
+            final Registry<Layer> layer = world.getLayerRegistry();
+
+            if (layer.has(Namespaces.banner_key)) {
+                layer.unregister(Namespaces.banner_key);
+            }
+        }
     }
 
     public void addBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final Key displayItem) {

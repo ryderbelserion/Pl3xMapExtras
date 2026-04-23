@@ -107,6 +107,12 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
         this.fileManager.extractFolder(source, "warps/icons", this.dataPath);
         this.fileManager.extractFolder(source, "mobs/icons", this.dataPath);
         this.fileManager.extractFolder(source, "signs/icons", this.dataPath);
+
+        if (getBannerConfig().isEnabled()) {
+            this.bannerRegistry.reload();
+        } else {
+            this.fusion.log("warn", "The banner module is not enabled!");
+        }
     }
 
     @Override
