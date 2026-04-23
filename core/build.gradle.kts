@@ -13,5 +13,5 @@ dependencies {
 
     compileOnlyApi(libs.pl3xmap)
 
-    compileOnlyApi(project(":api"))
+    api(project(":api"))
 }

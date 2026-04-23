@@ -81,10 +81,10 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
         final Path source = this.fileManager.getSource();
 
-        this.fileManager.extractFolder(source, "icons", this.dataPath.resolve("banners"));
-        this.fileManager.extractFolder(source, "icons", this.dataPath.resolve("warps"));
-        this.fileManager.extractFolder(source, "icons", this.dataPath.resolve("signs"));
-        this.fileManager.extractFolder(source, "icons", this.dataPath.resolve("mobs"));
+        this.fileManager.extractFolder(source, "banners/icons", this.dataPath);
+        this.fileManager.extractFolder(source, "warps/icons", this.dataPath);
+        this.fileManager.extractFolder(source, "mobs/icons", this.dataPath);
+        this.fileManager.extractFolder(source, "signs/icons", this.dataPath);
     }
 
     @Override
@@ -95,10 +95,10 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
         final Path source = this.fileManager.getSource();
 
-        this.fileManager.extractFolder(source, "icons", this.dataPath.resolve("banners"));
-        this.fileManager.extractFolder(source, "icons", this.dataPath.resolve("warps"));
-        this.fileManager.extractFolder(source, "icons", this.dataPath.resolve("signs"));
-        this.fileManager.extractFolder(source, "icons", this.dataPath.resolve("mobs"));
+        this.fileManager.extractFolder(source, "banners/icons", this.dataPath);
+        this.fileManager.extractFolder(source, "warps/icons", this.dataPath);
+        this.fileManager.extractFolder(source, "mobs/icons", this.dataPath);
+        this.fileManager.extractFolder(source, "signs/icons", this.dataPath);
     }
 
     @Override

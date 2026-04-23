@@ -70,7 +70,7 @@ public enum FileKeys {
     }
 
     public void addFile() {
-        this.fileManager.addFile(this.location, FileType.YAML, action -> action.addAction(FileAction.ALREADY_EXTRACTED));
+        this.fileManager.addFile(this.location, FileType.YAML);
     }
 
     public void save() {

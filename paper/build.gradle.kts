@@ -37,7 +37,7 @@ dependencies {
     compileOnly(libs.playerwarps)
     compileOnly(libs.worldguard)
 
-    compileOnlyApi(project(":core"))
+    api(project(":core"))
 }
 
 tasks {

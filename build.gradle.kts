@@ -18,8 +18,6 @@ val mergedJar by configurations.creating {
 
 dependencies {
     mergedJar(project(":paper"))
-    mergedJar(project(":core"))
-    mergedJar(project(":api"))
 }
 
 tasks.withType<Jar> {
