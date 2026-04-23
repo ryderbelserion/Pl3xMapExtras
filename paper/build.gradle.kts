@@ -46,10 +46,6 @@ tasks {
     }
 
     shadowJar {
-        from(rootProject.layout.projectDirectory.dir("configs")) {
-            into("/")
-        }
-
         listOf(
             "org.bstats"
         ).forEach {

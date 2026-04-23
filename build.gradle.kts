@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.from
 import utils.convertList
 import utils.updateMarkdown
 
@@ -28,6 +29,10 @@ tasks.withType<Jar> {
 
     // merge them into main jar (except their manifests)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(rootProject.layout.projectDirectory.dir("configs")) {
+        into("/")
+    }
 
     from(jars)
 }
