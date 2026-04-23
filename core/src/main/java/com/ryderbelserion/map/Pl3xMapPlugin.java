@@ -87,7 +87,6 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
         this.configManager = new ConfigManager();
         this.configManager.init();
 
-        this.fileManager.extractFolder(source, "banners/icons", this.dataPath);
         this.fileManager.extractFolder(source, "warps/icons", this.dataPath);
         this.fileManager.extractFolder(source, "mobs/icons", this.dataPath);
         this.fileManager.extractFolder(source, "signs/icons", this.dataPath);
@@ -103,23 +102,22 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
         final Path source = this.fileManager.getSource();
 
-        this.fileManager.extractFolder(source, "banners/icons", this.dataPath);
         this.fileManager.extractFolder(source, "warps/icons", this.dataPath);
         this.fileManager.extractFolder(source, "mobs/icons", this.dataPath);
         this.fileManager.extractFolder(source, "signs/icons", this.dataPath);
 
-        if (this.bannerRegistry != null) {
-            this.bannerRegistry.reload();
-        }
+        this.bannerRegistry.reload();
     }
 
     @Override
     public void post() {
         this.adapter = new PlayerAdapter<>(getUserRegistry(), getContextRegistry());
 
+        this.bannerRegistry = new BannerRegistry();
+        this.bannerRegistry.init();
+
         if (getBannerConfig().isEnabled()) {
-            this.bannerRegistry = new BannerRegistry();
-            this.bannerRegistry.init();
+            this.bannerRegistry.post();
         } else {
             this.fusion.log("warn", "The banner module is not enabled!");
         }

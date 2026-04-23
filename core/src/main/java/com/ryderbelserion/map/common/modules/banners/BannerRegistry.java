@@ -1,5 +1,6 @@
 package com.ryderbelserion.map.common.modules.banners;
 
+import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
@@ -28,10 +29,12 @@ public class BannerRegistry {
 
     private final Pl3xMapPlugin plugin = (Pl3xMapPlugin) Pl3xMapExtras.Provider.getInstance();
     private final BannerRegistry registry = this.plugin.getBannerRegistry();
+    private final FileManager fileManager = this.plugin.getFileManager();
     private final FusionKyori fusion = this.plugin.getFusion();
+    private final Path source = this.fileManager.getSource();
     private final Path path = this.plugin.getDataPath();
 
-    public void init() {
+    public void post() {
         for (final Path path : this.fusion.getFiles(this.path.resolve("banners").resolve("icons"), ".png")) {
             final String fileName = path.getFileName().toString().replace(".png", "");
 
@@ -43,7 +46,13 @@ public class BannerRegistry {
         this.fusion.log("info", "The banner module has been initialized!");
     }
 
+    public void init() {
+        this.fileManager.extractFolder(this.source, "banners/icons", this.path);
+    }
+
     public void reload() {
+        this.fileManager.extractFolder(this.source, "banners/icons", this.path);
+
         final BannerConfig config = this.plugin.getBannerConfig();
 
         final Pl3xMap api = Pl3xMap.api();
