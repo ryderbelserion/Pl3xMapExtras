@@ -33,14 +33,18 @@ https://modrinth.com/project/pl3xmapextras
 5) Restart server again
 
 ## Permissions
-| Node                          | Description                                          | Default |
-|-------------------------------|------------------------------------------------------|---------|
-| `pl3xmapextras.banners.admin` | `allows the user to have banners show up on the map` | op      |
-| `pl3xmapextras.signs.admin`   | `allows the user to have signs show up on the map`   | op      |
-| `pl3xmapextras.reload`        | `the reload command`                                 | op      |
-| `pl3xmapextras.help`          | `help command`                                       | op      |
+| Node                           | Description                                                            | Default |
+|--------------------------------|------------------------------------------------------------------------|---------|
+| `pl3xmapextras.banners.admin`  | `allows the user to add banners to the web map via block interaction.` | op      |
+| `pl3xmapextras.banners.place`  | `allows the user to add banners to the web map via block placement.`   | op      |
+| `pl3xmapextras.banners.remove` | `allows the user to remove banners from the web map.`                  | op      |
+| `pl3xmapextras.signs.admin`    | `allows the user to add signs to the web map via block interaction.`   | op      |
+| `pl3xmapextras.access`         | `gives access to /pl3xmapextras.`                                      | op      |
+| `pl3xmapextras.reload`         | `gives access to reloading the plugin.`                                | op      |
 
 ## Credit
-Original Author: BillyGalbreath
+### Original Author
+BillyGalbreath
 
+### Textures
 Mob Icons: https://github.com/ADHDMC/Entity-Icons

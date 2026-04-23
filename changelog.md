@@ -1,9 +1,15 @@
-## What's Changed
-* Sign Changes by [@granny](https://github.com/granny) in https://github.com/ryderbelserion/Pl3xMapExtras/pull/19
-* Add config for banner sounds and particles by [@granny](https://github.com/granny) in https://github.com/ryderbelserion/Pl3xMapExtras/pull/20
-* Fix WorldGuard hook not showing region owners and members by [@Grabsky](https://github.com/Grabsky) in https://github.com/ryderbelserion/Pl3xMapExtras/pull/22
+* The toggle for banners is no longer in `config.yml`, it's moved to banners/`config.yml`
+    * It's disabled by default, set it to `true` in banners/`config.yml`, then restart your server.
+* The existing banners directory should be deleted, as the layout changed.
+* `/pl3xmapextras help` is removed, as only `pl3xmapextras reload` is needed.
+    * You should re-generate the messages.yml.
+* ClaimChunk support was removed, The developer no longer updates it.
+* All banner data is stored in storage/banners.json.
+* Fixed an issue with icons throwing an `IllegalStateException` by switching to Optionals
+  * If no icon is found, A simple message will log to console instead.
 
-## New Contributors
-* [@Grabsky](https://github.com/Grabsky) made their first contribution in https://github.com/ryderbelserion/Pl3xMapExtras/pull/22
-
-**Full Changelog**: https://github.com/ryderbelserion/Pl3xMapExtras/compare/1.3.0...1.4.0
+### New Permissions:
+- pl3xmapextras.banners.admin (default to op)
+- pl3xmapextras.banners.place (default to op)
+- pl3xmapextras.banners.remove (default to op)
+- pl3xmapextras.access (gives access to /pl3xmapextras)
