@@ -8,8 +8,6 @@ root:
   prefix: "<dark_gray>[<green>Pl3xMapExtras</green>]</dark_gray> <reset>"
 
 marker:
-  # Should we display banner markers on pl3xmap?
-  banners: true
   # Should we display sign markers on pl3xmap?
   signs: true
   # Should we display mob markers on pl3xmap?
