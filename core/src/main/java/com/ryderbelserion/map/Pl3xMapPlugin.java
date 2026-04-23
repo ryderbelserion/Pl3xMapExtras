@@ -1,6 +1,7 @@
 package com.ryderbelserion.map;
 
 import com.ryderbelserion.fusion.core.api.interfaces.permissions.enums.Mode;
+import com.ryderbelserion.fusion.files.enums.FileAction;
 import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
@@ -68,18 +69,23 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
         this.fileManager.addFolder(this.dataPath.resolve("locale"), FileType.YAML);
 
-        List.of(
-                FileKeys.config,
-                FileKeys.messages,
+        final Path source = this.fileManager.getSource();
 
+        this.fileManager.extractFolder(source, "storage", this.dataPath);
+        this.fileManager.extractFolder(source, "banners", this.dataPath);
+
+        List.of(
                 FileKeys.banners_storage,
                 FileKeys.banners_config
+        ).forEach(file -> file.addFile(consumer -> consumer.addAction(FileAction.ALREADY_EXTRACTED)));
+
+        List.of(
+                FileKeys.config,
+                FileKeys.messages
         ).forEach(FileKeys::addFile);
 
         this.configManager = new ConfigManager();
         this.configManager.init();
-
-        final Path source = this.fileManager.getSource();
 
         this.fileManager.extractFolder(source, "banners/icons", this.dataPath);
         this.fileManager.extractFolder(source, "warps/icons", this.dataPath);
