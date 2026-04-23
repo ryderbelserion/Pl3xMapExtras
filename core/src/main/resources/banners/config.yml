@@ -1,4 +1,4 @@
-# Banner related settings
+# Banner related settings.
 banner:
   # Should the banner module be enabled?
   enabled: false
@@ -8,24 +8,24 @@ banner:
   # Should banners be displayed on block interact?
   block-interact: false
 
-  # Layer Settings
+  # Layer Settings.
   layer:
-    # The label for the map player
+    # The label for the map player.
     label: "Banners"
-    # Show controls for map layer
+    # Show controls for map layer.
     show-controls: true
     # Should the map layer be hidden?
     default-hidden: false
     # The update interval, Set -1 for live update.
     update-interval: 5
-    # The priority for the map layer
+    # The priority for the map layer.
     priority: 99
-    # The z-index for the map layer
+    # The z-index for the map layer.
     z-index: 99
     # The custom css for the banner's layer
     css: ""
 
-  # Icon Settings
+  # Icon Settings.
   icon:
     # The size (in pixels) the icon should be.
     size:
@@ -37,13 +37,13 @@ banner:
     anchor:
       x: -1
       z: -1
-    # Rotation settings
+    # Rotation settings.
     rotation:
       # The angle (in degrees) the icon should be rotated at. Rotation is in a clockwise direction with 0 being at the top.
       angle: 0.0
       # The origin point on the icon for the center of rotation
       origin: 0.0
-    # Shadow Settings
+    # Shadow Settings.
     shadow:
       # The registered icon to use for a shadow image.
       image: ""
@@ -55,7 +55,7 @@ banner:
       anchor-vector:
         x: -1
         z: -1
-    # Tooltip settings
+    # Tooltip settings.
     tooltip:
       # Contents of the icon's popup.
       content: ""
@@ -74,7 +74,7 @@ banner:
       sticky: false
       # Tooltip container opacity.
       opacity: 0.0
-    # Pop up settings
+    # Pop up settings.
     popup:
       # Contents of the icon's popup.
       content: ""
@@ -95,7 +95,7 @@ banner:
       auto-pan:
         # Set it to false if you don't want the map to do panning animation to fit the opened popup.
         enabled: false
-        # Padding settings
+        # Padding settings.
         padding:
           # Equivalent of setting both top left and bottom right auto-pan padding to the same value.
           bottom-left:
@@ -116,7 +116,7 @@ banner:
       # Set it if you want to override the default behavior of the popup closing when user clicks on the map. Defaults to true.
       close-on-click: true
 
-  # The particle settings
+  # The particle settings.
   particle:
     # Should particles play?
     enabled: true
@@ -125,7 +125,7 @@ banner:
     # The type of particle to play when a banner is removed.
     remove: "wax_on"
 
-  # The sound settings
+  # The sound settings.
   sound:
     # Should sounds play?
     enabled: true
