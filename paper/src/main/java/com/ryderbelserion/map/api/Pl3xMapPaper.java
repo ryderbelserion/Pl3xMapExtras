@@ -168,6 +168,7 @@ public class Pl3xMapPaper extends Pl3xMapPlugin {
         manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             final Commands registry = event.registrar();
 
+            //noinspection SpellCheckingInspection
             registry.register(new CoreCommand<>("pl3xmapextras.access", "pl3xmapextras", function()).build(),
                     "The base command for Pl3xMapExtras!",
                     Collections.singletonList("pme"));
