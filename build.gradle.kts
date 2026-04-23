@@ -28,10 +28,6 @@ tasks.withType<Jar> {
     // merge them into main jar (except their manifests)
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    from(rootProject.layout.projectDirectory.dir("configs")) {
-        into("/")
-    }
-
     from(jars)
 }
 
