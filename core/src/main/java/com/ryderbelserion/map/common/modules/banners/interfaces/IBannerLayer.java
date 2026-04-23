@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 public interface IBannerLayer {
 
-    void displayBanner(@NotNull final Banner banner, final boolean cacheLookUp);
+    boolean displayBanner(@NotNull final Banner banner, final boolean index);
 
-    boolean removeBanner(@NotNull final Banner banner, final boolean cacheLookUp);
+    boolean removeBanner(@NotNull final Banner banner, final boolean index);
 
     void refresh();
 

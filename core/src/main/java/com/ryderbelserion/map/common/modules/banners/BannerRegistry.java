@@ -81,14 +81,14 @@ public class BannerRegistry {
         getLayer(worldName).ifPresentOrElse(layer -> {
             final Banner banner = Banner.of(getTexture(displayItem), displayName, position);
 
-            layer.displayBanner(banner, true);
+            if (layer.displayBanner(banner, true)) {
+                final BannerConfig config = this.plugin.getBannerConfig();
 
-            final BannerConfig config = this.plugin.getBannerConfig();
+                final MapPosition location = MapPosition.of(worldName, position.x(), position.y(), position.z());
 
-            final MapPosition location = MapPosition.of(worldName, position.x(), position.y(), position.z());
-
-            config.getSpawnParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
-            config.getSpawnSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
+                config.getSpawnParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
+                config.getSpawnSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
+            }
         }, () -> {
             this.fusion.log("warn", "Failed to add banner to %s @ (%s,%s,%s)".formatted(worldName, position.x(), position.y(), position.z()));
         });
