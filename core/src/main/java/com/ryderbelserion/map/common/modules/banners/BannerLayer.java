@@ -4,6 +4,7 @@ import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
 import com.ryderbelserion.map.api.constants.Namespaces;
+import com.ryderbelserion.map.api.utils.ConfigUtils;
 import com.ryderbelserion.map.common.api.FileKeys;
 import com.ryderbelserion.map.common.configs.types.map.LayerConfig;
 import com.ryderbelserion.map.common.modules.banners.config.BannerConfig;
@@ -124,25 +125,15 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
         final String type = texture.getType();
 
+        final String worldName = position.worldName();
+
         if (index) {
-            final String worldName = position.worldName();
+            final BasicConfigurationNode root = node(worldName, type);
 
-            try {
-                final BasicConfigurationNode root = node(worldName, type);
+            final List<String> locations = ConfigUtils.getStringList(root);
 
-                final List<String> locations = com.ryderbelserion.map.api.utils.ConfigUtils.getStringList(root);
-
-                if (locations.contains(point)) {
-                    this.fusion.log("warn", "Cannot add %s as it already exists in `banners.json`".formatted(point));
-
-                    return false;
-                }
-
-                root.appendListNode().set(point);
-
-                FileKeys.banners_storage.save();
-            } catch (SerializationException exception) {
-                this.fusion.log("warn", "Failed to serialize and save %s for %s".formatted(point, worldName));
+            if (locations.contains(point)) {
+                this.fusion.log("warn", "Cannot add %s as it already exists in `banners.json`".formatted(point));
 
                 return false;
             }
@@ -207,6 +198,20 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
         this.markers.put(position, icon);
         this.banners.put(position, banner);
+
+        if (index) {
+            try {
+                final BasicConfigurationNode root = node(worldName, type);
+
+                root.appendListNode().set(point);
+
+                FileKeys.banners_storage.save();
+            } catch (SerializationException exception) {
+                this.fusion.log("warn", "Failed to serialize and save %s for %s".formatted(point, worldName));
+
+                return false;
+            }
+        }
 
         this.fusion.log("warn", "Successfully added %s to banners.json, and the live view!".formatted(point));
 
