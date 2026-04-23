@@ -103,7 +103,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
     }
 
     @Override
-    public void displayBanner(@NotNull final Banner banner, final boolean cacheLookUp) {
+    public boolean displayBanner(@NotNull final Banner banner, final boolean index) {
         final String name = banner.bannerName();
 
         final MapPosition position = banner.position();
@@ -112,9 +112,42 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         final int y = position.y();
         final int z = position.z();
 
+        final String point = "%s,%s,%s,%s".formatted(x, y, z, name);
+
+        if (this.markers.containsKey(position)) {
+            this.fusion.log("warn", "The cache already contains (%s)".formatted(point));
+
+            return false;
+        }
+
         final BannerTexture texture = banner.texture();
 
         final String type = texture.getType();
+
+        if (index) {
+            final String worldName = position.worldName();
+
+            try {
+                final BasicConfigurationNode root = node(worldName, type);
+
+                final List<String> locations = com.ryderbelserion.map.api.utils.ConfigUtils.getStringList(root);
+
+                if (locations.contains(point)) {
+                    this.fusion.log("warn", "Cannot add %s as it already exists in `banners.json`".formatted(point));
+
+                    return false;
+                }
+
+                root.appendListNode().set(point);
+
+                FileKeys.banners_storage.save();
+            } catch (SerializationException exception) {
+                this.fusion.log("warn", "Failed to serialize and save %s for %s".formatted(point, worldName));
+
+                return false;
+            }
+        }
+
         final String key = texture.getKey();
 
         final String format = "%s_%s_%d_%d".formatted(Namespaces.banner_key, position.worldName(), x, z);
@@ -175,35 +208,13 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         this.markers.put(position, icon);
         this.banners.put(position, banner);
 
-        final String point = "%s,%s,%s,%s".formatted(x, y, z, name);
-
-        if (cacheLookUp) {
-            final String worldName = position.worldName();
-
-            try {
-                final BasicConfigurationNode root = node(worldName, type);
-
-                final List<String> locations = com.ryderbelserion.map.api.utils.ConfigUtils.getStringList(root);
-
-                if (locations.contains(point)) {
-                    this.fusion.log("warn", "Cannot add %s as it already exists in `banners.json`".formatted(point));
-
-                    return;
-                }
-
-                root.appendListNode().set(point);
-
-                FileKeys.banners_storage.save();
-            } catch (SerializationException exception) {
-                this.fusion.log("warn", "Failed to serialize and save %s for %s".formatted(point, worldName));
-            }
-        }
-
         this.fusion.log("warn", "Successfully added %s to banners.json, and the live view!".formatted(point));
+
+        return true;
     }
 
     @Override
-    public boolean removeBanner(@NotNull final Banner banner, final boolean cacheLookUp) {
+    public boolean removeBanner(@NotNull final Banner banner, final boolean index) {
         final MapPosition position = banner.position();
 
         final int x = position.x();
