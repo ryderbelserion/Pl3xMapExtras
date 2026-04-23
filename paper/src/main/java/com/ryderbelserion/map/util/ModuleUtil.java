@@ -6,7 +6,6 @@ import com.ryderbelserion.map.api.Pl3xMapPaper;
 import com.ryderbelserion.map.common.configs.ConfigManager;
 import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.hook.Hook;
-import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkConfig;
 import com.ryderbelserion.map.hook.claims.griefdefender.GriefDefenderConfig;
 import com.ryderbelserion.map.hook.claims.griefprevention.GriefPreventionConfig;
 import com.ryderbelserion.map.hook.claims.plotsquared.P2Config;
@@ -72,10 +71,6 @@ public class ModuleUtil {
 
             if (pluginManager.isPluginEnabled("GriefDefender")) {
                 GriefDefenderConfig.reload();
-            }
-
-            if (pluginManager.isPluginEnabled("ClaimChunk")) {
-                ClaimChunkConfig.reload();
             }
 
             return;

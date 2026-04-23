@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
-import com.ryderbelserion.map.hook.claims.claimchunk.ClaimChunkHook;
 import com.ryderbelserion.map.hook.claims.griefdefender.GriefDefenderHook;
 import com.ryderbelserion.map.hook.claims.griefprevention.GriefPreventionHook;
 import com.ryderbelserion.map.hook.claims.plotsquared.P2Hook;
@@ -53,7 +52,6 @@ public interface Hook {
     enum Impl {
         ESSENTIALS("Essentials", EssentialsHook::new),
         PLAYERWARPS("PlayerWarps", PlayerWarpsHook::new),
-        CLAIMCHUNK("ClaimChunk", ClaimChunkHook::new),
         GRIEFDEFENDER("GriefDefender", GriefDefenderHook::new),
         GRIEFPREVENTION("GriefPrevention", GriefPreventionHook::new),
         PLOTSQUARED("PlotSquared", P2Hook::new),
