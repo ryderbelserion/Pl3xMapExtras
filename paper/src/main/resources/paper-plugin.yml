@@ -21,10 +21,6 @@ dependencies:
       load: BEFORE
       required: false
       join-classpath: true
-    ClaimChunk:
-      load: BEFORE
-      required: false
-      join-classpath: true
     GriefDefender:
       load: BEFORE
       required: false
