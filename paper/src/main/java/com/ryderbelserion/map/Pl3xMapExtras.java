@@ -1,6 +1,5 @@
 package com.ryderbelserion.map;
 
-import com.ryderbelserion.map.api.MetricsWrapper;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +16,6 @@ public class Pl3xMapExtras extends JavaPlugin {
     public void onEnable() {
         this.platform = new Pl3xMapPaper(getFile(), this);
         this.platform.init();
-
-        new MetricsWrapper(this, 22296);
     }
 
     @Override

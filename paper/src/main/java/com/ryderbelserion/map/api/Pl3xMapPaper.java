@@ -106,6 +106,8 @@ public class Pl3xMapPaper extends Pl3xMapPlugin {
 
         // Toggle all our shit on startup.
         ModuleUtil.toggleAll(false);
+
+        new MetricsWrapper(this.plugin, 22296);
     }
 
     @Override
