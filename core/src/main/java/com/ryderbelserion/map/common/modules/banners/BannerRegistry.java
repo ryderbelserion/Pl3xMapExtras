@@ -89,14 +89,14 @@ public class BannerRegistry {
                     position
             );
 
-            layer.removeBanner(banner, true);
+            if (layer.removeBanner(banner, true)) {
+                final BannerConfig config = this.plugin.getBannerConfig();
 
-            final BannerConfig config = this.plugin.getBannerConfig();
+                final MapPosition location = MapPosition.of(worldName, position.x(), position.y(), position.z());
 
-            final MapPosition location = MapPosition.of(worldName, position.x(), position.y(), position.z());
-
-            config.getRemoveParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
-            config.getRemoveSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
+                config.getRemoveParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
+                config.getRemoveSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
+            }
         }, () -> {
             this.fusion.log("warn", "Could not remove banner from %s, because layer for the world does not exist.".formatted(worldName));
         });

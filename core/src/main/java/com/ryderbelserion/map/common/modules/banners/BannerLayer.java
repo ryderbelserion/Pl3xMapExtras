@@ -203,7 +203,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
     }
 
     @Override
-    public void removeBanner(@NotNull final Banner banner, final boolean cacheLookUp) {
+    public boolean removeBanner(@NotNull final Banner banner, final boolean cacheLookUp) {
         final MapPosition position = banner.position();
 
         final int x = position.x();
@@ -217,7 +217,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         if (!this.markers.containsKey(position)) {
             this.fusion.log("warn", "The cache does not contain (%s)".formatted(point));
 
-            return;
+            return false;
         }
 
         this.markers.remove(position);
@@ -240,10 +240,16 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
                 root.setList(String.class, locations);
 
                 FileKeys.banners_storage.save();
+
+                return true;
             }
         } catch (final Exception exception) {
             this.fusion.log("warn", "Failed to remove %s for %s".formatted(point, worldName), exception);
+
+            return false;
         }
+
+        return false;
     }
 
     public BasicConfigurationNode node(@NotNull final String worldName, @NotNull final String bannerType) {
