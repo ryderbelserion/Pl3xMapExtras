@@ -25,7 +25,6 @@ public class BasicConfig {
         this.isClaimsEnabled = markers.node("claims").getBoolean(false);
     }
 
-
     public final boolean isClaimsEnabled() {
         return this.isClaimsEnabled;
     }

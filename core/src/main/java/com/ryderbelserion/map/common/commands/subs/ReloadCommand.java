@@ -1,0 +1,27 @@
+package com.ryderbelserion.map.common.commands.subs;
+
+import com.mojang.brigadier.context.CommandContext;
+import com.ryderbelserion.fusion.core.api.interfaces.permissions.enums.Mode;
+import com.ryderbelserion.map.api.constants.Messages;
+import com.ryderbelserion.map.common.commands.BaseCommand;
+import com.ryderbelserion.map.common.commands.player.ISource;
+import org.jetbrains.annotations.NotNull;
+import java.util.function.Function;
+
+public class ReloadCommand<S> extends BaseCommand<S> {
+
+    public ReloadCommand(@NotNull final Function<S, ISource> function) {
+        super("Gives access to reloading the plugin", "pl3xmapextras.reload", "reload", Mode.OP, function);
+    }
+
+    @Override
+    protected int execute(@NotNull CommandContext<S> context) {
+        final ISource source = getSource(context);
+
+        this.plugin.reload();
+
+        this.adapter.sendMessage(source.getAudience(), Messages.reload_plugin);
+
+        return 1;
+    }
+}

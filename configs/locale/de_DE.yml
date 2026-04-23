@@ -30,10 +30,3 @@ messages:
     internal-error: "{prefix}<red>Ein interner Fehler ist aufgetreten. Bitte prüfen Sie die Konsole für den vollständigen Fehler."
     # Available placeholders: {prefix}
     message-empty: "{prefix}<red>Die Nachricht kann nicht leer sein."
-
-# All messages related to commands.
-commands:
-  # The message sent when doing /pl3xmapextras help
-  help:
-    - "{prefix} <red>/pl3xmapextras reload <gray>- <white>reloads the plugin."
-    - "{prefix} <red>/pl3xmapextras help <gray>- <white>shows this menu."

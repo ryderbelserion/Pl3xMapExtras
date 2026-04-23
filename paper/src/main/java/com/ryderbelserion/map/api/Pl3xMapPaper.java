@@ -1,31 +1,45 @@
 package com.ryderbelserion.map.api;
 
+import com.ryderbelserion.fusion.core.api.interfaces.permissions.enums.Mode;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.Pl3xMapPlugin;
+import com.ryderbelserion.map.api.commands.PaperSource;
+import com.ryderbelserion.map.api.enums.Permissions;
 import com.ryderbelserion.map.api.registry.PaperContextRegistry;
 import com.ryderbelserion.map.api.registry.PaperMessageRegistry;
 import com.ryderbelserion.map.api.registry.PaperUserRegistry;
 import com.ryderbelserion.map.api.registry.adapters.PaperSenderAdapter;
-import com.ryderbelserion.map.common.configs.ConfigManager;
-import com.ryderbelserion.map.common.configs.types.BasicConfig;
+import com.ryderbelserion.map.common.commands.player.ISource;
+import com.ryderbelserion.map.common.commands.subs.CoreCommand;
 import com.ryderbelserion.map.common.objects.MapParticle;
 import com.ryderbelserion.map.common.objects.MapPosition;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.listener.banners.PaperBannerListener;
 import com.ryderbelserion.map.marker.mobs.MobsManager;
 import com.ryderbelserion.map.util.ModuleUtil;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import net.kyori.adventure.audience.Audience;
 import org.bukkit.Particle;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 
 public class Pl3xMapPaper extends Pl3xMapPlugin {
 
@@ -65,6 +79,15 @@ public class Pl3xMapPaper extends Pl3xMapPlugin {
     @Override
     public void post() {
         super.post();
+
+        registerCommands();
+
+        // Register the permissions.
+        Arrays.stream(Permissions.values()).toList().forEach(permission -> this.pluginManager.addPermission(new Permission(
+                permission.getPermission(),
+                permission.getDescription(),
+                permission.isDefault()
+        )));
 
         if (getBannerConfig().isEnabled()) {
             this.pluginManager.registerEvents(new PaperBannerListener(), this.plugin);
@@ -134,6 +157,51 @@ public class Pl3xMapPaper extends Pl3xMapPlugin {
     }
 
     @Override
+    public void registerCommands() {
+        final LifecycleEventManager<@NotNull Plugin> manager = this.plugin.getLifecycleManager();
+
+        manager.registerEventHandler(LifecycleEvents.COMMANDS, event -> {
+            final Commands registry = event.registrar();
+
+            registry.register(new CoreCommand<>("pl3xmapextras.access", "pl3xmapextras", function()).build(),
+                    "The base command for Pl3xMapExtras!",
+                    Collections.singletonList("pme"));
+        });
+    }
+
+    @Override
+    public void registerPermission(@NotNull final Mode mode, @NotNull final String parent, @NotNull final String description, @NotNull final Map<String, Boolean> children) {
+        PermissionDefault permissionDefault;
+
+        switch (mode) {
+            case NOT_OP -> permissionDefault = PermissionDefault.NOT_OP;
+            case TRUE -> permissionDefault = PermissionDefault.TRUE;
+            case FALSE -> permissionDefault = PermissionDefault.FALSE;
+            default -> permissionDefault = PermissionDefault.OP;
+        }
+
+        final PluginManager pluginManager = this.server.getPluginManager();
+
+        if (pluginManager.getPermission(parent) != null) return;
+
+        final Permission permission = new Permission(
+                parent,
+                description,
+                permissionDefault,
+                children
+        );
+
+        pluginManager.addPermission(permission);
+    }
+
+    @Override
+    public final boolean hasPermission(@NotNull final Audience audience, @NotNull final String permission) {
+        final CommandSender sender = (CommandSender) audience;
+
+        return sender.hasPermission(permission);
+    }
+
+    @Override
     public @NotNull final PaperContextRegistry getContextRegistry() {
         return this.contextRegistry;
     }
@@ -160,5 +228,9 @@ public class Pl3xMapPaper extends Pl3xMapPlugin {
 
     public @NotNull final Optional<MobsManager> getMobsManager() {
         return Optional.of(this.mobsManager);
+    }
+
+    public @NotNull final Function<CommandSourceStack, ISource> function() {
+        return stack -> new PaperSource(stack.getSender());
     }
 }

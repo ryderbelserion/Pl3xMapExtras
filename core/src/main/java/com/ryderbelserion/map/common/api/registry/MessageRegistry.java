@@ -1,6 +1,5 @@
 package com.ryderbelserion.map.common.api.registry;
 
-import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.Pl3xMapPlugin;
@@ -11,7 +10,6 @@ import com.ryderbelserion.map.common.api.adapters.MessageAdapter;
 import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
-
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -56,13 +54,6 @@ public class MessageRegistry implements IMessageRegistry<MessageAdapter> {
                 addMessage(key, Messages.target_not_online, new MessageAdapter(configuration, "{prefix}<red>{player} <gray>is not online.", "messages", "player", "target-not-online"));
 
                 addMessage(key, Messages.target_same_player, new MessageAdapter(configuration, "{prefix}<red>You cannot use this command on yourself.", "messages", "player", "target-same-player"));
-
-                addMessage(key, Messages.help, new MessageAdapter(configuration, StringUtils.toString(
-                        List.of(
-                                "{prefix} <red>/pl3xmapextras reload <gray>- <white>reloads the plugin.",
-                                "{prefix} <red>/pl3xmapextras help <gray>- <white>shows this menu."
-                        )
-                ), "messages", "commands", "help"));
             }, () -> this.fusion.log("info", "Path %s not found in cache.".formatted(path)));
         }
 

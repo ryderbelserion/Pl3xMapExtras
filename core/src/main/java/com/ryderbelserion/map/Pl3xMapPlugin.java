@@ -1,5 +1,6 @@
 package com.ryderbelserion.map;
 
+import com.ryderbelserion.fusion.core.api.interfaces.permissions.enums.Mode;
 import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
@@ -19,7 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
@@ -41,7 +44,17 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
     public abstract void playParticle(@NotNull final MapPosition position, @NotNull final MapParticle mapParticle);
 
+    public abstract boolean hasPermission(@NotNull final Audience audience, @NotNull final String permission);
+
+    public abstract void registerPermission(@NotNull final Mode mode, @NotNull final String permission, @NotNull final String description, @NotNull final Map<String, Boolean> children);
+
+    public void registerPermission(@NotNull final Mode mode, @NotNull final String permission, @NotNull final String description) {
+        registerPermission(mode, permission, description, new HashMap<>());
+    }
+
     public abstract ISenderAdapter getSenderAdapter();
+
+    public abstract void registerCommands();
 
     @Override
     public void init() {
