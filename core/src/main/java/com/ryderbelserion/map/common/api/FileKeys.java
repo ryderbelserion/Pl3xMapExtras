@@ -22,7 +22,8 @@ public enum FileKeys {
     config("config.yml", FileType.YAML),
 
     banners_storage("banners.json", FileType.JSON, "storage"),
-    banners_config("banners.yml", FileType.YAML, "banners");
+
+    banners_config("config.yml", FileType.YAML, "banners");
 
     private final FusionCore fusion = FusionProvider.getInstance();
     private final FileManager fileManager = this.fusion.getFileManager();

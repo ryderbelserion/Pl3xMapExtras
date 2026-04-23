@@ -1,6 +1,5 @@
 package com.ryderbelserion.map.common.modules.banners.config;
 
-import com.ryderbelserion.fusion.core.FusionCore;
 import com.ryderbelserion.fusion.core.api.FusionProvider;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.common.api.FileKeys;
@@ -44,21 +43,21 @@ public class BannerConfig {
         Optional.of(configuration.node("layer")).ifPresentOrElse(section -> {
             this.layerConfig = new LayerConfig(section);
 
-            this.fusion.log("warn", "The layer section was found in banners.yml!");
+            this.fusion.log("warn", "The layer section was found in config.yml!");
         }, () -> {
             this.layerConfig = new LayerConfig();
 
-            this.fusion.log("warn", "The layer section was not found in banners.yml, Default values are being used!");
+            this.fusion.log("warn", "The layer section was not found in config.yml, Default values are being used!");
         });
 
         Optional.of(configuration.node("icon")).ifPresentOrElse(section -> {
             this.iconConfig = new IconConfig(section);
 
-            this.fusion.log("warn", "The icon section was found in banners.yml!");
+            this.fusion.log("warn", "The icon section was found in config.yml!");
         }, () -> {
             this.iconConfig = new IconConfig();
 
-            this.fusion.log("warn", "The icon section was not found in banners.yml, Default values are being used!");
+            this.fusion.log("warn", "The icon section was not found in config.yml, Default values are being used!");
         });
 
         Optional.of(configuration.node("particle")).ifPresent(section -> {
