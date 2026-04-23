@@ -80,7 +80,7 @@ public class WorldGuardHook implements Hook {
                     Marker<?> marker;
 
                     if (claim.getType() == RegionType.POLYGON) {
-                        marker = Marker.polygon(key, Marker.polyline(key + "line", claim.getPoints().stream().map(point -> Point.of(point.getX(), point.getZ())).toList()));
+                        marker = Marker.polygon(key, Marker.polyline(key + "line", claim.getPoints().stream().map(point -> Point.of(point.x(), point.z())).toList()));
                     } else {
                         marker = Marker.rectangle(key, claim.getMin(), claim.getMax());
                     }

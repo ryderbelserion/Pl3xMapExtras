@@ -71,7 +71,7 @@ public class P2Hook implements Listener, Hook {
                     final BlockVector3 max = region.getMaximumPoint();
                     final BlockVector3 min = region.getMinimumPoint();
 
-                    p2plots.add(new P2Plot(min.getX() - 1, max.getX() + 1, min.getZ() - 1, max.getZ() + 1, null));
+                    p2plots.add(new P2Plot(min.x() - 1, max.x() + 1, min.z() - 1, max.z() + 1, null));
                 }
 
                 if (p2plots.isEmpty()) {
