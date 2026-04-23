@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
 import com.ryderbelserion.map.api.constants.Namespaces;
+import com.ryderbelserion.map.api.enums.Permissions;
 import com.ryderbelserion.map.common.configs.ConfigManager;
 import com.ryderbelserion.map.common.modules.banners.BannerLayer;
 import com.ryderbelserion.map.common.modules.banners.BannerRegistry;
@@ -61,7 +62,7 @@ public class PaperBannerListener implements Listener {
 
         if (inventory.getItemInMainHand().getType() != Material.FILLED_MAP) return;
 
-        if (!player.hasPermission("pl3xmapextras.banners.admin")) return;
+        if (!Permissions.banners_admin.hasPermission(player)) return;
 
         switch (event.getAction()) {
             case LEFT_CLICK_BLOCK -> {
@@ -88,7 +89,7 @@ public class PaperBannerListener implements Listener {
 
         final Player player = event.getPlayer();
 
-        if (!player.hasPermission("pl3xmapextras.banners.place")) return;
+        if (!Permissions.banners_place.hasPermission(player)) return;
 
         addBanner(player, banner);
     }
@@ -107,7 +108,7 @@ public class PaperBannerListener implements Listener {
 
         final Player player = event.getPlayer();
 
-        if (!player.hasPermission("pl3xmapextras.banners.remove")) return;
+        if (!Permissions.banners_remove.hasPermission(player)) return;
 
         removeBanner(player, banner);
     }

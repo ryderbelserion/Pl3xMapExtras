@@ -7,7 +7,11 @@ import org.jetbrains.annotations.NotNull;
 
 public enum Permissions {
 
-    signs_admin("signs.admin", "allows the user to have signs show up on the map", PermissionDefault.OP);
+    signs_admin("signs.admin", "allows the user to add signs to the web map via block interaction.", PermissionDefault.OP),
+
+    banners_admin("banners.admin", "allows the user to add banners to the web map via block interaction.", PermissionDefault.OP),
+    banners_place("banners.place", "allows the user to add banners to the web map via block placement.", PermissionDefault.OP),
+    banners_remove("banners.remove", "allows the user to remove banners from the web map", PermissionDefault.OP);
 
     private final PermissionDefault isDefault;
     private final String description;
@@ -20,7 +24,7 @@ public enum Permissions {
     }
 
     public final String getPermission() {
-        return "Pl3xMapExtras" + this.node;
+        return "pl3xmapextras" + this.node;
     }
 
     public final boolean hasPermission(@NotNull final CommandSender player) {
