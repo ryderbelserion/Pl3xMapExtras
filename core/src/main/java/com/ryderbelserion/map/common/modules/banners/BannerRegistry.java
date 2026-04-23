@@ -43,6 +43,10 @@ public class BannerRegistry {
     }
 
     public void reload() {
+        if (this.plugin.getBannerConfig().isEnabled()) {
+            return;
+        }
+
         final Pl3xMap api = Pl3xMap.api();
 
         final WorldRegistry registry = api.getWorldRegistry();
@@ -55,6 +59,8 @@ public class BannerRegistry {
             final Registry<Layer> layer = world.getLayerRegistry();
 
             if (layer.has(Namespaces.banner_key)) {
+                this.fusion.log("warn", "Unregistering the banner layer for %s".formatted(world.getName()));
+
                 layer.unregister(Namespaces.banner_key);
             }
         }
