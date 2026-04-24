@@ -5,7 +5,7 @@ import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
 import com.ryderbelserion.map.api.constants.Namespaces;
 import com.ryderbelserion.map.common.modules.banners.config.BannerConfig;
-import com.ryderbelserion.map.common.modules.banners.objects.BannerTexture;
+import com.ryderbelserion.map.common.objects.MapTexture;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
 import net.pl3x.map.core.event.EventListener;
@@ -36,7 +36,7 @@ public class BannerListener implements EventListener {
             return;
         }
 
-        for (final BannerTexture texture : this.registry.getTextures().values()) {
+        for (final MapTexture texture : this.registry.getTextures().values()) {
             texture.register();
         }
     }
@@ -47,7 +47,7 @@ public class BannerListener implements EventListener {
             return;
         }
 
-        for (final BannerTexture texture : this.registry.getTextures().values()) {
+        for (final MapTexture texture : this.registry.getTextures().values()) {
             texture.register();
         }
 

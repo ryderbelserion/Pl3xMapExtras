@@ -13,7 +13,7 @@ import com.ryderbelserion.map.common.modules.banners.config.icons.types.PopupCon
 import com.ryderbelserion.map.common.modules.banners.config.icons.types.TooltipConfig;
 import com.ryderbelserion.map.common.modules.banners.interfaces.IBannerLayer;
 import com.ryderbelserion.map.common.modules.banners.objects.Banner;
-import com.ryderbelserion.map.common.modules.banners.objects.BannerTexture;
+import com.ryderbelserion.map.common.objects.MapTexture;
 import com.ryderbelserion.map.common.objects.MapPosition;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Icon;
@@ -121,7 +121,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
             return false;
         }
 
-        final BannerTexture texture = banner.texture();
+        final MapTexture texture = banner.texture();
 
         final String type = texture.getType();
 
@@ -241,7 +241,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
 
         final String worldName = position.worldName();
 
-        final BannerTexture texture = banner.texture();
+        final MapTexture texture = banner.texture();
 
         final String bannerType = texture.getType();
 

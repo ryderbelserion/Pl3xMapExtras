@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.common.modules.banners.objects;
+package com.ryderbelserion.map.common.objects;
 
 import com.ryderbelserion.fusion.core.api.FusionProvider;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.nio.file.Path;
 
-public class BannerTexture {
+public class MapTexture {
 
     private final FusionKyori fusion = (FusionKyori) FusionProvider.getInstance();
 
@@ -17,13 +17,13 @@ public class BannerTexture {
     private final String key;
     private final Path path;
 
-    public BannerTexture(@NotNull final Path path, @NotNull final String fileName) {
-        this.key = "pl3xmapextras_%s_banner".formatted(this.type = fileName);
+    public MapTexture(@NotNull final Path path, @NotNull final String type, @NotNull final String fileName) {
+        this.key = "pl3xmapextras_%s_%s".formatted(this.type = fileName, type);
         this.path = path;
     }
 
-    public static BannerTexture of(@NotNull final Path path, @NotNull final String fileName) {
-        return new BannerTexture(path, fileName);
+    public static MapTexture of(@NotNull final Path path, @NotNull final String type, @NotNull final String fileName) {
+        return new MapTexture(path, type, fileName);
     }
 
     public void register() {

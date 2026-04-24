@@ -7,7 +7,7 @@ import com.ryderbelserion.map.api.Pl3xMapExtras;
 import com.ryderbelserion.map.api.constants.Namespaces;
 import com.ryderbelserion.map.common.modules.banners.config.BannerConfig;
 import com.ryderbelserion.map.common.modules.banners.objects.Banner;
-import com.ryderbelserion.map.common.modules.banners.objects.BannerTexture;
+import com.ryderbelserion.map.common.objects.MapTexture;
 import com.ryderbelserion.map.common.objects.MapPosition;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
@@ -25,7 +25,7 @@ import java.util.Optional;
 
 public class BannerRegistry {
 
-    private final Map<String, BannerTexture> textures = new HashMap<>();
+    private final Map<String, MapTexture> textures = new HashMap<>();
 
     private final Pl3xMapPlugin plugin = (Pl3xMapPlugin) Pl3xMapExtras.Provider.getInstance();
     private final FileManager fileManager = this.plugin.getFileManager();
@@ -37,7 +37,7 @@ public class BannerRegistry {
         for (final Path path : this.fusion.getFiles(this.path.resolve("banners").resolve("icons"), ".png")) {
             final String fileName = path.getFileName().toString().replace(".png", "");
 
-            this.textures.putIfAbsent(fileName, BannerTexture.of(path, fileName));
+            this.textures.putIfAbsent(fileName, MapTexture.of(path, "banner", fileName));
         }
 
         new BannerListener();
@@ -135,18 +135,18 @@ public class BannerRegistry {
         return Optional.ofNullable((BannerLayer) world.getLayerRegistry().get(Namespaces.banner_key));
     }
 
-    public @NotNull final BannerTexture getTexture(@NotNull final String fileName) {
+    public @NotNull final MapTexture getTexture(@NotNull final String fileName) {
         return this.textures.get(fileName);
     }
 
-    public @NotNull BannerTexture getTexture(@NotNull final Key key) {
+    public @NotNull MapTexture getTexture(@NotNull final Key key) {
         final String minimal = key.asMinimalString();
         final String value = minimal.endsWith("wall_banner") ? minimal.replace("_wall_banner", "") : minimal.replace("_banner", "");
 
         return getTexture(value);
     }
 
-    public @NotNull final Map<String, BannerTexture> getTextures() {
+    public @NotNull final Map<String, MapTexture> getTextures() {
         return Collections.unmodifiableMap(this.textures);
     }
 }
