@@ -1,10 +1,9 @@
 package com.ryderbelserion.map.common.modules.banners;
 
-import com.ryderbelserion.fusion.files.FileManager;
-import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
 import com.ryderbelserion.map.api.constants.Namespaces;
+import com.ryderbelserion.map.api.registry.layers.AbstractLayerRegistry;
 import com.ryderbelserion.map.common.modules.banners.config.BannerConfig;
 import com.ryderbelserion.map.common.modules.banners.objects.Banner;
 import com.ryderbelserion.map.common.objects.MapTexture;
@@ -12,9 +11,6 @@ import com.ryderbelserion.map.api.objects.MapPosition;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.pl3x.map.core.Pl3xMap;
-import net.pl3x.map.core.markers.layer.Layer;
-import net.pl3x.map.core.registry.Registry;
-import net.pl3x.map.core.registry.WorldRegistry;
 import net.pl3x.map.core.world.World;
 import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
@@ -23,16 +19,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class BannerRegistry {
+public class BannerRegistry extends AbstractLayerRegistry<BannerLayer> {
+
+    private final Pl3xMapPlugin plugin = (Pl3xMapPlugin) Pl3xMapExtras.Provider.getInstance();
 
     private final Map<String, MapTexture> textures = new HashMap<>();
 
-    private final Pl3xMapPlugin plugin = (Pl3xMapPlugin) Pl3xMapExtras.Provider.getInstance();
-    private final FileManager fileManager = this.plugin.getFileManager();
-    private final FusionKyori fusion = this.plugin.getFusion();
-    private final Path source = this.fileManager.getSource();
-    private final Path path = this.plugin.getDataPath();
+    @Override
+    public void init() {
+        this.fileManager.extractFolder(this.source, "banners/icons", this.path);
+    }
 
+    @Override
     public void post() {
         for (final Path path : this.fusion.getFiles(this.path.resolve("banners").resolve("icons"), ".png")) {
             final String fileName = path.getFileName().toString().replace(".png", "");
@@ -45,42 +43,11 @@ public class BannerRegistry {
         this.fusion.log("info", "The banner module has been initialized!");
     }
 
-    public void init() {
-        this.fileManager.extractFolder(this.source, "banners/icons", this.path);
-    }
-
+    @Override
     public void reload() {
         this.fileManager.extractFolder(this.source, "banners/icons", this.path);
 
-        final BannerConfig config = this.plugin.getBannerConfig();
-
-        final Pl3xMap api = Pl3xMap.api();
-
-        final WorldRegistry registry = api.getWorldRegistry();
-
-        final boolean isEnabled = config.isEnabled();
-
-        for (final World world : registry.values()) {
-            if (!world.isEnabled()) {
-                continue;
-            }
-
-            final Registry<Layer> layer = world.getLayerRegistry();
-
-            if (layer.has(Namespaces.banner_key)) {
-                final String name = world.getName();
-
-                if (isEnabled) {
-                    getLayer(name).ifPresent(BannerLayer::refresh);
-
-                    continue;
-                }
-
-                this.fusion.log("warn", "Unregistering the banner layer, as the banner view is disabled for %s".formatted(name));
-
-                layer.unregister(Namespaces.banner_key);
-            }
-        }
+        super.reload();
     }
 
     public void addBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final Key displayItem) {
@@ -97,9 +64,7 @@ public class BannerRegistry {
                 config.getSpawnParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
                 config.getSpawnSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
             }
-        }, () -> {
-            this.fusion.log("warn", "Failed to add banner to %s @ (%s,%s,%s)".formatted(worldName, position.x(), position.y(), position.z()));
-        });
+        }, () -> this.fusion.log("warn", "Failed to add banner to %s @ (%s,%s,%s)".formatted(worldName, position.x(), position.y(), position.z())));
     }
 
     public void removeBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final String displayItem) {
@@ -120,12 +85,11 @@ public class BannerRegistry {
                 config.getRemoveParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
                 config.getRemoveSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
             }
-        }, () -> {
-            this.fusion.log("warn", "Could not remove banner from %s, because layer for the world does not exist.".formatted(worldName));
-        });
+        }, () -> this.fusion.log("warn", "Could not remove banner from %s, because layer for the world does not exist.".formatted(worldName)));
     }
 
-    public Optional<BannerLayer> getLayer(@NotNull final String worldName) {
+    @Override
+    public @NotNull final Optional<BannerLayer> getLayer(@NotNull final String worldName) {
         final World world = Pl3xMap.api().getWorldRegistry().get(worldName);
 
         if (world == null || !world.isEnabled()) {
@@ -133,6 +97,16 @@ public class BannerRegistry {
         }
 
         return Optional.ofNullable((BannerLayer) world.getLayerRegistry().get(Namespaces.banner_key));
+    }
+
+    @Override
+    public final boolean isEnabled() {
+        return this.plugin.getBannerConfig().isEnabled();
+    }
+
+    @Override
+    public @NotNull final String getKey() {
+        return Namespaces.banner_key;
     }
 
     public @NotNull final MapTexture getTexture(@NotNull final String fileName) {

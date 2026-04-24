@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.api.registry.layers;
 
 import com.ryderbelserion.fusion.core.api.FusionProvider;
+import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.api.registry.layers.objects.AbstractLayer;
 import net.pl3x.map.core.Pl3xMap;
@@ -9,11 +10,18 @@ import net.pl3x.map.core.registry.Registry;
 import net.pl3x.map.core.registry.WorldRegistry;
 import net.pl3x.map.core.world.World;
 import org.jetbrains.annotations.NotNull;
+import java.nio.file.Path;
 import java.util.Optional;
 
 public abstract class AbstractLayerRegistry<L extends AbstractLayer> {
 
     protected final FusionKyori fusion = (FusionKyori) FusionProvider.getInstance();
+
+    protected final FileManager fileManager = this.fusion.getFileManager();
+
+    protected final Path source = this.fileManager.getSource();
+
+    protected final Path path = this.fusion.getDataPath();
 
     public abstract void init();
 
