@@ -28,7 +28,6 @@ public class BannerRegistry {
     private final Map<String, BannerTexture> textures = new HashMap<>();
 
     private final Pl3xMapPlugin plugin = (Pl3xMapPlugin) Pl3xMapExtras.Provider.getInstance();
-    private final BannerRegistry registry = this.plugin.getBannerRegistry();
     private final FileManager fileManager = this.plugin.getFileManager();
     private final FusionKyori fusion = this.plugin.getFusion();
     private final Path source = this.fileManager.getSource();
@@ -72,7 +71,7 @@ public class BannerRegistry {
                 final String name = world.getName();
 
                 if (isEnabled) {
-                    this.registry.getLayer(name).ifPresent(BannerLayer::refresh);
+                    getLayer(name).ifPresent(BannerLayer::refresh);
 
                     continue;
                 }
