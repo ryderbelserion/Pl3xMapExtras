@@ -9,7 +9,7 @@ import com.ryderbelserion.map.common.configs.ConfigManager;
 import com.ryderbelserion.map.common.modules.banners.BannerLayer;
 import com.ryderbelserion.map.common.modules.banners.BannerRegistry;
 import com.ryderbelserion.map.common.modules.banners.config.BannerConfig;
-import com.ryderbelserion.map.common.objects.MapPosition;
+import com.ryderbelserion.map.api.objects.MapPosition;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -204,7 +204,7 @@ public class PaperBannerListener implements Listener {
         int maxX = minX + 16;
         int maxZ = minZ + 16;
 
-        layer.getBanners().stream()
+        layer.getPositions().stream()
                 // filter banners only inside chunk
                 .filter(banner -> banner.position().x() >= minX)
                 .filter(banner -> banner.position().z() >= minZ)

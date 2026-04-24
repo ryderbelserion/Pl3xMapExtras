@@ -1,6 +1,6 @@
 package com.ryderbelserion.map.common.modules.banners.objects;
 
-import com.ryderbelserion.map.common.objects.MapPosition;
+import com.ryderbelserion.map.api.objects.MapPosition;
 import com.ryderbelserion.map.common.objects.MapTexture;
 import org.jetbrains.annotations.NotNull;
 

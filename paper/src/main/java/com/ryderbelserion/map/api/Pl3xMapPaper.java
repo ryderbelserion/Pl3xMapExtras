@@ -14,7 +14,7 @@ import com.ryderbelserion.map.api.registry.adapters.PaperSenderAdapter;
 import com.ryderbelserion.map.common.commands.player.ISource;
 import com.ryderbelserion.map.common.commands.subs.CoreCommand;
 import com.ryderbelserion.map.common.objects.MapParticle;
-import com.ryderbelserion.map.common.objects.MapPosition;
+import com.ryderbelserion.map.api.objects.MapPosition;
 import com.ryderbelserion.map.hook.Hook;
 import com.ryderbelserion.map.listener.CacheListener;
 import com.ryderbelserion.map.listener.banners.PaperBannerListener;

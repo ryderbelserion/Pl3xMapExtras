@@ -1,4 +1,4 @@
-package com.ryderbelserion.map.common.objects;
+package com.ryderbelserion.map.api.objects;
 
 import net.pl3x.map.core.markers.Point;
 import org.jetbrains.annotations.NotNull;

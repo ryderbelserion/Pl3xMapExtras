@@ -14,7 +14,7 @@ import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.common.modules.banners.BannerRegistry;
 import com.ryderbelserion.map.common.modules.banners.config.BannerConfig;
 import com.ryderbelserion.map.common.objects.MapParticle;
-import com.ryderbelserion.map.common.objects.MapPosition;
+import com.ryderbelserion.map.api.objects.MapPosition;
 import com.ryderbelserion.map.common.objects.MapSound;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;

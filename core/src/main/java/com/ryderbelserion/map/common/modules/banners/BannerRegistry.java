@@ -8,7 +8,7 @@ import com.ryderbelserion.map.api.constants.Namespaces;
 import com.ryderbelserion.map.common.modules.banners.config.BannerConfig;
 import com.ryderbelserion.map.common.modules.banners.objects.Banner;
 import com.ryderbelserion.map.common.objects.MapTexture;
-import com.ryderbelserion.map.common.objects.MapPosition;
+import com.ryderbelserion.map.api.objects.MapPosition;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.pl3x.map.core.Pl3xMap;

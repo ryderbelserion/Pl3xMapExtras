@@ -4,6 +4,7 @@ import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
 import com.ryderbelserion.map.api.constants.Namespaces;
+import com.ryderbelserion.map.api.registry.layers.objects.AbstractLayer;
 import com.ryderbelserion.map.api.utils.ConfigUtils;
 import com.ryderbelserion.map.common.api.FileKeys;
 import com.ryderbelserion.map.common.configs.types.map.LayerConfig;
@@ -14,8 +15,7 @@ import com.ryderbelserion.map.common.modules.banners.config.icons.types.TooltipC
 import com.ryderbelserion.map.common.modules.banners.interfaces.IBannerLayer;
 import com.ryderbelserion.map.common.modules.banners.objects.Banner;
 import com.ryderbelserion.map.common.objects.MapTexture;
-import com.ryderbelserion.map.common.objects.MapPosition;
-import net.pl3x.map.core.markers.layer.WorldLayer;
+import com.ryderbelserion.map.api.objects.MapPosition;
 import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
@@ -29,9 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class BannerLayer extends WorldLayer implements IBannerLayer {
+public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
 
-    private final Map<MapPosition, Marker<?>> markers = new ConcurrentHashMap<>();
     private final Map<MapPosition, Banner> banners = new ConcurrentHashMap<>();
 
     private final Pl3xMapPlugin plugin = (Pl3xMapPlugin) Pl3xMapExtras.Provider.getInstance();
@@ -39,17 +38,16 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
     private final FusionKyori fusion = this.plugin.getFusion();
 
     public BannerLayer(@NotNull final BannerConfig config, @NotNull final World world) {
-        super(Namespaces.banner_key, world, () -> config.getLayerConfig().getLayerLabel());
+        super(Namespaces.banner_key, world, config.getLayerConfig().getLayerLabel());
 
         refresh();
 
-        init(world);
-
-        this.fusion.log("warn", "The banner layer for {} is ready!", world.getName());
+        init();
     }
 
-    public void init(@NotNull final World world) {
-        final String worldName = world.getName();
+    @Override
+    public void init() {
+        final String worldName = this.world.getName();
 
         final BasicConfigurationNode root = node(worldName, "");
 
@@ -73,6 +71,8 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
                 ), false);
             }
         }
+
+        this.fusion.log("warn", "The banner layer for {} is ready!", worldName);
     }
 
     @Override
@@ -92,15 +92,6 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         } else {
             setUpdateInterval(interval);
         }
-    }
-
-    @Override
-    public @NotNull Collection<Marker<?>> getMarkers() {
-        return this.markers.values();
-    }
-
-    public @NotNull final Collection<Banner> getBanners() {
-        return Collections.unmodifiableCollection(this.banners.values());
     }
 
     @Override
@@ -172,7 +163,7 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
                         .tooltipSticky(tooltipConfig.isSticky())
                         .tooltipOpacity(tooltipConfig.getOpacity());
             }
-            
+
             final PopupConfig popup = iconConfig.asPopup();
 
             final String popupContent = popup.asContent();
@@ -268,7 +259,12 @@ public class BannerLayer extends WorldLayer implements IBannerLayer {
         return false;
     }
 
-    public BasicConfigurationNode node(@NotNull final String worldName, @NotNull final String bannerType) {
+    @Override
+    public @NotNull final Collection<Banner> getPositions() {
+        return Collections.unmodifiableCollection(this.banners.values());
+    }
+
+    private BasicConfigurationNode node(@NotNull final String worldName, @NotNull final String bannerType) {
         final BasicConfigurationNode root = FileKeys.banners_storage.getJsonConfig().node("banners", worldName);
 
         if (bannerType.isEmpty()) {
