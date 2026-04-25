@@ -3,10 +3,9 @@ plugins {
 }
 
 project.description = "The api for Pl3xMapExtras."
+project.version = rootProject.property("api_version").toString()
 project.group = "${rootProject.group}.api"
 
 dependencies {
-    compileOnlyApi(libs.bundles.kyori)
-    compileOnlyApi(libs.fusion.kyori)
-    compileOnlyApi(libs.pl3xmap)
+    compileOnlyApi(libs.bundles.global)
 }

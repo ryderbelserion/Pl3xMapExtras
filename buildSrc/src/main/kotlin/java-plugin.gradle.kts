@@ -6,10 +6,12 @@ plugins {
 
 val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
 
+base {
+    archivesName = "${rootProject.name}-${project.name}"
+}
+
 repositories {
     maven("https://repo.codemc.io/repository/maven-public/")
-
-    maven("https://repo.triumphteam.dev/snapshots/")
 
     maven("https://repo.crazycrew.us/releases/")
 
@@ -18,7 +20,6 @@ repositories {
     maven("https://jitpack.io/")
 
     mavenCentral()
-    mavenLocal()
 }
 
 java {

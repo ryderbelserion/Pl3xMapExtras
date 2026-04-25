@@ -2,7 +2,9 @@ plugins {
     `paper-plugin`
 }
 
+project.description = "The paper version of Pl3xMapExtras."
 project.group = "${rootProject.group}"
+project.version = "${rootProject.version}"
 
 repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
@@ -20,8 +22,9 @@ repositories {
 
 dependencies {
     implementation(libs.fusion.paper)
-
     implementation(libs.metrics)
+
+    api(project(":core"))
 
     implementation(platform(libs.plot.bom))
     compileOnly(libs.plot.bukkit)
@@ -36,8 +39,6 @@ dependencies {
     compileOnly(libs.griefdefender)
     compileOnly(libs.playerwarps)
     compileOnly(libs.worldguard)
-
-    api(project(":core"))
 }
 
 tasks {

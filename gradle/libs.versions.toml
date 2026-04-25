@@ -2,14 +2,14 @@
 # Paper API
 paperweight = "2.0.0-beta.21" # https://github.com/PaperMC/paperweight
 adventure = "5.0.0" # https://github.com/KyoriPowered/adventure
-paper = "1.21.11-R0.1-SNAPSHOT" # https://github.com/PaperMC/Paper
+paper = "26.1.2.build.+" # https://github.com/PaperMC/Paper
 
 # Minecraft API
-minecraft = "1.21.11" # https://minecraft.net
+minecraft = "26.1.2" # https://minecraft.net
 brigadier = "1.3.10" # https://minecraft.net
 
 # Pl3xMap API
-pl3xmap = "1.21.11-544" # https://modrinth.com/project/Pl3xMap
+pl3xmap = "26.1.2-545" # https://modrinth.com/project/Pl3xMap
 
 # Plugin API
 headdatabaseapi = "1.3.2" # https://github.com/Arcaniax-Development/HeadDatabase-API
@@ -27,14 +27,14 @@ plot-bom = "1.56" # https://intellectualsites.gitbook.io/plotsquared/api/api-doc
 playerwarps = "7.10.0" # https://docs.olziedev.com/projects/playerwarps/api
 
 # Other API
-fusion = "3.4.3" # https://github.com/ryderbelserion/Fusion
-bStats = "3.1.0" # https://github.com/Bastian/bStats
+fusion = "4.21.0" # https://github.com/ryderbelserion/Fusion
+bStats = "3.2.1" # https://github.com/Bastian/bStats
 
 # Gradle API
 fix-javadoc = "1.19" # https://github.com/mfnalex/gradle-fix-javadoc-plugin
 run-paper = "3.0.2" # https://github.com/jpenilla/run-task
 minotaur = "2.9.0" # https://github.com/modrinth/minotaur
-feather = "0.4.0" # https://github.com/ryderbelserion/Feather
+feather = "0.6.0" # https://github.com/ryderbelserion/Feather
 hangar = "0.1.4" # https://github.com/HangarMC/hangar-publish-plugin
 shadow = "9.4.1" # https://github.com/GradleUp/shadow
 
@@ -126,4 +126,12 @@ build = [
 paper = [
     "paperweight",
     "run-paper"
+]
+
+global = [
+    "fusion-kyori",
+    "kyori-logger",
+    "kyori-text",
+    "kyori-api",
+    "pl3xmap"
 ]
