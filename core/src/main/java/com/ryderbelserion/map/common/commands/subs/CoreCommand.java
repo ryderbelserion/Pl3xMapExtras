@@ -1,8 +1,8 @@
 package com.ryderbelserion.map.common.commands.subs;
 
 import com.mojang.brigadier.context.CommandContext;
-import com.ryderbelserion.fusion.core.api.interfaces.permissions.enums.Mode;
 import com.ryderbelserion.map.common.commands.BaseCommand;
+import com.ryderbelserion.map.common.commands.enums.Mode;
 import com.ryderbelserion.map.common.commands.player.ISource;
 import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;

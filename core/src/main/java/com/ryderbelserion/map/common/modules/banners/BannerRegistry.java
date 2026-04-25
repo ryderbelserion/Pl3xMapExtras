@@ -1,5 +1,6 @@
 package com.ryderbelserion.map.common.modules.banners;
 
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
 import com.ryderbelserion.map.api.constants.Namespaces;
@@ -27,12 +28,12 @@ public class BannerRegistry extends AbstractLayerRegistry<BannerLayer> {
 
     @Override
     public void init() {
-        this.fileManager.extractFolder(this.source, "banners/icons", this.path);
+        this.fileManager.extractFolder("banners/icons", this.path);
     }
 
     @Override
     public void post() {
-        for (final Path path : this.fusion.getFiles(this.path.resolve("banners").resolve("icons"), ".png")) {
+        for (final Path path : this.fusion.getFilesByPath(this.path.resolve("banners").resolve("icons"), ".png")) {
             final String fileName = path.getFileName().toString().replace(".png", "");
 
             this.textures.putIfAbsent(fileName, MapTexture.of(path, "banner", fileName));
@@ -40,12 +41,12 @@ public class BannerRegistry extends AbstractLayerRegistry<BannerLayer> {
 
         new BannerListener();
 
-        this.fusion.log("info", "The banner module has been initialized!");
+        this.fusion.log(Level.INFO, "The banner module has been initialized!");
     }
 
     @Override
     public void reload() {
-        this.fileManager.extractFolder(this.source, "banners/icons", this.path);
+        this.fileManager.extractFolder("banners/icons", this.path);
 
         super.reload();
     }
@@ -64,7 +65,7 @@ public class BannerRegistry extends AbstractLayerRegistry<BannerLayer> {
                 config.getSpawnParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
                 config.getSpawnSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
             }
-        }, () -> this.fusion.log("warn", "Failed to add banner to %s @ (%s,%s,%s)".formatted(worldName, position.x(), position.y(), position.z())));
+        }, () -> this.fusion.log(Level.WARNING, "Failed to add banner to %s @ (%s,%s,%s)".formatted(worldName, position.x(), position.y(), position.z())));
     }
 
     public void removeBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final String displayItem) {
@@ -85,7 +86,7 @@ public class BannerRegistry extends AbstractLayerRegistry<BannerLayer> {
                 config.getRemoveParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
                 config.getRemoveSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
             }
-        }, () -> this.fusion.log("warn", "Could not remove banner from %s, because layer for the world does not exist.".formatted(worldName)));
+        }, () -> this.fusion.log(Level.WARNING, "Could not remove banner from %s, because layer for the world does not exist.".formatted(worldName)));
     }
 
     @Override

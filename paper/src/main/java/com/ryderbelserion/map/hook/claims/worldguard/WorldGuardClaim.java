@@ -26,8 +26,8 @@ public class WorldGuardClaim {
 
         BlockVector3 min = this.region.getMinimumPoint();
         BlockVector3 max = this.region.getMaximumPoint();
-        this.min = Point.of(min.getX(), min.getZ());
-        this.max = Point.of(max.getX(), max.getZ());
+        this.min = Point.of(min.x(), min.z());
+        this.max = Point.of(max.x(), max.z());
     }
 
     public @NotNull World getWorld() {

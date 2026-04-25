@@ -1,7 +1,6 @@
 package com.ryderbelserion.map;
 
-import com.ryderbelserion.fusion.core.api.interfaces.permissions.enums.Mode;
-import com.ryderbelserion.fusion.files.enums.FileAction;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
@@ -9,6 +8,7 @@ import com.ryderbelserion.map.api.adapters.IPlayerAdapter;
 import com.ryderbelserion.map.common.api.FileKeys;
 import com.ryderbelserion.map.common.api.adapters.PlayerAdapter;
 import com.ryderbelserion.map.common.api.adapters.sender.ISenderAdapter;
+import com.ryderbelserion.map.common.commands.enums.Mode;
 import com.ryderbelserion.map.common.configs.ConfigManager;
 import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.common.modules.banners.BannerRegistry;
@@ -18,9 +18,6 @@ import com.ryderbelserion.map.api.objects.MapPosition;
 import com.ryderbelserion.map.common.objects.MapSound;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +36,12 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
         super(fusion);
     }
 
+    public abstract void registerPermission(@NotNull final Mode mode, @NotNull final String permission, @NotNull final String description, @NotNull final Map<String, Boolean> children);
+
+    public void registerPermission(@NotNull final Mode mode, @NotNull final String permission, @NotNull final String description) {
+        registerPermission(mode, permission, description, new HashMap<>());
+    }
+
     public void playSound(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final MapSound mapSound) {
         audience.playSound(mapSound.asSound(), position.x(), position.y(), position.z());
     }
@@ -46,12 +49,6 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
     public abstract void playParticle(@NotNull final MapPosition position, @NotNull final MapParticle mapParticle);
 
     public abstract boolean hasPermission(@NotNull final Audience audience, @NotNull final String permission);
-
-    public abstract void registerPermission(@NotNull final Mode mode, @NotNull final String permission, @NotNull final String description, @NotNull final Map<String, Boolean> children);
-
-    public void registerPermission(@NotNull final Mode mode, @NotNull final String permission, @NotNull final String description) {
-        registerPermission(mode, permission, description, new HashMap<>());
-    }
 
     public abstract ISenderAdapter getSenderAdapter();
 
@@ -63,23 +60,12 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
         Pl3xMapExtras.Provider.register(this);
 
-        try {
-            Files.createDirectories(this.dataPath);
-        } catch (final IOException ignored) {}
-
         this.fileManager.addFolder(this.dataPath.resolve("locale"), FileType.YAML);
-
-        final Path source = this.fileManager.getSource();
-
-        this.fileManager.extractFolder(source, "storage", this.dataPath);
-        this.fileManager.extractFolder(source, "banners", this.dataPath);
 
         List.of(
                 FileKeys.banners_storage,
-                FileKeys.banners_config
-        ).forEach(file -> file.addFile(consumer -> consumer.addAction(FileAction.ALREADY_EXTRACTED)));
+                FileKeys.banners_config,
 
-        List.of(
                 FileKeys.config,
                 FileKeys.messages
         ).forEach(FileKeys::addFile);
@@ -87,9 +73,9 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
         this.configManager = new ConfigManager();
         this.configManager.init();
 
-        this.fileManager.extractFolder(source, "warps/icons", this.dataPath);
-        this.fileManager.extractFolder(source, "mobs/icons", this.dataPath);
-        this.fileManager.extractFolder(source, "signs/icons", this.dataPath);
+        this.fileManager.extractFolder("warps/icons", this.dataPath);
+        this.fileManager.extractFolder("signs/icons", this.dataPath);
+        this.fileManager.extractFolder("mobs/icons", this.dataPath);
     }
 
     @Override
@@ -100,11 +86,9 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
         this.configManager.init();
 
-        final Path source = this.fileManager.getSource();
-
-        this.fileManager.extractFolder(source, "warps/icons", this.dataPath);
-        this.fileManager.extractFolder(source, "mobs/icons", this.dataPath);
-        this.fileManager.extractFolder(source, "signs/icons", this.dataPath);
+        this.fileManager.extractFolder("warps/icons", this.dataPath);
+        this.fileManager.extractFolder("signs/icons", this.dataPath);
+        this.fileManager.extractFolder("mobs/icons", this.dataPath);
 
         this.bannerRegistry.reload();
     }
@@ -119,7 +103,7 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
         if (getBannerConfig().isEnabled()) {
             this.bannerRegistry.post();
         } else {
-            this.fusion.log("warn", "The banner module is not enabled!");
+            this.fusion.log(Level.WARNING, "The banner module is not enabled!");
         }
     }
 
@@ -132,15 +116,15 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
         return this.bannerRegistry;
     }
 
+    public @NotNull final ConfigManager getConfigManager() {
+        return this.configManager;
+    }
+
     public @NotNull final BannerConfig getBannerConfig() {
         return this.configManager.getBannerConfig();
     }
 
     public @NotNull final BasicConfig getBasicConfig() {
         return this.configManager.getConfig();
-    }
-
-    public @NotNull final ConfigManager getConfigManager() {
-        return this.configManager;
     }
 }

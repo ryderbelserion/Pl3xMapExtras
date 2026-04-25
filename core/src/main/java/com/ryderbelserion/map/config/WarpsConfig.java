@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import com.ryderbelserion.fusion.core.api.FusionProvider;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
@@ -41,7 +42,7 @@ public abstract class WarpsConfig extends AbstractConfig {
             final String key = String.format("pl3xmap_warps_%s", image);
             Pl3xMap.api().getIconRegistry().register(new IconImage(key, ImageIO.read(icon), "png"));
         } catch (final IOException exception) {
-            provider.log("warn", "Failed to register icon ({}) {}, {}", image, fileName, exception.getMessage());
+            provider.log(Level.WARNING, "Failed to register icon ({}) {}, {}", image, fileName, exception.getMessage());
 
             exception.printStackTrace();
         }
@@ -78,7 +79,6 @@ public abstract class WarpsConfig extends AbstractConfig {
                 if (value instanceof ConfigurationSection section) {
                     return Point.of(section.getInt("x"), section.getInt("z"));
                 } else if (value instanceof Map<?, ?>) {
-                    @SuppressWarnings("unchecked")
                     final Map<String, Integer> point = (Map<String, Integer>) value;
 
                     return Point.of(point.get("x"), point.get("z"));

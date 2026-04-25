@@ -1,5 +1,6 @@
 package com.ryderbelserion.map.marker.mobs;
 
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
@@ -459,7 +460,7 @@ public enum Icon {
         }
 
         if (safeIcon.isEmpty()) {
-            fusion.log("warn", "{} is a mob that I can recognize.", type.getKey().asString());
+            fusion.log(Level.WARNING, "{} is a mob that I can recognize.", type.getKey().asString());
         }
 
         return safeIcon;
@@ -503,7 +504,7 @@ public enum Icon {
                     registry.register(new IconImage(icon.key, ImageIO.read(file), "png"));
                 }
             } catch (final IOException exception) {
-                fusion.log("warn", "Failed to register icon (%s) %s".formatted(icon.type, fileName), exception);
+                fusion.log(Level.WARNING, "Failed to register icon (%s) %s".formatted(icon.type, fileName), exception);
             }
         }
     }

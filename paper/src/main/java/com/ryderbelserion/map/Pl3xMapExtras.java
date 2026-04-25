@@ -14,7 +14,7 @@ public class Pl3xMapExtras extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.platform = new Pl3xMapPaper(getFile(), this);
+        this.platform = new Pl3xMapPaper(this);
         this.platform.init();
     }
 

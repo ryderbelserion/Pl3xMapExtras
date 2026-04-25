@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.common.objects;
 
 import com.ryderbelserion.fusion.core.api.FusionProvider;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.image.IconImage;
@@ -34,7 +35,7 @@ public class MapTexture {
                     "png"
             ));
         } catch (final IOException exception) {
-            this.fusion.log("warn", "Failed to register icon (%s), %s".formatted(this.key, this.path), exception);
+            this.fusion.log(Level.WARNING, "Failed to register icon (%s), %s".formatted(this.key, this.path), exception);
         }
     }
 

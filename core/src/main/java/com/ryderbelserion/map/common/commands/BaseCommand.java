@@ -2,10 +2,10 @@ package com.ryderbelserion.map.common.commands;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.ryderbelserion.fusion.core.api.interfaces.permissions.enums.Mode;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
 import com.ryderbelserion.map.common.api.adapters.sender.ISenderAdapter;
+import com.ryderbelserion.map.common.commands.enums.Mode;
 import com.ryderbelserion.map.common.commands.player.ISource;
 import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;

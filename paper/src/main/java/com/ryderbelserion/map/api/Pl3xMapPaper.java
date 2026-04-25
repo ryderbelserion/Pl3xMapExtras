@@ -1,6 +1,6 @@
 package com.ryderbelserion.map.api;
 
-import com.ryderbelserion.fusion.core.api.interfaces.permissions.enums.Mode;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.fusion.paper.utils.ItemUtils;
 import com.ryderbelserion.map.Pl3xMapExtras;
@@ -11,6 +11,7 @@ import com.ryderbelserion.map.api.registry.PaperContextRegistry;
 import com.ryderbelserion.map.api.registry.PaperMessageRegistry;
 import com.ryderbelserion.map.api.registry.PaperUserRegistry;
 import com.ryderbelserion.map.api.registry.adapters.PaperSenderAdapter;
+import com.ryderbelserion.map.common.commands.enums.Mode;
 import com.ryderbelserion.map.common.commands.player.ISource;
 import com.ryderbelserion.map.common.commands.subs.CoreCommand;
 import com.ryderbelserion.map.common.objects.MapParticle;
@@ -34,7 +35,6 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -56,8 +56,8 @@ public class Pl3xMapPaper extends Pl3xMapPlugin {
 
     private MobsManager mobsManager;
 
-    public Pl3xMapPaper(@NotNull final File file, @NotNull final Pl3xMapExtras plugin) {
-        super(this.fusion = new FusionPaper(file, plugin));
+    public Pl3xMapPaper(@NotNull final Pl3xMapExtras plugin) {
+        super(this.fusion = new FusionPaper(plugin));
     }
 
     @Override
@@ -95,7 +95,7 @@ public class Pl3xMapPaper extends Pl3xMapPlugin {
         if (getBannerConfig().isEnabled()) {
             this.pluginManager.registerEvents(new PaperBannerListener(), this.plugin);
         } else {
-            this.fusion.log("warn", "The banner listener for Paper is not enabled.");
+            this.fusion.log(Level.WARNING, "The banner listener for Paper is not enabled.");
         }
 
         // Find all plugin hooks and load them.
@@ -145,7 +145,7 @@ public class Pl3xMapPaper extends Pl3xMapPlugin {
         final World world = this.server.getWorld(worldName);
 
         if (world == null) {
-            this.fusion.log("warn", "The world with the name %s does not exist".formatted(worldName));
+            this.fusion.log(Level.WARNING, "The world with the name %s does not exist".formatted(worldName));
 
             return;
         }

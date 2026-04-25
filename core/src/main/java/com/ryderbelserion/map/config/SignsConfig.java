@@ -288,7 +288,6 @@ public class SignsConfig extends AbstractConfig {
                 if (value instanceof ConfigurationSection section) {
                     return Vector.of(section.getDouble("x"), section.getDouble("z"));
                 } else if (value instanceof Map<?, ?>) {
-                    @SuppressWarnings("unchecked")
                     Map<String, Double> map = (Map<String, Double>) value;
                     return Vector.of(map.get("x"), map.get("z"));
                 }

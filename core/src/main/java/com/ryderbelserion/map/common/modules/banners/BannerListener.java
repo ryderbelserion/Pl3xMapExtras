@@ -1,5 +1,6 @@
 package com.ryderbelserion.map.common.modules.banners;
 
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
@@ -54,7 +55,7 @@ public class BannerListener implements EventListener {
         Pl3xMap.api().getWorldRegistry().forEach(world -> {
             world.getLayerRegistry().register(new BannerLayer(this.config, world));
 
-            this.fusion.log("warn", "Registered layer {} for {} on server load", Namespaces.banner_key, world.getName());
+            this.fusion.log(Level.WARNING, "Registered layer {} for {} on server load", Namespaces.banner_key, world.getName());
         });
     }
 
@@ -68,7 +69,7 @@ public class BannerListener implements EventListener {
 
         world.getLayerRegistry().register(new BannerLayer(this.config, world));
 
-        this.fusion.log("warn", "Registered {} on {} load", Namespaces.banner_key, world.getName());
+        this.fusion.log(Level.WARNING, "Registered {} on {} load", Namespaces.banner_key, world.getName());
     }
 
     @EventHandler
@@ -79,7 +80,7 @@ public class BannerListener implements EventListener {
         if (registry.has(Namespaces.banner_key)) {
             registry.unregister(Namespaces.banner_key);
 
-            this.fusion.log("warn", "Unregistered {} while unloading the world {}", Namespaces.banner_key, world.getName());
+            this.fusion.log(Level.WARNING, "Unregistered {} while unloading the world {}", Namespaces.banner_key, world.getName());
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.ryderbelserion.map.common.api.registry;
 
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.Pl3xMapPlugin;
@@ -31,7 +32,7 @@ public class MessageRegistry implements IMessageRegistry<MessageAdapter> {
     public MessageRegistry init() {
         this.messages.clear();
 
-        final List<Path> paths = this.fileManager.getFiles(this.path.resolve("locale"), ".yml", 1);
+        final List<Path> paths = this.fileManager.getFilesByPath(this.path.resolve("locale"), ".yml", 1);
 
         paths.add(this.path.resolve("messages.yml")); // add to list
 
@@ -54,7 +55,7 @@ public class MessageRegistry implements IMessageRegistry<MessageAdapter> {
                 addMessage(key, Messages.target_not_online, new MessageAdapter(configuration, "{prefix}<red>{player} <gray>is not online.", "messages", "player", "target-not-online"));
 
                 addMessage(key, Messages.target_same_player, new MessageAdapter(configuration, "{prefix}<red>You cannot use this command on yourself.", "messages", "player", "target-same-player"));
-            }, () -> this.fusion.log("info", "Path %s not found in cache.".formatted(path)));
+            }, () -> this.fusion.log(Level.INFO, "Path %s not found in cache.".formatted(path)));
         }
 
         return this;
@@ -62,7 +63,7 @@ public class MessageRegistry implements IMessageRegistry<MessageAdapter> {
 
     @Override
     public void addMessage(@NotNull final Key locale, @NotNull final Key key, @NotNull final MessageAdapter message) {
-        this.fusion.log("info", "Registering the message @ %s for %s".formatted(locale.asString(), key.asString()));
+        this.fusion.log(Level.INFO, "Registering the message @ %s for %s".formatted(locale.asString(), key.asString()));
 
         final Map<Key, MessageAdapter> keys = this.messages.getOrDefault(locale, new HashMap<>());
 

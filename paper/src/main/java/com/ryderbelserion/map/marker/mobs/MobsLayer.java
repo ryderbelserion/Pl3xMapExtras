@@ -1,7 +1,7 @@
 package com.ryderbelserion.map.marker.mobs;
 
-import com.ryderbelserion.fusion.paper.scheduler.FoliaScheduler;
-import com.ryderbelserion.fusion.paper.scheduler.Scheduler;
+import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
+import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
 import com.ryderbelserion.map.config.MobConfig;

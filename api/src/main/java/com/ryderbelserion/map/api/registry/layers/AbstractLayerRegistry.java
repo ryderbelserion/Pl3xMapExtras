@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.api.registry.layers;
 
 import com.ryderbelserion.fusion.core.api.FusionProvider;
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.files.FileManager;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.api.registry.layers.objects.AbstractLayer;
@@ -18,8 +19,6 @@ public abstract class AbstractLayerRegistry<L extends AbstractLayer> {
     protected final FusionKyori fusion = (FusionKyori) FusionProvider.getInstance();
 
     protected final FileManager fileManager = this.fusion.getFileManager();
-
-    protected final Path source = this.fileManager.getSource();
 
     protected final Path path = this.fusion.getDataPath();
 
@@ -51,7 +50,7 @@ public abstract class AbstractLayerRegistry<L extends AbstractLayer> {
                 continue;
             }
 
-            this.fusion.log("warn", "Unregistering the %s layer!, as the view is disabled for the world %s".formatted(key, worldName));
+            this.fusion.log(Level.WARNING, "Unregistering the %s layer!, as the view is disabled for the world %s".formatted(key, worldName));
 
             layer.unregister(key);
         }

@@ -4,7 +4,6 @@ import com.ryderbelserion.fusion.core.api.FusionProvider;
 import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.api.adapters.IMessageAdapter;
-import com.ryderbelserion.map.api.utils.ConfigUtils;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -16,7 +15,7 @@ public class MessageAdapter implements IMessageAdapter {
     public MessageAdapter(@NotNull final CommentedConfigurationNode configuration, @NotNull final String defaultValue, @NotNull final Object... path) {
         final CommentedConfigurationNode root = configuration.node(path);
 
-        this.value = root.isList() ? StringUtils.toString(ConfigUtils.getStringList(root, defaultValue)) : root.getString(defaultValue); // store pre-fetch the value from the default Messages.yml
+        this.value = root.isList() ? StringUtils.toString(StringUtils.getStringList(root, defaultValue)) : root.getString(defaultValue); // store pre-fetch the value from the default Messages.yml
     }
 
     @Override

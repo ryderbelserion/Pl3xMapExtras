@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import com.destroystokyo.paper.event.block.BlockDestroyEvent;
+import com.ryderbelserion.fusion.paper.utils.ItemUtils;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
 import com.ryderbelserion.map.api.enums.Permissions;
 import com.ryderbelserion.map.common.configs.types.BasicConfig;
-import com.ryderbelserion.map.util.ItemUtil;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.world.World;
 import com.ryderbelserion.map.marker.signs.Icon;
@@ -237,7 +237,7 @@ public class SignListener implements Listener {
         layer.putSign(new Sign(pos, icon, lines));
 
         // play fancy particles as visualizer
-        particles(sign.getLocation(), ItemUtil.getParticleType(layer.getConfig().SIGN_ADD_PARTICLES), ItemUtil.getSound(layer.getConfig().SIGN_ADD_SOUND));
+        particles(sign.getLocation(), ItemUtils.getParticleType(layer.getConfig().SIGN_ADD_PARTICLES), ItemUtils.getSound(layer.getConfig().SIGN_ADD_SOUND));
     }
 
     protected void tryRemoveSign(@NotNull final BlockState state) {
@@ -261,7 +261,7 @@ public class SignListener implements Listener {
         layer.removeSign(pos);
 
         // play fancy particles as visualizer
-        particles(sign.getLocation(), ItemUtil.getParticleType(layer.getConfig().SIGN_REMOVE_PARTICLES), ItemUtil.getSound(layer.getConfig().SIGN_REMOVE_SOUND));
+        particles(sign.getLocation(), ItemUtils.getParticleType(layer.getConfig().SIGN_REMOVE_PARTICLES), ItemUtils.getSound(layer.getConfig().SIGN_REMOVE_SOUND));
     }
 
     protected List<String> getLines(@NotNull final SignSide side) {

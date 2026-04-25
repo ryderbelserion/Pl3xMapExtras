@@ -1,11 +1,12 @@
 package com.ryderbelserion.map.common.modules.banners;
 
+import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.core.utils.StringUtils;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
 import com.ryderbelserion.map.api.constants.Namespaces;
 import com.ryderbelserion.map.api.registry.layers.objects.AbstractLayer;
-import com.ryderbelserion.map.api.utils.ConfigUtils;
 import com.ryderbelserion.map.common.api.FileKeys;
 import com.ryderbelserion.map.common.configs.types.map.LayerConfig;
 import com.ryderbelserion.map.common.modules.banners.config.BannerConfig;
@@ -52,7 +53,7 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
         final BasicConfigurationNode root = node(worldName, "");
 
         for (final Map.Entry<Object, BasicConfigurationNode> child : root.childrenMap().entrySet()) {
-            final List<String> locations = com.ryderbelserion.map.api.utils.ConfigUtils.getStringList(child.getValue());
+            final List<String> locations = StringUtils.getStringList(child.getValue());
 
             final String name = child.getKey().toString();
 
@@ -72,7 +73,7 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
             }
         }
 
-        this.fusion.log("warn", "The banner layer for {} is ready!", worldName);
+        this.fusion.log(Level.WARNING, "The banner layer for {} is ready!", worldName);
     }
 
     @Override
@@ -107,7 +108,7 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
         final String point = "%s,%s,%s,%s".formatted(x, y, z, name);
 
         if (this.markers.containsKey(position)) {
-            this.fusion.log("warn", "The cache already contains (%s)".formatted(point));
+            this.fusion.log(Level.WARNING, "The cache already contains (%s)".formatted(point));
 
             return false;
         }
@@ -121,10 +122,10 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
         if (index) {
             final BasicConfigurationNode root = node(worldName, type);
 
-            final List<String> locations = ConfigUtils.getStringList(root);
+            final List<String> locations = StringUtils.getStringList(root);
 
             if (locations.contains(point)) {
-                this.fusion.log("warn", "Cannot add %s as it already exists in `banners.json`".formatted(point));
+                this.fusion.log(Level.WARNING, "Cannot add %s as it already exists in `banners.json`".formatted(point));
 
                 return false;
             }
@@ -198,13 +199,13 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
 
                 FileKeys.banners_storage.save();
             } catch (SerializationException exception) {
-                this.fusion.log("warn", "Failed to serialize and save %s for %s".formatted(point, worldName));
+                this.fusion.log(Level.WARNING, "Failed to serialize and save %s for %s".formatted(point, worldName));
 
                 return false;
             }
         }
 
-        this.fusion.log("warn", "Successfully added %s to banners.json, and the live view!".formatted(point));
+        this.fusion.log(Level.WARNING, "Successfully added %s to banners.json, and the live view!".formatted(point));
 
         return true;
     }
@@ -222,7 +223,7 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
         final String point = "%s,%s,%s,%s".formatted(x, y, z, displayName);
 
         if (!this.markers.containsKey(position)) {
-            this.fusion.log("warn", "The cache does not contain (%s)".formatted(point));
+            this.fusion.log(Level.WARNING, "The cache does not contain (%s)".formatted(point));
 
             return false;
         }
@@ -239,10 +240,10 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
         try {
             final BasicConfigurationNode root = node(worldName, bannerType);
 
-            final List<String> locations = com.ryderbelserion.map.api.utils.ConfigUtils.getStringList(root);
+            final List<String> locations = StringUtils.getStringList(root);
 
             if (locations.remove(point)) {
-                this.fusion.log("warn", "Successfully removed %s from banners.json".formatted(point));
+                this.fusion.log(Level.WARNING, "Successfully removed %s from banners.json".formatted(point));
 
                 root.setList(String.class, locations);
 
@@ -251,7 +252,7 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
                 return true;
             }
         } catch (final Exception exception) {
-            this.fusion.log("warn", "Failed to remove %s for %s".formatted(point, worldName), exception);
+            this.fusion.log(Level.WARNING, "Failed to remove %s for %s".formatted(point, worldName), exception);
 
             return false;
         }

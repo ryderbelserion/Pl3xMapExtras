@@ -1,5 +1,6 @@
 package com.ryderbelserion.map.util;
 
+import com.ryderbelserion.fusion.core.api.enums.Level;
 import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
@@ -151,7 +152,7 @@ public class ModuleUtil {
     public static void findHooks() {
         Arrays.stream(Hook.Impl.values()).forEach(impl -> {
             if (pluginManager.isPluginEnabled(impl.getPluginName())) {
-                fusion.log("info", "<red>Hooking into <yellow>%s".formatted(impl.getPluginName()));
+                fusion.log(Level.INFO, "<red>Hooking into <yellow>%s".formatted(impl.getPluginName()));
 
                 Hook.add(impl);
             }

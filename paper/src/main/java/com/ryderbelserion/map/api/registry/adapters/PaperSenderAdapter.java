@@ -70,16 +70,16 @@ public class PaperSenderAdapter extends ISenderAdapter<Pl3xMapPaper, Component, 
         }
 
         if (!(sender instanceof Player player)) {
-            return this.fusion.parse(sender, this.messageRegistry.getMessage(id).getValue(), map);
+            return this.fusion.asComponent(sender, this.messageRegistry.getMessage(id).getValue(), map);
         }
 
         final Optional<PaperUserAdapter> optional = this.userRegistry.getUser(player.getUniqueId());
 
-        if (optional.isEmpty()) return this.fusion.parse(player, this.messageRegistry.getMessage(id).getValue(), map);
+        if (optional.isEmpty()) return this.fusion.asComponent(player, this.messageRegistry.getMessage(id).getValue(), map);
 
         final PaperUserAdapter user = optional.get();
 
-        return this.fusion.parse(player, this.messageRegistry.getMessageByLocale(user.getLocaleKey(), id).getValue(), map);
+        return this.fusion.asComponent(player, this.messageRegistry.getMessageByLocale(user.getLocaleKey(), id).getValue(), map);
     }
 
     @Override
