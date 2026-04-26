@@ -7,7 +7,7 @@ plugins {
 val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("libs")
 
 base {
-    archivesName = "${rootProject.name}-${project.name}"
+    archivesName = project.name
 }
 
 repositories {

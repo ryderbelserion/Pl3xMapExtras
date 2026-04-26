@@ -20,18 +20,18 @@ tasks {
 
         archiveClassifier = ""
 
-        val files = subprojects.filter { it.name == "core" && it.name == "api" }.mapNotNull {
-            val file = it.layout.buildDirectory.file("libs/${project.name}-${it.name}-${it.version}.jar")
+        val files = subprojects.filter { it.name != "core" && it.name != "api" }.mapNotNull {
+            val file = it.tasks.jar.get().archiveFile
 
             if (file.isPresent) {
-                println("File is present!")
-
-                zipTree(file)
+                zipTree(file.get().asFile)
             } else {
-                println("File is not present!")
-
                 null
             }
+        }
+
+        from(files) {
+            exclude("META-INF/MANIFEST.MF")
         }
 
         doFirst {
