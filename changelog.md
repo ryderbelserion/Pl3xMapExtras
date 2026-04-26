@@ -8,7 +8,7 @@
 * Fixed an issue with icons throwing an `IllegalStateException` by switching to Optionals
   * If no icon is found, A simple message will log to console instead.
 
-### New Permissions:
+**New Permissions:**
 - pl3xmapextras.banners.admin (default to op)
 - pl3xmapextras.banners.place (default to op)
 - pl3xmapextras.banners.remove (default to op)
