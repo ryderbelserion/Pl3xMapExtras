@@ -29,7 +29,6 @@ modrinth {
     dependencies {
         required.project("Pl3xMap")
 
-        optional.project("ClaimChunk")
         optional.project("WorldGuard")
         optional.project("EssentialsX")
         optional.project("GriefPrevention")
