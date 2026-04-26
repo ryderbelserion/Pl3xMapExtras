@@ -11,7 +11,7 @@ val utils = git.utils
 
 val branch = utils.getRemoteBranch()
 val hash = utils.getRemoteCommitHash()
-val commit = utils.getRemoteCommitMessage(hash, "")
+val commit = utils.getRemoteCommitMessage(hash, "%B")
 
 val isBeta: Boolean = branch == rootProject.property("beta_branch").toString()
 val isAlpha: Boolean = branch == rootProject.property("alpha_branch").toString()
