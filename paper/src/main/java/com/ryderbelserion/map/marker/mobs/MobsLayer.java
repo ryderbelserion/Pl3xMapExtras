@@ -12,7 +12,10 @@ import org.bukkit.World;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MobsLayer extends WorldLayer {
 
@@ -42,11 +45,13 @@ public class MobsLayer extends WorldLayer {
     public @NotNull Collection<Marker<?>> getMarkers() {
         retrieveMarkers();
 
-        Collection<Marker<?>> markers = new HashSet<>();
+        final Map<String, Collection<Marker<?>>> mobs = new ConcurrentHashMap<>();
 
-        this.platform.getMobsManager().ifPresent(mobs -> markers.addAll(mobs.getActiveMarkers(getWorld().getName())));
+        final String worldName = getWorld().getName();
 
-        return markers;
+        this.platform.getMobsManager().ifPresent(mob -> mobs.put(worldName, mob.getActiveMarkers(worldName)));
+
+        return mobs.get(worldName);
     }
 
     private void retrieveMarkers() {
