@@ -27,7 +27,7 @@ plot-bom = "1.56" # https://intellectualsites.gitbook.io/plotsquared/api/api-doc
 playerwarps = "7.10.0" # https://docs.olziedev.com/projects/playerwarps/api
 
 # Other API
-fusion = "4.21.0" # https://github.com/ryderbelserion/Fusion
+fusion = "4.21.1" # https://github.com/ryderbelserion/Fusion
 bStats = "3.2.1" # https://github.com/Bastian/bStats
 
 # Gradle API
