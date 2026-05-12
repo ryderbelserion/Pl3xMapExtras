@@ -109,6 +109,39 @@ feather {
 
         webhook {
             group(rootProject.name.lowercase())
+            task("jenkins-build")
+
+            if (System.getenv("BUILD_WEBHOOK") != null) {
+                post(System.getenv("BUILD_WEBHOOK"))
+            }
+
+            username(rootProject.property("mascot_name").toString())
+
+            avatar(rootProject.property("mascot_avatar").toString())
+
+            embeds {
+                embed {
+                    color(color)
+
+                    title("${rootProject.name} (Build #${rootProject.ext.get("build_number")})")
+
+                    fields {
+                        field(
+                            ":hammer: Changelog",
+                            rootProject.ext.get("mc_changelog").toString().updateMarkdown()
+                        )
+
+                        field(
+                            ":link: Build Link",
+                            System.getenv("BUILD_URL") ?: "N/A",
+                        )
+                    }
+                }
+            }
+        }
+
+        webhook {
+            group(rootProject.name.lowercase())
             task("failed-build")
 
             if (System.getenv("BUILD_WEBHOOK") != null) {
