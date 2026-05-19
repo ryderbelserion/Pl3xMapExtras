@@ -73,7 +73,7 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
             }
         }
 
-        this.fusion.log(Level.WARNING, "The banner layer for {} is ready!", worldName);
+        this.fusion.log(Level.WARNING, "The banner layer for %s is ready!", worldName);
     }
 
     @Override

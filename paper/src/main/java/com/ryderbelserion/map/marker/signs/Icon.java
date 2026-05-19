@@ -7,8 +7,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
 import javax.imageio.ImageIO;
+
+import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.paper.FusionPaper;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minecraft.world.level.block.SignBlock;
@@ -17,7 +19,6 @@ import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.image.IconImage;
 import net.pl3x.map.core.registry.IconRegistry;
 import org.bukkit.block.Sign;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +41,7 @@ public enum Icon {
 
     private static @NotNull final Path path = plugin.getDataPath();
 
-    private static @NotNull final ComponentLogger logger = plugin.getComponentLogger();
+    private static @NotNull final FusionPaper fusion = plugin.getPlatform().getFusion();
 
     private static final Map<String, Icon> BY_NAME = new HashMap<>();
     private static final Map<WoodType, Icon> BY_WOOD = new HashMap<>();
@@ -73,7 +74,7 @@ public enum Icon {
                 registry.register(new IconImage(icon.key, ImageIO.read(iconFolder.resolve(signFilename).toFile()), "png"));
                 registry.register(new IconImage(tooltipKey, ImageIO.read(iconFolder.resolve(tooltipFilename).toFile()), "png"));
             } catch (IOException exception) {
-                logger.warn("Failed to register icon ({}) {}", icon.name, signFilename, exception);
+                fusion.log(Level.WARNING, "Failed to register icon (%s) %s", exception, icon.name, signFilename);
             }
         }
     }

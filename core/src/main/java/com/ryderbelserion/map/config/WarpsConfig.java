@@ -42,7 +42,7 @@ public abstract class WarpsConfig extends AbstractConfig {
             final String key = String.format("pl3xmap_warps_%s", image);
             Pl3xMap.api().getIconRegistry().register(new IconImage(key, ImageIO.read(icon), "png"));
         } catch (final IOException exception) {
-            provider.log(Level.WARNING, "Failed to register icon ({}) {}, {}", image, fileName, exception.getMessage());
+            provider.log(Level.WARNING, "Failed to register icon (%s) %s, %s", image, fileName, exception.getMessage());
 
             exception.printStackTrace();
         }
