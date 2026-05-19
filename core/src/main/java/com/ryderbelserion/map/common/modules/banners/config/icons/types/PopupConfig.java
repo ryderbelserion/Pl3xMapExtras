@@ -92,9 +92,7 @@ public class PopupConfig {
     }
 
     public @Nullable final Point asOffset() {
-        final Point point = this.offset;
-
-        return point.x() != -1 && point.z() != -1 ? point : null;
+        return this.offset;
     }
 
     public @Nullable final Point asLeftPoint() {
