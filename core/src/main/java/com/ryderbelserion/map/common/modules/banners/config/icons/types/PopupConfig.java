@@ -32,7 +32,7 @@ public class PopupConfig {
     public PopupConfig(@NotNull final CommentedConfigurationNode configuration) {
         final Point defaultPoint = Point.of(-1, -1);
 
-        this.content = configuration.node("content").getString("");
+        this.content = configuration.node("content").getString("<name>");
         this.pane = configuration.node("pane").getString("");
 
         this.offset = getPoint(configuration.node("offset"), defaultPoint);

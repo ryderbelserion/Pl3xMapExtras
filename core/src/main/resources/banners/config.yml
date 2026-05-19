@@ -58,7 +58,7 @@ banner:
     # Tooltip settings.
     tooltip:
       # Contents of the icon's popup.
-      content: ""
+      content: "<name>"
       # Map pane where the tooltip will be added.
       pane: ""
       # Optional offset of the tooltip position.
