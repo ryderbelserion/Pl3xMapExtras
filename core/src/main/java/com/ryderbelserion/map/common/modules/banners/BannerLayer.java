@@ -155,7 +155,7 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
 
             final String content = tooltipConfig.asContent();
 
-            if (content != null) {
+            if (!content.isBlank()) {
                 builder.tooltipContent(content.replace("<name>", name))
                         .tooltipPane(tooltipConfig.asPane())
                         .tooltipOffset(tooltipConfig.asPoint())

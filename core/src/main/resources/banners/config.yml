@@ -77,7 +77,7 @@ banner:
     # Pop up settings.
     popup:
       # Contents of the icon's popup.
-      content: ""
+      content: "<name>"
       # Map pane where the popup will be added.
       pane: ""
       # The offset of the popup position.

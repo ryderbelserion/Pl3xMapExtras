@@ -21,7 +21,7 @@ public class TooltipConfig {
     private final double opacity;
 
     public TooltipConfig(@NotNull final CommentedConfigurationNode configuration) {
-        this.content = configuration.node("content").getString("");
+        this.content = configuration.node("content").getString("<name>");
         this.pane = configuration.node("pane").getString("");
 
         try {
@@ -58,8 +58,8 @@ public class TooltipConfig {
         return this.direction;
     }
 
-    public @Nullable final String asContent() {
-        return !this.content.isEmpty() ? this.content : null;
+    public @NotNull final String asContent() {
+        return this.content;
     }
 
     public @Nullable final String asPane() {
