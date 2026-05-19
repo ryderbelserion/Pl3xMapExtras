@@ -24,7 +24,7 @@ public enum Permissions {
     }
 
     public final String getPermission() {
-        return "pl3xmapextras" + this.node;
+        return "pl3xmapextras." + this.node;
     }
 
     public final boolean hasPermission(@NotNull final CommandSender player) {
