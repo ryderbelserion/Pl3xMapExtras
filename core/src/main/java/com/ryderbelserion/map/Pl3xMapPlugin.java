@@ -60,12 +60,11 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
         Pl3xMapExtras.Provider.register(this);
 
-        this.fileManager.addFolder(this.dataPath.resolve("locale"), FileType.YAML);
+        this.fileManager.addFolder(this.dataPath.resolve("locale"), FileType.YAML)
+                .addFolder(this.dataPath.resolve("storage"), FileType.JSON)
+                .addFolder(this.dataPath.resolve("banners"), FileType.YAML);
 
         List.of(
-                FileKeys.banners_storage,
-                FileKeys.banners_config,
-
                 FileKeys.config,
                 FileKeys.messages
         ).forEach(FileKeys::addFile);
