@@ -17,7 +17,7 @@ public class BasicConfig {
     public BasicConfig(@NotNull final CommentedConfigurationNode configuration) {
         final CommentedConfigurationNode root = configuration.node("root");
 
-        this.prefix = root.node("prefix").getString("<dark_gray>[<red>Core<white>Craft<dark_gray>] <reset>");
+        this.prefix = root.node("prefix").getString("<dark_gray>[<green>Pl3xMapExtras</green>]</dark_gray> <reset>");
 
         this.ignorePlayerName = root.node("ignore-player-names").getBoolean(false);
 
