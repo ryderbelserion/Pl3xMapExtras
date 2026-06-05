@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -159,7 +160,13 @@ public class GriefPreventionHook implements Listener, Hook {
             if (player.isBlank()) continue;
 
             try {
-                final UUID uuid = UUID.fromString(player);
+                final Optional<UUID> optional = get(player);
+
+                if (optional.isEmpty()) continue;
+
+                if (this.config.isIgnorePlayerName()) continue;
+
+                final UUID uuid = optional.get();
 
                 if (cache.containsKey(uuid)) {
                     names.add(cache.get(uuid));
@@ -176,5 +183,9 @@ public class GriefPreventionHook implements Listener, Hook {
         this.users.put(owner, worldCache);
 
         return String.join(", ", names);
+    }
+
+    public Optional<UUID> get(@NotNull final String uuid) {
+        return Optional.of(UUID.fromString(uuid));
     }
 }

@@ -7,6 +7,8 @@ public class BasicConfig {
 
     private final String prefix;
 
+    private final boolean ignorePlayerName;
+
     private final boolean isSignsEnabled;
     private final boolean isMobsEnabled;
     private final boolean isWarpsEnabled;
@@ -17,12 +19,18 @@ public class BasicConfig {
 
         this.prefix = root.node("prefix").getString("<dark_gray>[<red>Core<white>Craft<dark_gray>] <reset>");
 
+        this.ignorePlayerName = root.node("ignore-player-names").getBoolean(false);
+
         final CommentedConfigurationNode markers = configuration.node("marker");
 
         this.isSignsEnabled = markers.node("signs").getBoolean(true);
         this.isMobsEnabled = markers.node("mobs").getBoolean(true);
         this.isWarpsEnabled = markers.node("warps").getBoolean(false);
         this.isClaimsEnabled = markers.node("claims").getBoolean(false);
+    }
+
+    public final boolean isIgnorePlayerName() {
+        return this.ignorePlayerName;
     }
 
     public final boolean isClaimsEnabled() {

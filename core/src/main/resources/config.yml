@@ -6,6 +6,9 @@
 root:
   # The prefix that appears in front of commands!
   prefix: "<dark_gray>[<green>Pl3xMapExtras</green>]</dark_gray> <reset>"
+  # Should we ignore player names in GriefPrevention checks?
+  # This is a temporary option.
+  ignore-player-names: false
 
 marker:
   # Should we display sign markers on pl3xmap?
