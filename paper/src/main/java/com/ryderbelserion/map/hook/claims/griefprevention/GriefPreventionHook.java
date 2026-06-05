@@ -158,15 +158,15 @@ public class GriefPreventionHook implements Listener, Hook {
         for (final String player : players) {
             if (player.isBlank()) continue;
 
-            final UUID uuid = UUID.fromString(player);
-
-            if (cache.containsKey(uuid)) {
-                names.add(cache.get(uuid));
-
-                continue;
-            }
-
             try {
+                final UUID uuid = UUID.fromString(player);
+
+                if (cache.containsKey(uuid)) {
+                    names.add(cache.get(uuid));
+
+                    continue;
+                }
+
                 CompletableFuture.runAsync(() -> names.add(Bukkit.getOfflinePlayer(uuid).getName()));
             } catch (final Exception exception) {
                 names.add(player);
