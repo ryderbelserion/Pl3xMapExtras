@@ -460,7 +460,7 @@ public enum Icon {
         }
 
         if (safeIcon.isEmpty()) {
-            fusion.log(Level.WARNING, "%s is a mob that I can recognize.", type.getKey().asString());
+            fusion.log(Level.WARNING, "%s is a mob that I can't recognize.", type.getKey().asString());
         }
 
         return safeIcon;
