@@ -29,7 +29,7 @@ public class GriefPreventionHook implements Listener, Hook {
 
     private final BasicConfig config = this.platform.getBasicConfig();
 
-    private final Map<String, Map<UUID, String>> users = new HashMap<>();
+    private final Map<String, Map<String, Map<UUID, String>>> users = new HashMap<>();
 
     public GriefPreventionHook() {
         GriefPreventionConfig.reload();
@@ -41,7 +41,11 @@ public class GriefPreventionHook implements Listener, Hook {
 
     @Override
     public void registerWorld(@NotNull final World world) {
-        if (isWorldEnabled(world.getName())) {
+        final String name = world.getName();
+
+        if (isWorldEnabled(name)) {
+            this.users.put(name, new HashMap<>());
+
             world.getLayerRegistry().register(new GriefPreventionLayer(this, world));
         }
     }
@@ -49,6 +53,8 @@ public class GriefPreventionHook implements Listener, Hook {
     @Override
     public void unloadWorld(@NotNull final World world) {
         world.getLayerRegistry().unregister(GriefPreventionLayer.KEY);
+
+        this.users.remove(world.getName());
     }
 
     @Override
@@ -111,36 +117,39 @@ public class GriefPreventionHook implements Listener, Hook {
         final StringBuilder sb = new StringBuilder();
 
         final String owner = claim.getOwnerName();
+        final String world = claim.getWorld().getName();
 
         if (!builders.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_TRUST.replace("<builders>", getNames(owner, builders)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_TRUST.replace("<builders>", getNames(world, owner, builders)));
         }
 
         if (!containers.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_CONTAINER.replace("<containers>", getNames(owner, containers)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_CONTAINER.replace("<containers>", getNames(world, owner, containers)));
         }
 
         if (!accessors.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_ACCESS.replace("<accessors>", getNames(owner, accessors)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_ACCESS.replace("<accessors>", getNames(world, owner, accessors)));
         }
 
         if (!managers.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_PERMISSION.replace("<managers>", getNames(owner, managers)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_PERMISSION.replace("<managers>", getNames(world, owner, managers)));
         }
 
         return sb.toString();
     }
 
-    private @NotNull String getNames(@NotNull final String owner, @NotNull final List<String> players) {
-        final Map<UUID, String> cache = this.users.getOrDefault(owner, new HashMap<>());
+    private @NotNull String getNames(@NotNull final String world, @NotNull final String owner, @NotNull final List<String> players) {
+        final Map<String, Map<UUID, String>> worldCache = this.users.getOrDefault(world, new HashMap<>());
+
+        final Map<UUID, String> cache = worldCache.getOrDefault(owner, new HashMap<>());
 
         cache.entrySet().removeIf(entry -> !players.contains(entry.getValue()));
 
@@ -164,7 +173,7 @@ public class GriefPreventionHook implements Listener, Hook {
             }
         }
 
-        this.users.put(owner, cache);
+        this.users.put(owner, worldCache);
 
         return String.join(", ", names);
     }
