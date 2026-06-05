@@ -2,8 +2,11 @@ package com.ryderbelserion.map.hook.claims.griefprevention;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
@@ -15,7 +18,6 @@ import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.util.Colors;
 import net.pl3x.map.core.world.World;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,6 +28,8 @@ public class GriefPreventionHook implements Listener, Hook {
     private final Pl3xMapPaper platform = this.plugin.getPlatform();
 
     private final BasicConfig config = this.platform.getBasicConfig();
+
+    private final Map<String, Map<UUID, String>> users = new HashMap<>();
 
     public GriefPreventionHook() {
         GriefPreventionConfig.reload();
@@ -106,46 +110,61 @@ public class GriefPreventionHook implements Listener, Hook {
 
         final StringBuilder sb = new StringBuilder();
 
+        final String owner = claim.getOwnerName();
+
         if (!builders.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_TRUST.replace("<builders>", getNames(builders)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_TRUST.replace("<builders>", getNames(owner, builders)));
         }
 
         if (!containers.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_CONTAINER.replace("<containers>", getNames(containers)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_CONTAINER.replace("<containers>", getNames(owner, containers)));
         }
 
         if (!accessors.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_ACCESS.replace("<accessors>", getNames(accessors)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_ACCESS.replace("<accessors>", getNames(owner, accessors)));
         }
 
         if (!managers.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_PERMISSION.replace("<managers>", getNames(managers)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_PERMISSION.replace("<managers>", getNames(owner, managers)));
         }
 
         return sb.toString();
     }
 
-    private @NotNull String getNames(@NotNull final List<String> list) {
+    private @NotNull String getNames(@NotNull final String owner, @NotNull final List<String> players) {
+        final Map<UUID, String> cache = this.users.getOrDefault(owner, new HashMap<>());
+
+        cache.entrySet().removeIf(entry -> !players.contains(entry.getValue()));
+
         final List<String> names = new ArrayList<>();
 
-        for (final String str : list) { // todo() wtf
-            try {
-                final UUID uuid = UUID.fromString(str);
-                final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+        for (final String player : players) {
+            if (player.isBlank()) continue;
 
-                names.add(offlinePlayer.getName());
-            } catch (Exception e) {
-                names.add(str);
+            final UUID uuid = UUID.fromString(player);
+
+            if (cache.containsKey(uuid)) {
+                names.add(cache.get(uuid));
+
+                continue;
+            }
+
+            try {
+                CompletableFuture.runAsync(() -> names.add(Bukkit.getOfflinePlayer(uuid).getName()));
+            } catch (final Exception exception) {
+                names.add(player);
             }
         }
+
+        this.users.put(owner, cache);
 
         return String.join(", ", names);
     }
