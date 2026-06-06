@@ -36,7 +36,13 @@ public class PaperUserRegistry implements IUserRegistry<Player> {
 
         adapter.init();
 
-        return this.users.putIfAbsent(player.getUniqueId(), adapter);
+        final UUID uuid = player.getUniqueId();
+
+        if (isCached(uuid)) {
+            this.cache.invalidate(uuid);
+        }
+
+        return this.users.putIfAbsent(uuid, adapter);
     }
 
     @Override
