@@ -169,14 +169,12 @@ public class GriefPreventionHook implements Listener, Hook {
                 return this.holder.getName(uuid);
             });
 
-            if (name.equalsIgnoreCase("N/A")) continue;
-
             names.add(name);
 
             this.userRegistry.updateCache(uuid, name);
         }
 
-        final List<String> processed = names.stream().filter(value -> !value.isBlank()).toList();
+        final List<String> processed = names.stream().filter(value -> !value.isBlank() || !value.equalsIgnoreCase("N/A")).toList();
 
         return String.join(", ", processed);
     }
