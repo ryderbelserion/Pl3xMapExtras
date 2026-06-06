@@ -159,19 +159,23 @@ public class GriefPreventionHook implements Listener, Hook {
         for (final String player : players) {
             if (player.isBlank()) continue;
 
-            final UUID uuid = UUID.fromString(player);
+            try {
+                final UUID uuid = UUID.fromString(player);
 
-            final String name = this.userRegistry.getUser(uuid).map(PaperUserAdapter::getUsername).orElseGet(() -> {
-                if (this.userRegistry.isCached(uuid)) {
-                    return this.userRegistry.getCache(uuid);
-                }
+                final String name = this.userRegistry.getUser(uuid).map(PaperUserAdapter::getUsername).orElseGet(() -> {
+                    if (this.userRegistry.isCached(uuid)) {
+                        return this.userRegistry.getCache(uuid);
+                    }
 
-                return this.holder.getName(uuid);
-            });
+                    return this.holder.getName(uuid);
+                });
 
-            names.add(name);
+                names.add(name);
 
-            this.userRegistry.updateCache(uuid, name);
+                this.userRegistry.updateCache(uuid, name);
+            } catch (final Exception exception) {
+                names.add(player);
+            }
         }
 
         final List<String> processed = names.stream().filter(value -> !value.isBlank() || !value.equalsIgnoreCase("N/A")).toList();
