@@ -1,5 +1,7 @@
 package com.ryderbelserion.map.api.registry;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.registry.adapters.PaperUserAdapter;
@@ -11,12 +13,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class PaperUserRegistry implements IUserRegistry<Player> {
 
     private final Map<UUID, PaperUserAdapter> users = new HashMap<>();
 
     private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+
+    private final Cache<UUID, String> cache = CacheBuilder.newBuilder()
+            .expireAfterAccess(30, TimeUnit.MINUTES)
+            .build();
 
     @Override
     public void init() {
@@ -26,6 +33,8 @@ public class PaperUserRegistry implements IUserRegistry<Player> {
     @Override
     public PaperUserAdapter addUser(@NotNull final Player player) {
         final PaperUserAdapter adapter = new PaperUserAdapter(player);
+
+        adapter.init();
 
         return this.users.putIfAbsent(player.getUniqueId(), adapter);
     }
@@ -41,15 +50,35 @@ public class PaperUserRegistry implements IUserRegistry<Player> {
 
         final Player player = server.getPlayer(uuid);
 
-        if (!this.users.containsKey(uuid) && player != null) {
-            return Optional.of(addUser(player));
+        if (!hasUser(uuid) && player != null) {
+            return Optional.ofNullable(addUser(player));
         }
 
-        return Optional.of(this.users.get(uuid));
+        return Optional.ofNullable(this.users.get(uuid));
+    }
+
+    @Override
+    public void updateCache(@NotNull final UUID uuid, @NotNull final String name) {
+        this.cache.put(uuid, name);
+    }
+
+    @Override
+    public final boolean isCached(@NotNull final UUID uuid) {
+        return this.cache.getIfPresent(uuid) != null;
+    }
+
+    @Override
+    public String getCache(@NotNull final UUID uuid) {
+        return this.cache.getIfPresent(uuid);
     }
 
     @Override
     public @NotNull final IUser getConsole() {
         return this.users.get(Pl3xMapPlugin.CONSOLE_UUID);
+    }
+
+    @Override
+    public final boolean hasUser(@NotNull final UUID uuid) {
+        return this.users.containsKey(uuid);
     }
 }

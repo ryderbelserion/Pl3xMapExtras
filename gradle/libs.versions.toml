@@ -26,8 +26,12 @@ plot-bom = "1.56" # https://intellectualsites.gitbook.io/plotsquared/api/api-doc
 # Warp API
 playerwarps = "7.10.0" # https://docs.olziedev.com/projects/playerwarps/api
 
+## Database API
+postgres = "42.7.10" # https://jdbc.postgresql.org/
+hikari = "7.0.2" # https://github.com/brettwooldridge/HikariCP
+
 # Other API
-fusion = "4.22.0" # https://github.com/ryderbelserion/Fusion
+fusion = "4.30.2" # https://github.com/ryderbelserion/Fusion
 bStats = "3.2.1" # https://github.com/Bastian/bStats
 
 # Gradle API
@@ -103,6 +107,9 @@ fusion-kyori = { module = "com.ryderbelserion.fusion:fusion-kyori", version.ref 
 
 # https://github.com/Bastian/bStats
 metrics = { module = "org.bstats:bstats-bukkit", version.ref = "bStats" }
+
+# https://github.com/brettwooldridge/HikariCP
+hikari-cp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 
 [bundles]
 kyori = [

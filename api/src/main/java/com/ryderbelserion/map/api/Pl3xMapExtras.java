@@ -6,8 +6,10 @@ import com.ryderbelserion.map.api.adapters.IPlayerAdapter;
 import com.ryderbelserion.map.api.registry.IContextRegistry;
 import com.ryderbelserion.map.api.registry.IMessageRegistry;
 import com.ryderbelserion.map.api.registry.IUserRegistry;
+import com.ryderbelserion.map.api.storage.IStorageHolder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import java.nio.file.Path;
 
 public abstract class Pl3xMapExtras {
@@ -24,13 +26,15 @@ public abstract class Pl3xMapExtras {
         this.fusion = fusion;
     }
 
-    public abstract <C> @NotNull IPlayerAdapter<C> getPlayerAdapter(@NotNull final Class<C> object);
+    public abstract <C> @NonNull IPlayerAdapter<C> getPlayerAdapter(@NotNull final Class<C> object);
 
-    public abstract IMessageRegistry getMessageRegistry();
+    public abstract @NonNull IMessageRegistry getMessageRegistry();
 
-    public abstract IContextRegistry getContextRegistry();
+    public abstract @NonNull IStorageHolder getStorageHolder();
 
-    public abstract IUserRegistry getUserRegistry();
+    public abstract @NonNull IContextRegistry getContextRegistry();
+
+    public abstract @NonNull IUserRegistry getUserRegistry();
 
     public abstract void init();
 

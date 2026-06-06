@@ -2,6 +2,10 @@ package com.ryderbelserion.map.hook.claims.plotsquared;
 
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.api.registry.PaperUserRegistry;
+import com.ryderbelserion.map.api.registry.adapters.PaperUserAdapter;
+import com.ryderbelserion.map.api.storage.IStorageHolder;
+import com.ryderbelserion.map.api.user.IUser;
 import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.util.ChunkUtil;
 import com.plotsquared.core.PlotSquared;
@@ -15,6 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Polygon;
@@ -33,6 +38,10 @@ public class P2Hook implements Listener, Hook {
     private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
 
     private final Pl3xMapPaper platform = this.plugin.getPlatform();
+
+    private final IStorageHolder holder = this.platform.getStorageHolder();
+
+    private final PaperUserRegistry userRegistry = this.platform.getUserRegistry();
 
     private final BasicConfig config = this.platform.getBasicConfig();
 
@@ -87,9 +96,22 @@ public class P2Hook implements Listener, Hook {
         return markers;
     }
 
-    private @NotNull Options.Builder options(@NotNull final World world, @Nullable final UUID owner) {
-        final OfflinePlayer player = owner == null ? null : Bukkit.getOfflinePlayer(owner);  //todo() wtf
-        final String ownerName = player == null || player.getName() == null ? "unknown" : player.getName();
+    private @NotNull Options.Builder options(@NotNull final World world, @Nullable final UUID uuid) {
+        String name = "N/A";
+
+        if (uuid != null) {
+            final Optional<PaperUserAdapter> user = this.userRegistry.getUser(uuid);
+
+            name = user.map(PaperUserAdapter::getUsername).orElseGet(() -> {
+                if (this.userRegistry.isCached(uuid)) {
+                    return this.userRegistry.getCache(uuid);
+                }
+
+                return this.holder.getName(uuid);
+            });
+
+            this.userRegistry.updateCache(uuid, name);
+        }
 
         return Options.builder()
                 .strokeColor(Colors.fromHex(P2Config.MARKER_STROKE_COLOR))
@@ -98,7 +120,7 @@ public class P2Hook implements Listener, Hook {
                 .fillType(Fill.Type.NONZERO)
                 .popupContent(P2Config.MARKER_POPUP
                         .replace("<world>", world.getName())
-                        .replace("<owner>", ownerName)
+                        .replace("<owner>", name)
                 );
     }
 }

@@ -1,22 +1,23 @@
 package com.ryderbelserion.map.hook.claims.worldguard;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.api.registry.PaperUserRegistry;
+import com.ryderbelserion.map.api.registry.adapters.PaperUserAdapter;
+import com.ryderbelserion.map.api.storage.IStorageHolder;
 import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.hook.Hook;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.RegionType;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -32,11 +33,11 @@ public class WorldGuardHook implements Hook {
 
     private final Pl3xMapPaper platform = this.plugin.getPlatform();
 
-    private final BasicConfig config = this.platform.getBasicConfig();
+    private final IStorageHolder holder = this.platform.getStorageHolder();
 
-    private final Cache<UUID, String> userCache = CacheBuilder.newBuilder()
-            .expireAfterAccess(30, TimeUnit.MINUTES)
-            .build();
+    private final PaperUserRegistry userRegistry = this.platform.getUserRegistry();
+
+    private final BasicConfig config = this.platform.getBasicConfig();
 
     public WorldGuardHook() {
         WorldGuardConfig.reload();
@@ -111,19 +112,26 @@ public class WorldGuardHook implements Hook {
 
     private @NotNull String getOwners(@NotNull final WorldGuardClaim claim) {
         final Set<String> set = new HashSet<>();
-        set.addAll(claim.getOwners().getGroups());
-        set.addAll(claim.getOwners().getPlayers());
-        set.addAll(claim.getOwners().getUniqueIds().stream().map(uniqueId -> {
-            String username = userCache.getIfPresent(uniqueId);
-            if (username != null) {
-                return username;
-            }
-            username = plugin.getServer().getOfflinePlayer(uniqueId).getName();
-            if (username != null) {
-                userCache.put(uniqueId, username);
-                return username;
-            }
-            return uniqueId.toString();
+
+        final DefaultDomain domain = claim.getOwners();
+
+        set.addAll(domain.getGroups());
+        set.addAll(domain.getPlayers());
+
+        set.addAll(domain.getUniqueIds().stream().map(uuid -> {
+            final Optional<PaperUserAdapter> user = this.userRegistry.getUser(uuid);
+
+            return user.map(PaperUserAdapter::getUsername).orElseGet(() -> {
+                if (this.userRegistry.isCached(uuid)) {
+                    return this.userRegistry.getCache(uuid);
+                }
+
+                final String name = this.holder.getName(uuid);
+
+                this.userRegistry.updateCache(uuid, name);
+
+                return name;
+            });
         }).toList());
 
         return set.isEmpty() ? "" : WorldGuardConfig.MARKER_POPUP_OWNERS
@@ -132,19 +140,26 @@ public class WorldGuardHook implements Hook {
 
     private @NotNull String getMembers(@NotNull final WorldGuardClaim claim) {
         final Set<String> set = new HashSet<>();
-        set.addAll(claim.getMembers().getGroups());
-        set.addAll(claim.getMembers().getPlayers());
-        set.addAll(claim.getMembers().getUniqueIds().stream().map(uniqueId -> {
-            String username = userCache.getIfPresent(uniqueId);
-            if (username != null) {
-                return username;
-            }
-            username = plugin.getServer().getOfflinePlayer(uniqueId).getName();
-            if (username != null) {
-                userCache.put(uniqueId, username);
-                return username;
-            }
-            return uniqueId.toString();
+
+        final DefaultDomain domain = claim.getMembers();
+
+        set.addAll(domain.getGroups());
+        set.addAll(domain.getPlayers());
+
+        set.addAll(domain.getUniqueIds().stream().map(uuid -> {
+            final Optional<PaperUserAdapter> user = this.userRegistry.getUser(uuid);
+
+            return user.map(PaperUserAdapter::getUsername).orElseGet(() -> {
+                if (this.userRegistry.isCached(uuid)) {
+                    return this.userRegistry.getCache(uuid);
+                }
+
+                final String name = this.holder.getName(uuid);
+
+                this.userRegistry.updateCache(uuid, name);
+
+                return name;
+            });
         }).toList());
 
         return set.isEmpty() ? "" : WorldGuardConfig.MARKER_POPUP_MEMBERS

@@ -14,9 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.Optional;
 
-public abstract class AbstractLayerRegistry<L extends AbstractLayer> {
+public abstract class AbstractLayerRegistry<S, L extends AbstractLayer> {
 
-    protected final FusionKyori fusion = (FusionKyori) FusionProvider.getInstance();
+    protected final FusionKyori<S> fusion = (FusionKyori) FusionProvider.getInstance();
 
     protected final FileManager fileManager = this.fusion.getFileManager();
 

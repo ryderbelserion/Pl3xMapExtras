@@ -11,7 +11,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly(libs.brigadier)
-
     api(project(":api"))
+
+    implementation(libs.hikari.cp)
+
+    compileOnly(libs.brigadier)
 }

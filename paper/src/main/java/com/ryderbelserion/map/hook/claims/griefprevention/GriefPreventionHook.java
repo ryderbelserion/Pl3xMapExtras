@@ -2,15 +2,14 @@ package com.ryderbelserion.map.hook.claims.griefprevention;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
+import com.ryderbelserion.map.api.registry.PaperUserRegistry;
+import com.ryderbelserion.map.api.registry.adapters.PaperUserAdapter;
+import com.ryderbelserion.map.api.storage.IStorageHolder;
 import com.ryderbelserion.map.common.configs.types.BasicConfig;
 import com.ryderbelserion.map.hook.Hook;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
@@ -28,9 +27,11 @@ public class GriefPreventionHook implements Listener, Hook {
 
     private final Pl3xMapPaper platform = this.plugin.getPlatform();
 
-    private final BasicConfig config = this.platform.getBasicConfig();
+    private final IStorageHolder holder = this.platform.getStorageHolder();
 
-    private final Map<String, Map<String, Map<UUID, String>>> users = new HashMap<>();
+    private final PaperUserRegistry userRegistry = this.platform.getUserRegistry();
+
+    private final BasicConfig config = this.platform.getBasicConfig();
 
     public GriefPreventionHook() {
         GriefPreventionConfig.reload();
@@ -45,8 +46,6 @@ public class GriefPreventionHook implements Listener, Hook {
         final String name = world.getName();
 
         if (isWorldEnabled(name)) {
-            this.users.put(name, new HashMap<>());
-
             world.getLayerRegistry().register(new GriefPreventionLayer(this, world));
         }
     }
@@ -54,8 +53,6 @@ public class GriefPreventionHook implements Listener, Hook {
     @Override
     public void unloadWorld(@NotNull final World world) {
         world.getLayerRegistry().unregister(GriefPreventionLayer.KEY);
-
-        this.users.remove(world.getName());
     }
 
     @Override
@@ -117,75 +114,70 @@ public class GriefPreventionHook implements Listener, Hook {
 
         final StringBuilder sb = new StringBuilder();
 
-        final String owner = claim.getOwnerName();
-        final String world = claim.getWorld().getName();
-
         if (!builders.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_TRUST.replace("<builders>", getNames(world, owner, builders)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_TRUST.replace("<builders>", getPlayerNames(builders)));
         }
 
         if (!containers.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_CONTAINER.replace("<containers>", getNames(world, owner, containers)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_CONTAINER.replace("<containers>", getNames(containers)));
         }
 
         if (!accessors.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_ACCESS.replace("<accessors>", getNames(world, owner, accessors)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_ACCESS.replace("<accessors>", getNames(accessors)));
         }
 
         if (!managers.isEmpty()) {
             if (sb.isEmpty()) sb.append("<hr/>");
 
-            sb.append(GriefPreventionConfig.MARKER_POPUP_PERMISSION.replace("<managers>", getNames(world, owner, managers)));
+            sb.append(GriefPreventionConfig.MARKER_POPUP_PERMISSION.replace("<managers>", getPlayerNames(managers)));
         }
 
         return sb.toString();
     }
 
-    private @NotNull String getNames(@NotNull final String world, @NotNull final String owner, @NotNull final List<String> players) {
-        final Map<String, Map<UUID, String>> worldCache = this.users.getOrDefault(world, new HashMap<>());
-
-        final Map<UUID, String> cache = worldCache.getOrDefault(owner, new HashMap<>());
-
-        cache.entrySet().removeIf(entry -> !players.contains(entry.getValue()));
-
+    private @NotNull String getNames(@NotNull final List<String> players) {
         final List<String> names = new ArrayList<>();
 
         for (final String player : players) {
             if (player.isBlank()) continue;
 
-            try {
-                final Optional<UUID> optional = get(player);
-
-                if (optional.isEmpty()) continue;
-
-                if (this.config.isIgnorePlayerName()) continue;
-
-                final UUID uuid = optional.get();
-
-                if (cache.containsKey(uuid)) {
-                    names.add(cache.get(uuid));
-
-                    continue;
-                }
-
-                CompletableFuture.runAsync(() -> names.add(Bukkit.getOfflinePlayer(uuid).getName()));
-            } catch (final Exception exception) {
-                names.add(player);
-            }
+            names.add(player);
         }
-
-        this.users.put(owner, worldCache);
 
         return String.join(", ", names);
     }
 
-    public Optional<UUID> get(@NotNull final String uuid) {
-        return Optional.of(UUID.fromString(uuid));
+    private @NotNull String getPlayerNames(@NotNull final List<String> players) {
+        final List<String> names = new ArrayList<>();
+
+        for (final String player : players) {
+            if (player.isBlank()) continue;
+
+            final UUID uuid = UUID.fromString(player);
+
+            final String name = this.userRegistry.getUser(uuid).map(PaperUserAdapter::getUsername).orElseGet(() -> {
+                if (this.userRegistry.isCached(uuid)) {
+                    return this.userRegistry.getCache(uuid);
+                }
+
+                return this.holder.getName(uuid);
+            });
+
+            if (name.equalsIgnoreCase("N/A")) continue;
+
+            names.add(name);
+
+            this.userRegistry.updateCache(uuid, name);
+        }
+
+        final List<String> processed = names.stream().filter(value -> !value.isBlank()).toList();
+
+        return String.join(", ", processed);
     }
 }

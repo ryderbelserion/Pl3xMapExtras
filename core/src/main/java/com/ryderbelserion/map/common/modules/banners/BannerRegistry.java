@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.common.modules.banners;
 
 import com.ryderbelserion.fusion.core.api.enums.Level;
+import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.map.Pl3xMapPlugin;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
 import com.ryderbelserion.map.api.constants.Namespaces;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class BannerRegistry extends AbstractLayerRegistry<BannerLayer> {
+public class BannerRegistry extends AbstractLayerRegistry<Audience, BannerLayer> {
 
     private final Pl3xMapPlugin plugin = (Pl3xMapPlugin) Pl3xMapExtras.Provider.getInstance();
 
@@ -28,7 +29,7 @@ public class BannerRegistry extends AbstractLayerRegistry<BannerLayer> {
 
     @Override
     public void init() {
-        this.fileManager.extractFolder("banners/icons", this.path);
+        this.fileManager.extractFolder("icons", "banners", FileType.PNG, this.path.resolve("banners"));
     }
 
     @Override
@@ -46,7 +47,7 @@ public class BannerRegistry extends AbstractLayerRegistry<BannerLayer> {
 
     @Override
     public void reload() {
-        this.fileManager.extractFolder("banners/icons", this.path);
+        this.fileManager.extractFolder("icons", "banners", FileType.PNG, this.path.resolve("banners"));
 
         super.reload();
     }

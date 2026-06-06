@@ -5,6 +5,7 @@ import com.ryderbelserion.fusion.files.enums.FileType;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
 import com.ryderbelserion.map.api.Pl3xMapExtras;
 import com.ryderbelserion.map.api.adapters.IPlayerAdapter;
+import com.ryderbelserion.map.api.storage.IStorageHolder;
 import com.ryderbelserion.map.common.api.FileKeys;
 import com.ryderbelserion.map.common.api.adapters.PlayerAdapter;
 import com.ryderbelserion.map.common.api.adapters.sender.ISenderAdapter;
@@ -16,8 +17,10 @@ import com.ryderbelserion.map.common.modules.banners.config.BannerConfig;
 import com.ryderbelserion.map.common.objects.MapParticle;
 import com.ryderbelserion.map.api.objects.MapPosition;
 import com.ryderbelserion.map.common.objects.MapSound;
+import com.ryderbelserion.map.common.storage.StorageManager;
 import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,8 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
     private BannerRegistry bannerRegistry;
     private ConfigManager configManager;
     private IPlayerAdapter<?> adapter;
+
+    protected IStorageHolder storageHolder;
 
     public Pl3xMapPlugin(@NotNull final FusionKyori fusion) {
         super(fusion);
@@ -62,8 +67,8 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
         this.fileManager.addFolder(this.dataPath.resolve("locale"), FileType.YAML);
 
-        this.fileManager.extractFolder("banners", this.dataPath);
-        this.fileManager.extractFolder("storage", this.dataPath);
+        this.fileManager.extractFolder("banners", FileType.YAML, this.dataPath);
+        this.fileManager.extractFolder("storage", FileType.JSON, this.dataPath);
 
         List.of(
                 FileKeys.banners_storage,
@@ -76,9 +81,15 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
         this.configManager = new ConfigManager();
         this.configManager.init();
 
-        this.fileManager.extractFolder("warps/icons", this.dataPath);
-        this.fileManager.extractFolder("signs/icons", this.dataPath);
-        this.fileManager.extractFolder("mobs/icons", this.dataPath);
+        this.fileManager.extractFolder("icons", "warps", FileType.PNG, this.dataPath.resolve("warps"));
+        this.fileManager.extractFolder("icons", "signs", FileType.PNG, this.dataPath.resolve("signs"));
+        this.fileManager.extractFolder("icons", "mobs", FileType.PNG, this.dataPath.resolve("mobs"));
+
+        try {
+            this.storageHolder = new StorageManager(this).init();
+        } catch (final Exception exception) {
+            this.fusion.log(Level.ERROR, "Failed to initialize storage impl", exception);
+        }
     }
 
     @Override
@@ -89,11 +100,13 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
 
         this.configManager.init();
 
-        this.fileManager.extractFolder("warps/icons", this.dataPath);
-        this.fileManager.extractFolder("signs/icons", this.dataPath);
-        this.fileManager.extractFolder("mobs/icons", this.dataPath);
+        this.fileManager.extractFolder("icons", "warps", FileType.PNG, this.dataPath.resolve("warps"));
+        this.fileManager.extractFolder("icons", "signs", FileType.PNG, this.dataPath.resolve("signs"));
+        this.fileManager.extractFolder("icons", "mobs", FileType.PNG, this.dataPath.resolve("mobs"));
 
         this.bannerRegistry.reload();
+
+        this.storageHolder.reload();
     }
 
     @Override
@@ -113,6 +126,11 @@ public abstract class Pl3xMapPlugin extends Pl3xMapExtras {
     @Override
     public @NotNull <C> IPlayerAdapter<C> getPlayerAdapter(@NotNull final Class<C> object) {
         return (IPlayerAdapter<C>) this.adapter;
+    }
+
+    @Override
+    public @NonNull final IStorageHolder getStorageHolder() {
+        return this.storageHolder;
     }
 
     public @NotNull final BannerRegistry getBannerRegistry() {

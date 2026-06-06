@@ -12,8 +12,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
