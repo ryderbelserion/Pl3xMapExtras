@@ -65,7 +65,6 @@ public abstract class WarpsConfig extends AbstractConfig {
                 if (value instanceof ConfigurationSection section) {
                     return Vector.of(section.getDouble("x"), section.getDouble("z"));
                 } else if (value instanceof Map<?, ?>) {
-                    @SuppressWarnings("unchecked")
                     final Map<String, Double> vector = (Map<String, Double>) value;
 
                     return Vector.of(vector.get("x"), vector.get("z"));

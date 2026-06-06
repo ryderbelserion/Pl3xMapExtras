@@ -54,6 +54,7 @@ public class BannerRegistry extends AbstractLayerRegistry<Audience, BannerLayer>
 
     public void addBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final Key displayItem) {
         final String worldName = position.worldName();
+        final Key worldKey = position.worldKey();
 
         getLayer(worldName).ifPresentOrElse(layer -> {
             final Banner banner = Banner.of(getTexture(displayItem), displayName, position);
@@ -61,16 +62,17 @@ public class BannerRegistry extends AbstractLayerRegistry<Audience, BannerLayer>
             if (layer.displayBanner(banner, true)) {
                 final BannerConfig config = this.plugin.getBannerConfig();
 
-                final MapPosition location = MapPosition.of(worldName, position.x(), position.y(), position.z());
+                final MapPosition location = MapPosition.of(worldKey, worldName, position.x(), position.y(), position.z());
 
                 config.getSpawnParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
                 config.getSpawnSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
             }
-        }, () -> this.fusion.log(Level.WARNING, "Failed to add banner to %s @ (%s,%s,%s)".formatted(worldName, position.x(), position.y(), position.z())));
+        }, () -> this.fusion.log(Level.WARNING, "Failed to add banner to %s @ (%s,%s,%s)".formatted(worldKey, position.x(), position.y(), position.z())));
     }
 
     public void removeBanner(@NotNull final Audience audience, @NotNull final MapPosition position, @NotNull final String displayName, @NotNull final String displayItem) {
         final String worldName = position.worldName();
+        final Key worldKey = position.worldKey();
 
         getLayer(worldName).ifPresentOrElse(layer -> {
             final Banner banner = new Banner(
@@ -82,12 +84,12 @@ public class BannerRegistry extends AbstractLayerRegistry<Audience, BannerLayer>
             if (layer.removeBanner(banner, true)) {
                 final BannerConfig config = this.plugin.getBannerConfig();
 
-                final MapPosition location = MapPosition.of(worldName, position.x(), position.y(), position.z());
+                final MapPosition location = MapPosition.of(worldKey, worldName, position.x(), position.y(), position.z());
 
                 config.getRemoveParticle().ifPresent(particle -> this.plugin.playParticle(location, particle));
                 config.getRemoveSound().ifPresent(sound -> this.plugin.playSound(audience, location, sound));
             }
-        }, () -> this.fusion.log(Level.WARNING, "Could not remove banner from %s, because layer for the world does not exist.".formatted(worldName)));
+        }, () -> this.fusion.log(Level.WARNING, "Could not remove banner from %s, because layer for the world does not exist.".formatted(worldKey)));
     }
 
     @Override

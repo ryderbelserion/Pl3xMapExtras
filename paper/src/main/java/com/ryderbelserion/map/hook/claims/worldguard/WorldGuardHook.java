@@ -6,6 +6,7 @@ import com.ryderbelserion.map.api.registry.PaperUserRegistry;
 import com.ryderbelserion.map.api.registry.adapters.PaperUserAdapter;
 import com.ryderbelserion.map.api.storage.IStorageHolder;
 import com.ryderbelserion.map.common.configs.types.BasicConfig;
+import com.ryderbelserion.map.common.utils.KeyUtils;
 import com.ryderbelserion.map.hook.Hook;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
@@ -24,12 +25,15 @@ import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.util.Colors;
 import net.pl3x.map.core.world.World;
+import org.bukkit.Server;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WorldGuardHook implements Hook {
 
     private final Pl3xMapExtras plugin = Pl3xMapExtras.getPlugin();
+
+    private final Server server = this.plugin.getServer();
 
     private final Pl3xMapPaper platform = this.plugin.getPlatform();
 
@@ -44,7 +48,7 @@ public class WorldGuardHook implements Hook {
     }
 
     private @Nullable RegionManager getRegionManager(@NotNull final World world) {
-        final org.bukkit.World bukkit = this.plugin.getServer().getWorld(world.getName());
+        final org.bukkit.World bukkit = this.server.getWorld(KeyUtils.asKey(world.getName()));
 
         return bukkit == null ? null : WorldGuard.getInstance().getPlatform()
                 .getRegionContainer().get(BukkitAdapter.adapt(bukkit));

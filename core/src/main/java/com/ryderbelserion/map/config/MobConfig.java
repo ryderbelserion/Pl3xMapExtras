@@ -2,6 +2,7 @@ package com.ryderbelserion.map.config;
 
 import com.ryderbelserion.fusion.core.api.FusionProvider;
 import com.ryderbelserion.fusion.kyori.FusionKyori;
+import com.ryderbelserion.map.common.utils.KeyUtils;
 import libs.org.simpleyaml.configuration.ConfigurationSection;
 import net.pl3x.map.core.configuration.AbstractConfig;
 import net.pl3x.map.core.markers.Vector;
@@ -59,10 +60,14 @@ public class MobConfig extends AbstractConfig {
 
     private final World world;
 
-    public MobConfig(@NotNull World world) {
+    public MobConfig(@NotNull final World world) {
         this.world = world;
 
         reload();
+    }
+
+    public @NotNull net.kyori.adventure.key.Key getWorldKey() {
+        return KeyUtils.asKey(this.world.getName());
     }
 
     public @NotNull World getWorld() {

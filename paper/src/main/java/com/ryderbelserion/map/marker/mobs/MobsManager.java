@@ -1,6 +1,7 @@
 package com.ryderbelserion.map.marker.mobs;
 
 import com.ryderbelserion.map.config.MobConfig;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.pl3x.map.core.markers.Point;
@@ -8,6 +9,7 @@ import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.markers.option.Tooltip;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Mob;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,10 +18,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MobsManager {
 
-    private final Map<String, Collection<Marker<?>>> activeMarkers = new ConcurrentHashMap<>();
+    private final Map<Key, Collection<Marker<?>>> activeMarkers = new ConcurrentHashMap<>();
 
-    public Collection<Marker<?>> getActiveMarkers(@NotNull final String worldName) {
-        final Collection<Marker<?>> markers = this.activeMarkers.get(worldName);
+    public Collection<Marker<?>> getActiveMarkers(@NotNull final Key worldKey) {
+        final Collection<Marker<?>> markers = this.activeMarkers.get(worldKey);
 
         if (markers != null) {
             return markers;
@@ -28,20 +30,20 @@ public class MobsManager {
         return Collections.emptySet();
     }
 
-    public void clearMarkers(@NotNull final String worldName) {
-        if (this.activeMarkers.isEmpty() || worldName.isBlank()) return;
+    public void clearMarkers(@NotNull final Key worldKey) {
+        if (this.activeMarkers.isEmpty()) return;
 
-        this.activeMarkers.remove(worldName);
+        this.activeMarkers.remove(worldKey);
     }
 
     public void clearAll() {
         this.activeMarkers.clear();
     }
 
-    public void addWorld(@NotNull final String worldName) {
-        if (this.activeMarkers.containsKey(worldName)) return;
+    public void addWorld(@NotNull final Key worldKey) {
+        if (this.activeMarkers.containsKey(worldKey)) return;
 
-        this.activeMarkers.put(worldName, new HashSet<>());
+        this.activeMarkers.put(worldKey, new HashSet<>());
     }
 
     public void addMarker(@NotNull final String key, @NotNull final Mob mob, @NotNull final MobConfig config) {
@@ -55,17 +57,17 @@ public class MobsManager {
         removeMarker(mob);
 
         // Add new icon.
-        this.activeMarkers.get(mob.getWorld().getName()).add(icon);
+        this.activeMarkers.get(mob.getWorld().getKey()).add(icon);
     }
 
     public void removeMarker(@NotNull final Mob mob) {
-        final String worldName = mob.getWorld().getName();
+        final NamespacedKey worldKey = mob.getWorld().getKey();
 
-        final String key = String.format("%s_%s_%s", "pl3xmap_mobs", worldName, mob.getUniqueId());
+        if (!this.activeMarkers.containsKey(worldKey)) return;
 
-        if (!this.activeMarkers.containsKey(worldName)) return;
+        final String key = String.format("%s_%s_%s", "pl3xmap_mobs", worldKey, mob.getUniqueId());
 
-        this.activeMarkers.get(worldName).removeIf(marker -> marker.getKey().equals(key));
+        this.activeMarkers.get(worldKey).removeIf(marker -> marker.getKey().equals(key));
     }
 
     private @NotNull String mob(@NotNull final Mob mob) {

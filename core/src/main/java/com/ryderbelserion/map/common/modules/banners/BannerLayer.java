@@ -17,6 +17,8 @@ import com.ryderbelserion.map.common.modules.banners.interfaces.IBannerLayer;
 import com.ryderbelserion.map.common.modules.banners.objects.Banner;
 import com.ryderbelserion.map.common.objects.MapTexture;
 import com.ryderbelserion.map.api.objects.MapPosition;
+import com.ryderbelserion.map.common.utils.KeyUtils;
+import net.kyori.adventure.key.Key;
 import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
@@ -49,6 +51,7 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
     @Override
     public void init() {
         final String worldName = this.world.getName();
+        final Key worldKey = KeyUtils.asKey(worldName);
 
         final BasicConfigurationNode root = node(worldName, "");
 
@@ -64,6 +67,7 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
                         this.registry.getTexture(name),
                         splitter[3],
                         new MapPosition(
+                                worldKey,
                                 worldName,
                                 Integer.parseInt(splitter[0]),
                                 Integer.parseInt(splitter[1]),
@@ -73,7 +77,7 @@ public class BannerLayer extends AbstractLayer<Banner> implements IBannerLayer {
             }
         }
 
-        this.fusion.log(Level.WARNING, "The banner layer for %s is ready!", worldName);
+        this.fusion.log(Level.WARNING, "The banner layer for %s is ready!", worldKey);
     }
 
     @Override

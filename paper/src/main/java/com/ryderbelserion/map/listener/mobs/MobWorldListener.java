@@ -3,6 +3,7 @@ package com.ryderbelserion.map.listener.mobs;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
 import com.ryderbelserion.map.common.configs.types.BasicConfig;
+import com.ryderbelserion.map.common.utils.KeyUtils;
 import com.ryderbelserion.map.config.MobConfig;
 import com.ryderbelserion.map.marker.mobs.Icon;
 import com.ryderbelserion.map.marker.mobs.MobsLayer;
@@ -59,16 +60,18 @@ public class MobWorldListener implements EventListener, Listener {
         if (!this.config.isMobsEnabled()) return;
 
         this.platform.getMobsManager().ifPresent(mobs -> {
-            mobs.clearMarkers(event.getWorld().getName());
+            final World world = event.getWorld();
 
-            event.getWorld().getLayerRegistry().unregister(MobsLayer.KEY);
+            mobs.clearMarkers(KeyUtils.asKey(world.getName()));
+
+            world.getLayerRegistry().unregister(MobsLayer.KEY);
         });
     }
 
     private void registerWorld(@NotNull final World world) {
         this.platform.getMobsManager().ifPresent(mobs -> {
             // Add new world.
-            mobs.addWorld(world.getName());
+            mobs.addWorld(KeyUtils.asKey(world.getName()));
 
             // Add new layer.
             world.getLayerRegistry().register(new MobsLayer(new MobConfig(world)));

@@ -1,12 +1,13 @@
 package com.ryderbelserion.map.marker.mobs;
 
 import com.ryderbelserion.fusion.paper.builders.folia.FoliaScheduler;
-import com.ryderbelserion.fusion.paper.builders.folia.Scheduler;
 import com.ryderbelserion.map.Pl3xMapExtras;
 import com.ryderbelserion.map.api.Pl3xMapPaper;
 import com.ryderbelserion.map.config.MobConfig;
+import net.kyori.adventure.key.Key;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.markers.marker.Marker;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Mob;
@@ -43,38 +44,42 @@ public class MobsLayer extends WorldLayer {
     public @NotNull Collection<Marker<?>> getMarkers() {
         retrieveMarkers();
 
-        final Map<String, Collection<Marker<?>>> mobs = new ConcurrentHashMap<>();
+        final Map<Key, Collection<Marker<?>>> mobs = new ConcurrentHashMap<>();
 
-        final String worldName = getWorld().getName();
+        final Key worldKey = this.config.getWorldKey();
 
-        this.platform.getMobsManager().ifPresent(mob -> mobs.put(worldName, mob.getActiveMarkers(worldName)));
+        this.platform.getMobsManager().ifPresent(mob -> mobs.put(worldKey, mob.getActiveMarkers(worldKey)));
 
-        return mobs.get(worldName);
+        return mobs.get(worldKey);
     }
 
     private void retrieveMarkers() {
         this.platform.getMobsManager().ifPresent(mobs -> {
-            final World bukkitWorld = this.server.getWorld(this.config.getWorld().getName());
+            final Key worldKey = this.config.getWorldKey();
+
+            final World bukkitWorld = this.server.getWorld(worldKey);
 
             // If world is null, do fuck all.
             if (bukkitWorld == null) {
                 return;
             }
 
-            new FoliaScheduler(this.plugin, Scheduler.region_scheduler) {
-                @Override
-                public void run() {
-                    bukkitWorld.getEntitiesByClass(Mob.class).forEach(mob -> {
-                        if (config.ONLY_SHOW_MOBS_EXPOSED_TO_SKY && bukkitWorld.getHighestBlockYAt(mob.getLocation()) > mob.getLocation().getY()) {
+            bukkitWorld.getEntitiesByClass(Mob.class).forEach(mob -> {
+                final Location location = mob.getLocation();
+
+                new FoliaScheduler(this.plugin, location.getWorld(), location.getBlockX(), location.getBlockZ()) {
+                    @Override
+                    public void run() {
+                        if (config.ONLY_SHOW_MOBS_EXPOSED_TO_SKY && bukkitWorld.getHighestBlockYAt(location) > location.getY()) {
                             return;
                         }
 
                         String key = String.format("%s_%s_%s", KEY, getWorld().getName(), mob.getUniqueId());
 
                         mobs.addMarker(key, mob, config);
-                    });
-                }
-            }.runNow();
+                    }
+                }.runNow();
+            });
         });
     }
 }
