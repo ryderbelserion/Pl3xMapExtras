@@ -94,15 +94,31 @@ public class GriefPreventionHook implements Listener, Hook {
         return builder.build();
     }
 
-    private @NotNull String processPopup(@NotNull final String popup, @NotNull final GriefPreventionClaim claim) {
-        return popup.replace("<world>", claim.getWorld().getName())
-                .replace("<id>", Long.toString(claim.getID()))
-                .replace("<owner>", claim.getOwnerName())
-                .replace("<trusts>", getTrusts(claim))
-                .replace("<area>", Integer.toString(claim.getArea()))
-                .replace("<width>", Integer.toString(claim.getWidth()))
-                .replace("<height>", Integer.toString(claim.getHeight()));
+
+
+    private @NotNull String processPopup(
+            @NotNull final String popup,
+            @NotNull final GriefPreventionClaim claim
+            ) {
+        String result = popup
+            .replace("<world>", claim.getWorld().getName())
+            .replace("<id>", Long.toString(claim.getID()))
+            .replace("<area>", Integer.toString(claim.getArea()))
+            .replace("<width>", Integer.toString(claim.getWidth()))
+            .replace("<height>", Integer.toString(claim.getHeight()));
+
+        if (popup.contains("<owner>")) {
+            result = result.replace("<owner>", claim.getOwnerName());
+        }
+
+        if (popup.contains("<trusts>")) {
+            result = result.replace("<trusts>", getTrusts(claim));
+        }
+
+        return result;
     }
+
+
 
     private @NotNull String getTrusts(@NotNull final GriefPreventionClaim claim) {
         final ArrayList<String> builders = new ArrayList<>();
