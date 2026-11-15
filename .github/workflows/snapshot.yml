@@ -51,7 +51,7 @@ jobs:
           BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
 
       - name: Notify Discord
-        if: failed()
+        if: failure()
         run: gradle failed-build --stacktrace
         env:
           BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
