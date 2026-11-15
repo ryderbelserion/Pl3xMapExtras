@@ -1,8 +1,0 @@
-name: Debug Build
-
-on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    uses: ./.github/workflows/build.yml

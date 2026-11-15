@@ -42,7 +42,7 @@ rootProject.ext {
     set("release_type", status)
 
     set("current_commit", commitHash)
-    set("previous_commit", env.getOrDefault("GIT_PREVIOUS_SUCCESSFUL_COMMIT", "N/A"))
+    set("previous_commit", env.getOrDefault("previous_commit", "N/A"))
     set("build_number", buildNumber)
 
     set("mc_changelog", content.lines().convertList())

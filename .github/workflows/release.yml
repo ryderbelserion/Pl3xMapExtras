@@ -6,9 +6,36 @@ on:
   release:
     types: [ published ]
 
+env:
+  previous_commit: ${{ github.event.before }}
+  commit_msg: ${{ github.event.head_commit.message }}
+  commit_id: ${{ github.sha }}
+  version_status: release
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      # Publish task runs build
+      - name: Publish to Modrinth
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        run: gradle modrinth --stacktrace
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+
+      - name: Notify Discord
+        if: success()
+        run: gradle release-build --stacktrace
+        env:
+          BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
+
+      - name: Notify Discord
+        if: failed()
+        run: gradle failed-build --stacktrace
+        env:
+          BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
