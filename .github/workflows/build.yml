@@ -28,11 +28,11 @@ jobs:
 
       - name: Print Git Information
         run: | 
-          echo "::debug::$commit_msg"
-          echo "::debug::$commit_id"
+          echo "$commit_msg"
+          echo "$commit_id"
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
+      #- name: Setup Gradle
+      #   uses: gradle/actions/setup-gradle@v6
 
-      - name: Build
-        run: gradle build --stacktrace
+      #- name: Build
+      #  run: gradle build --stacktrace
