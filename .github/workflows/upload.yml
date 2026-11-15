@@ -8,7 +8,7 @@ jobs:
   build:
     if: github.repository_owner == 'ryderbelserion'
 
-    uses: ryderbelerion/.github/workflows/upload.yml@main
+    uses: ryderbelerion/ryderbelserion/.github/workflows/upload.yml@main
 
     secrets:
       app_id: ${{ secrets.APP_ID }}
