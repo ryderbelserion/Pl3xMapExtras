@@ -26,31 +26,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    if: "!contains(github.event.commits[0].message, '[ci-skip]') || !contains(github.event.commits[0].message, 'chore:')"
-
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
         with:
-          distribution: temurin
+          distribution: corretto
           java-version: 21
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Build
-        run: ./gradlew build --stacktrace
+        run: gradle build --stacktrace
 
       - name: Publish to Modrinth
-        run: ./gradlew modrinth --stacktrace
+        run: gradle modrinth --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
 
       - name: Notify Discord
         if: success()
-        run: ./gradlew release-build --stacktrace
+        run: gradle release-build --stacktrace
         env:
           BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
