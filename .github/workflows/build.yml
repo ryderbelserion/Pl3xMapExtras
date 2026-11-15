@@ -28,8 +28,11 @@ jobs:
 
       - name: Print Git Information
         run: | 
-          echo "$commit_msg"
           echo "$commit_id"
+
+      - name: Print Git Message
+        run: |
+          echo "$commit_msg"
 
       #- name: Setup Gradle
       #   uses: gradle/actions/setup-gradle@v6
