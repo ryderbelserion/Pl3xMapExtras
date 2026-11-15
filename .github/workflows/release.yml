@@ -6,21 +6,34 @@ on:
   release:
     types: [ published ]
 
-permissions:
-  contents: write
-
 jobs:
   build:
-    if: github.repository_owner == 'ryderbelserion'
+    runs-on: ubuntu-latest
 
-    uses: ryderbelerion/ryderbelserion/.github/workflows/build.yml@main
+    steps:
+      - uses: actions/checkout@v6
 
-    with:
-      publish: modrinth
-      status: "release"
-      branch: main
+      - uses: actions/setup-java@v5
+        with:
+          distribution: corretto
+          java-version: 25
 
-    secrets:
-      webhook: ${{ secrets.BUILD_WEBHOOK }}
-      modrinth_token: ${{ secrets.MODRINTH_TOKEN }}
-      hangar_token: ${{ secrets.HANGAR_KEY }}
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build
+        run: ./gradlew build --stacktrace
+
+      - name: Publish to Modrinth
+        run: ./gradlew modrinth --stacktrace
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+
+      - name: Notify Discord
+        if: success()
+        run: ./gradlew release-build --stacktrace
+        env:
+          BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
