@@ -2,6 +2,7 @@ name: Build Project
 
 on:
   workflow_dispatch:
+  workflow_call:
 
   workflow_run:
     workflows: ["Release Build", "Snapshot Build"]
