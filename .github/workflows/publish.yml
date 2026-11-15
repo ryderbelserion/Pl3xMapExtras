@@ -8,6 +8,10 @@ on:
     types:
       - completed
 
+env:
+  commit_msg: ${{ github.event.head_commit.message }}
+  commit_id: ${{ github.sha }}
+
 jobs:
   build:
     runs-on: ubuntu-latest

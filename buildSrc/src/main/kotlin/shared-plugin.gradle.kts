@@ -10,14 +10,15 @@ val libs = extensions.getByType(VersionCatalogsExtension::class.java).named("lib
 
 val git = feather.builder
 val utils = git.utils
+val env: Map<String, String> = System.getenv()
 
 val branch = utils.getRemoteBranch()
-val hash = utils.getRemoteCommitHash()
-val commit = utils.getRemoteCommitMessage(hash, "%B")
+val hash: String = env.getOrDefault("commit_id", utils.getRemoteCommitHash())
+val commit: String = env.getOrDefault("commit_message", utils.getRemoteCommitMessage(hash, "%B"))
 
-val status: String = System.getenv().getOrDefault("version_status", "release").lowercase()
+val status: String = env.getOrDefault("version_status", "release").lowercase()
 
-val buildNumber: String = System.getenv("BUILD_NUMBER") ?: "N/A"
+val buildNumber: String = env.getOrDefault("BUILD_NUMBER", "N/A")
 val isJenkins: Boolean = buildNumber != "N/A"
 
 val isRelease: Boolean = status == "release"
@@ -41,7 +42,7 @@ rootProject.ext {
     set("release_type", status)
 
     set("current_commit", commitHash)
-    set("previous_commit", System.getenv("GIT_PREVIOUS_SUCCESSFUL_COMMIT") ?: "N/A")
+    set("previous_commit", env.getOrDefault("GIT_PREVIOUS_SUCCESSFUL_COMMIT", "N/A"))
     set("build_number", buildNumber)
 
     set("mc_changelog", content.lines().convertList())
