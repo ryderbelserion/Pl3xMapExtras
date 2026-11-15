@@ -39,18 +39,17 @@ jobs:
 
       # Publish task runs build
       - name: Publish to Modrinth
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         run: gradle modrinth --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
 
-      - name: Notify Discord
+      - name: Notify Successful Build
         if: success()
         run: gradle release-build --stacktrace
         env:
           BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
 
-      - name: Notify Discord
+      - name: Notify Failed Build
         if: failure()
         run: gradle failed-build --stacktrace
         env:
