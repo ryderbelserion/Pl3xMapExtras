@@ -1,10 +1,10 @@
-name: Publish
+name: Publish Release
 
 on:
   workflow_dispatch:
 
   workflow_run:
-    workflows: ["Release", "Snapshot"]
+    workflows: ["Release Build", "Snapshot Build"]
     types:
       - completed
 

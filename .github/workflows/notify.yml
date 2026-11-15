@@ -1,10 +1,10 @@
-name: Notify Release
+name: Release Notification
 
 on:
   workflow_dispatch:
 
   workflow_run:
-    workflows: ["Publish"]
+    workflows: ["Publish Release"]
     types:
       - completed
 
