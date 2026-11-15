@@ -14,7 +14,7 @@ jobs:
   sync:
     if: github.repository_owner == 'ryderbelserion'
 
-    uses: ryderbelerion/ryderbelserion/.github/workflows/sync.yml@main
+    uses: ryderbelerion/.github/workflows/sync.yml@main
 
     secrets:
       modrinth_token: ${{ secrets.MODRINTH_TOKEN }}

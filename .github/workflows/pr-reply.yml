@@ -10,7 +10,7 @@ jobs:
   build:
     if: github.repository_owner == 'ryderbelserion'
 
-    uses: ryderbelerion/ryderbelserion/.github/workflows/pr-reply.yml@main
+    uses: ryderbelerion/.github/workflows/pr-reply.yml@main
 
     secrets:
       app_id: ${{ secrets.APP_ID }}

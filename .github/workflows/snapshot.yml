@@ -29,7 +29,7 @@ jobs:
   build:
     if: github.repository_owner == 'ryderbelserion'
 
-    uses: ryderbelerion/ryderbelserion/.github/workflows/build.yml@main
+    uses: ryderbelerion/.github/workflows/build.yml@main
 
     with:
       platforms: modrinth
