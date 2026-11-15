@@ -30,24 +30,6 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-java@v6
-        with:
-          distribution: corretto
-          java-version: 25
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
-
+      # Make sure it builds first.
       - name: Build
-        run: gradle build --stacktrace
-
-      - name: Publish to Modrinth
-        run: gradle modrinth --stacktrace
-        env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-
-      - name: Notify Discord
-        if: success()
-        run: gradle release-build --stacktrace
-        env:
-          BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
+        run: ./.github/workflows/build.yml

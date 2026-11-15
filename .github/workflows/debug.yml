@@ -1,7 +1,12 @@
-name: Debug Publish
+name: Publish
 
 on:
   workflow_dispatch:
+
+  workflow_run:
+    workflows: ["Release", "Snapshot"]
+    types:
+      - completed
 
 jobs:
   build:
@@ -11,18 +16,6 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - uses: actions/setup-java@v6
-        with:
-          distribution: corretto
-          java-version: 25
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
 
       - name: Build
-        run: gradle build --stacktrace
-
-      - name: Publish to Modrinth
-        run: gradle modrinth --stacktrace
-        env:
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: ./.github/workflows/build.yml
