@@ -3,6 +3,10 @@ name: Debug Build
 on:
   workflow_dispatch:
 
+  push:
+    tags:
+      - '*' # Triggers on every tag pushed
+
 jobs:
   build:
     uses: ./.github/workflows/build.yml
