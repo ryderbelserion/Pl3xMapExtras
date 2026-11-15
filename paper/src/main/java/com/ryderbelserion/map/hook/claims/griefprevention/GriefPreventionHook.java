@@ -94,14 +94,8 @@ public class GriefPreventionHook implements Listener, Hook {
         return builder.build();
     }
 
-
-
-    private @NotNull String processPopup(
-            @NotNull final String popup,
-            @NotNull final GriefPreventionClaim claim
-            ) {
-        String result = popup
-            .replace("<world>", claim.getWorld().getName())
+    private @NotNull String processPopup(@NotNull final String popup, @NotNull final GriefPreventionClaim claim) {
+        String result = popup.replace("<world>", claim.getWorld().getName())
             .replace("<id>", Long.toString(claim.getID()))
             .replace("<area>", Integer.toString(claim.getArea()))
             .replace("<width>", Integer.toString(claim.getWidth()))
@@ -117,8 +111,6 @@ public class GriefPreventionHook implements Listener, Hook {
 
         return result;
     }
-
-
 
     private @NotNull String getTrusts(@NotNull final GriefPreventionClaim claim) {
         final ArrayList<String> builders = new ArrayList<>();
