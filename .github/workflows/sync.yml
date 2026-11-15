@@ -1,0 +1,21 @@
+name: Sync Page Description
+
+on:
+  workflow_dispatch:
+
+  push:
+    paths:
+      - 'README.md'   # Triggers for changes to this specific file
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.repository_owner == 'ryderbelserion'
+
+    uses: ryderbelerion/ryderbelserion/.github/workflows/sync.yml@main
+
+    secrets:
+      modrinth_token: ${{ secrets.MODRINTH_TOKEN }}
+      hangar_token: ${{ secrets.HANGAR_KEY }}

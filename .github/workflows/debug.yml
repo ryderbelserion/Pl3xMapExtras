@@ -1,0 +1,13 @@
+name: Debug Build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.repository_owner == 'ryderbelserion'
+
+    uses: ryderbelserion/ryderbelserion/.github/workflows/debug.yml@main

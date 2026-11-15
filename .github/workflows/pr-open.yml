@@ -1,0 +1,17 @@
+name: Open Pull Request
+
+on:
+  workflow_dispatch:
+
+  pull_request_target:
+    types: [ opened ]
+
+jobs:
+  build:
+    if: github.repository_owner == 'ryderbelserion'
+
+    uses: ryderbelerion/ryderbelserion/.github/workflows/pr-open.yml@main
+
+    secrets:
+      app_id: ${{ secrets.APP_ID }}
+      app_secret_key: ${{ secrets.APP_SECRET_KEY }}
