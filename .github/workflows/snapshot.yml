@@ -44,13 +44,13 @@ jobs:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
 
       - name: Notify Successful Build
-        if: success()
+        if: success() && !skipped()
         run: gradle release-build --stacktrace
         env:
           BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
 
       - name: Notify Failed Build
-        if: failure()
+        if: failure() && !skipped()
         run: gradle failed-build --stacktrace
         env:
           BUILD_WEBHOOK: ${{ secrets.BUILD_WEBHOOK }}
