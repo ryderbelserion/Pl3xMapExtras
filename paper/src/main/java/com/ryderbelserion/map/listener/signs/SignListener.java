@@ -237,7 +237,7 @@ public class SignListener implements Listener {
         layer.putSign(new Sign(pos, icon, lines));
 
         // play fancy particles as visualizer
-        particles(sign.getLocation(), ItemUtils.getParticleType(layer.getConfig().SIGN_ADD_PARTICLES), ItemUtils.getSound(layer.getConfig().SIGN_ADD_SOUND));
+        particles(sign.getLocation(), ItemUtils.getParticleType(layer.getConfig().SIGN_ADD_PARTICLES.toLowerCase()), ItemUtils.getSound(layer.getConfig().SIGN_ADD_SOUND));
     }
 
     protected void tryRemoveSign(@NotNull final BlockState state) {
@@ -261,7 +261,7 @@ public class SignListener implements Listener {
         layer.removeSign(pos);
 
         // play fancy particles as visualizer
-        particles(sign.getLocation(), ItemUtils.getParticleType(layer.getConfig().SIGN_REMOVE_PARTICLES), ItemUtils.getSound(layer.getConfig().SIGN_REMOVE_SOUND));
+        particles(sign.getLocation(), ItemUtils.getParticleType(layer.getConfig().SIGN_REMOVE_PARTICLES.toLowerCase()), ItemUtils.getSound(layer.getConfig().SIGN_REMOVE_SOUND));
     }
 
     protected List<String> getLines(@NotNull final SignSide side) {
