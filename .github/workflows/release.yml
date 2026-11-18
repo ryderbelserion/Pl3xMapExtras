@@ -21,6 +21,11 @@ jobs:
         with:
           fetch-depth: 2
 
+      - uses: actions/setup-java@v6
+        with:
+          distribution: corretto
+          java-version: 25
+
       # Publish task runs build
       - name: Publish to Modrinth
         run: gradle modrinth --stacktrace
